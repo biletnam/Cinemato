@@ -27,7 +27,7 @@ Listen 127.0.0.1:8001
 
 ##### Installation du projet
 
-1. Clôner le dossier git ou récupérer les sources
+A. Clôner le dossier git ou récupérer les sources
 
 ```
 cd /Votre/dossier/web/cinemato
@@ -39,14 +39,14 @@ git remote add origin https://gitlab.utc.fr/klamouri/cinemato.git
 git pull origin master
 ```
 
-2. Mettre à jour les sources (c'est mieux de temps en temps, au cas-où...)
+B. Mettre à jour les sources (c'est mieux de temps en temps, au cas-où...)
 
 ```
 php composer.phar self-update
 php composer.phar update
 ```
 
-3. Accès
+C. Accès
 
 La configuration est terminée, vous devriez pouvoir accéder au site en tapant, dans un navigateur :
 http://localhost:8001/
