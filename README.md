@@ -32,7 +32,10 @@ Listen 127.0.0.1:8001
 ```
 cd /Votre/dossier/web/cinemato
 git init
-git remote add origin git.
+git remote add origin git@gitlab.utc.fr:klamouri/cinemato.git
+# Si vous n'avez pas transmis la clé SSH de votre ordinateur à votre compte Gitlab :
+# Vous aurez à donner votre mot de passe à chaque fois...
+git remote add origin https://gitlab.utc.fr/klamouri/cinemato.git
 git pull origin master
 ```
 
