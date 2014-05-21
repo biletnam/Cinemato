@@ -9,3 +9,6 @@ assets/components
 
 *.rar
 *.zip
+.buildpath
+.project
+.settings
