@@ -1,0 +1,11 @@
+# /vendor
+
+*.DS_Store
+
+# Gulp
+assets/.sass-cache
+assets/node_modules
+assets/components
+
+*.rar
+*.zip
