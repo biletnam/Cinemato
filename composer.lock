@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "cc42789513aec61bfa89ca92c5ac4898",
+    "hash": "985d88d97f8f086ce12fb0c0ff4efbd7",
     "packages": [
         {
             "name": "entea/silex-twig-simple-asset-extension",

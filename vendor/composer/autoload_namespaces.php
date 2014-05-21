@@ -19,4 +19,5 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Pimple' => array($vendorDir . '/pimple/pimple/lib'),
     'Entea' => array($vendorDir . '/entea/silex-twig-simple-asset-extension'),
+    '' => array($baseDir . '/src'),
 );
