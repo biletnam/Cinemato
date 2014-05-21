@@ -12,7 +12,7 @@ class Genre
         return $this;
     }
 
-    public function setNom(string $nom) {
+    public function setNom($nom) {
         $this->nom = $nom;
 
         return $this;

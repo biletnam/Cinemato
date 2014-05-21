@@ -33,7 +33,7 @@ class Distributeur
         return $this->id;
     }
 
-    public function setNom(string $nom) {
+    public function setNom($nom) {
         $this->nom = $nom;
 
         return $this;
@@ -43,7 +43,7 @@ class Distributeur
         return $this->nom;
     }
 
-    public function setPrenom(string $prenom) {
+    public function setPrenom($prenom) {
         $this->prenom = $prenom;
 
         return $this;
@@ -53,7 +53,7 @@ class Distributeur
         return $this->prenom;
     }
 
-    public function setAdresse(string $adresse) {
+    public function setAdresse($adresse) {
         $this->adresse = $adresse;
 
         return $this;
@@ -63,7 +63,7 @@ class Distributeur
         return $this->adresse;
     }
 
-    public function setTelephone(string $telephone) {
+    public function setTelephone($telephone) {
         $this->telephone = $telephone;
 
         return $this;

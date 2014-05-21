@@ -28,7 +28,7 @@ class Film
         return $this;
     }
 
-    public function setTitre(string $titre) {
+    public function setTitre($titre) {
         $this->titre = $titre;
 
         return $this;
