@@ -12,3 +12,8 @@ assets/components
 .buildpath
 .project
 .settings
+
+/tests
+
+
+*.dist
