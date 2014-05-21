@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\Entite;
+namespace model\Entite;
 
 use \DateTime;
 
