@@ -7,10 +7,6 @@ class PersonneAbonne extends Personne {
 	private $recharges;
 	public function __construct() {
 	}
-	public function __construct($nom, $prenom) {
-		parent::setNom ( $nom );
-		parent::setPrenom ( $prenom );
-	}
 	public function getPlaceRestante() {
 		return $this->placeRestante;
 	}

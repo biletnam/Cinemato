@@ -13,7 +13,7 @@ abstract class Personne {
 		$this->$id = $id;
 		return $this;
 	}
-	public function setNom(string $nom) {
+	public function setNom($nom) {
 		$this->nom = $nom;
 		
 		return $this;
@@ -21,7 +21,7 @@ abstract class Personne {
 	public function getNom() {
 		return $this->nom;
 	}
-	public function setPrenom(string $prenom) {
+	public function setPrenom($prenom) {
 		$this->prenom = $prenom;
 		
 		return $this;
