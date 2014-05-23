@@ -13,7 +13,7 @@ class Produit
 
     private $prix;
 
-    public function __construct($codeBarre='', $nomDeProduit='', $prix='') {
+    public function __construct($codeBarre='', $nomDeProduit='', $prix=0) {
         $this->codeBarre = $codeBarre;
         $this->nomDeProduit = $nomDeProduit;
         $this->prix = $prix;
