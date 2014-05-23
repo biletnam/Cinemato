@@ -5,7 +5,7 @@ namespace model\Entite;
 /**
  * Entité Produit
  */
-class Produit
+abstract class Produit
 {
     private $codeBarre;
 
