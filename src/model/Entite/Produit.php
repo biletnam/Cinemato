@@ -13,7 +13,7 @@ class Produit
 
     private $prix;
 
-    public function __construct(string $codeBarre, string $nomDeProduit, string $prix) {
+    public function __construct($codeBarre='', $nomDeProduit='', $prix='') {
         $this->codeBarre = $codeBarre;
         $this->nomDeProduit = $nomDeProduit;
         $this->prix = $prix;
@@ -21,7 +21,7 @@ class Produit
         return $this;
     }
 
-    public function setCodeBarre(string $codeBarre) {
+    public function setCodeBarre($codeBarre) {
         $this->codeBarre = $codeBarre;
 
         return $this;
@@ -31,7 +31,7 @@ class Produit
         return $this->codeBarre;
     }
 
-    public function setNomDeProduit(string $nomDeProduit) {
+    public function setNomDeProduit($nomDeProduit) {
         $this->nomDeProduit = $nomDeProduit;
 
         return $this;
@@ -41,7 +41,7 @@ class Produit
         return $this->nomDeProduit;
     }
 
-    public function setPrix(string $prix) {
+    public function setPrix($prix) {
         $this->prix = $prix;
 
         return $this;
