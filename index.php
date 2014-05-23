@@ -2,11 +2,11 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
-use Silex\Application;
-use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\TwigServiceProvider;
+// Get bootstrapped application
+$app = require __DIR__.'/app/bootstrap.php';
 
-$app = new Application();
+// Load controllers
+require __DIR__.'/src/controllers/controllers.php';
 
 if ((isset($app_env)) && (in_array($app_env, array('dev','test')))) {
     $app['env'] = $app_env;
@@ -22,15 +22,5 @@ if ((isset($app_env)) && (in_array($app_env, array('dev','test')))) {
 if ($app['env'] === 'test') {
     return $app;
 } else {
-    $app->register(new UrlGeneratorServiceProvider());
-
-    $app->register(new TwigServiceProvider(), array(
-        'twig.path' => __DIR__ . '/views',
-    ));
-
-    $app->get('/', function () use ($app) {
-        return 'Home Page';
-    });
-
     $app->run();
 }
