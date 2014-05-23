@@ -31,5 +31,5 @@ class DAO {
 
 function f1TestDAO(){
 	$film = DOA::getInstance()->getFilmDAO()->find(1);
-	return print_r($film);
+	return print_r($film,true);
 }
