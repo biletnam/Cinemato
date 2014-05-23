@@ -2,7 +2,7 @@
 
 namespace model\Dao;
 
-class DAO {
+class Dao {
 	private static $instance;
 	private static final $cHost = "tuxa.sme.utc";
 	private static final $cPort = "5432";
@@ -13,7 +13,7 @@ class DAO {
 		if ($instance == NULL)
 			$this::$instance = new DAO ();
 	}
-	//Quand vous récupéré une connexion, vous utiliser ensuite une statement 
+	//Quand vous récupéré une connexion, vous utiliser ensuite une statement
 	//il faut TOUJOURS finir par mettre votre statement PUIS votre connexion à NULL
 	public function getConnexion() {
 		try {
@@ -26,10 +26,9 @@ class DAO {
 	public function getFilmDAO() {
 		return new FilmDAO ( $this::getInstance () );
 	}
-}
 
-
-function f1TestDAO(){
-	$film = DOA::getInstance()->getFilmDAO()->find(1);
-	return print_r($film,true);
+	public static function f1TestDAO() {
+		$film = self::getInstance()->getFilmDAO()->find(1);
+		return print_r($film,true);
+	}
 }
