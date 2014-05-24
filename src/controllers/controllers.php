@@ -2,6 +2,8 @@
 
 namespace controllers;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use model\Dao\Dao;
 
 $app->get('/', function() use ($app) {
@@ -11,6 +13,6 @@ $app->get('/', function() use ($app) {
 $app->get('/DAO/test', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $film = $filmDao->find(1);
-    echo '<pre>';
-    exit(var_dump($film));
+
+    return new JsonResponse($film, 200);
 });
