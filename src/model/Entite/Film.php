@@ -17,16 +17,6 @@ class Film
     private $genre;
 
     private $distributeur;
-
-    public function __construct($titre = '', $dateDeSortie = null, $ageMinimum = 0, $genre = null, $distributeur = null) {
-        $this->setTitre($titre);
-        $this->setDateDeSortie($dateDeSortie);
-        $this->setAgeMinimum($ageMinimum);
-        $this->setGenre($genre);
-        $this->setDistributeur($distributeur);
-
-        return $this;
-    }
     
     public function setId($id){
     	$this->id = $id;
@@ -46,7 +36,7 @@ class Film
         return $this->titre;
     }
 
-    public function setDateDeSortie(DateTime $dateDeSortie) {
+    public function setDateDeSortie($dateDeSortie) {
         $this->dateDeSortie = $dateDeSortie;
 
         return $this;
@@ -56,7 +46,7 @@ class Film
         return $this->dateDeSortie;
     }
 
-    public function setAgeMinimum(int $ageMinimum) {
+    public function setAgeMinimum($ageMinimum) {
         $this->ageMinimum = $ageMinimum;
 
         return $this;
@@ -66,7 +56,7 @@ class Film
         return $this->ageMinimum;
     }
 
-    public function setGenre(Genre $genre) {
+    public function setGenre($genre) {
         $this->genre = $genre;
 
         return $this;
@@ -76,7 +66,7 @@ class Film
         return $this->genre;
     }
 
-    public function setDistributeur(Distributeur $distributeur) {
+    public function setDistributeur($distributeur) {
         $this->distributeur = $distributeur;
 
         return $this;

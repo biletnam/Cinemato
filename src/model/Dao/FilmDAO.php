@@ -2,6 +2,8 @@
 
 namespace model\Dao;
 
+use \DateTime;
+
 use model\Dao\Film;
 
 class FilmDAO
@@ -17,7 +19,6 @@ class FilmDAO
 	}
 
 	public function find($id) {
-		// Film instance
 		$film = null;
 
 		$query = "SELECT * FROM tfilm WHERE pk_id_film = :id";
@@ -32,12 +33,11 @@ class FilmDAO
 			'id' => $id
 		));
 
-		// Ici il ne devrait y avait qu'un film retourné
 		if ($donnees = $request->fetch()) {
 			$film = new Film();
 			$film->setId($donnees['pk_id_film']);
 			$film->setTitre($donnees['titre']);
-			$film->setDateDeSortie($donnees['date_sortie']);
+			$film->setDateDeSortie(new DateTime($donnees['date_sortie']));
 			$film->setAgeMinimum($donnees['age_min']);
 
 			$genre = $this->getDao()->getGenreDAO()->find($donnees['fk_nom_genre']);
