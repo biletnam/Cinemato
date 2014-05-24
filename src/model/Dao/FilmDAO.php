@@ -48,7 +48,7 @@ class FilmDAO
 			$film->setDistributeur($distributeur);
 		}
 
-		return film;
+		return $film;
 	}
 }
 

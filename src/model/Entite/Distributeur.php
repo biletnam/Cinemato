@@ -8,11 +8,11 @@ class Distributeur
 
     private $nom;
 
-    private prenom;
+    private $prenom;
 
-    private adresse;
+    private $adresse;
 
-    private telephone;
+    private $telephone;
 
     public function __construct($nom = '', $prenom = '', $adresse = '', $telephone = '') {
         $this->setNom($nom);
@@ -23,7 +23,7 @@ class Distributeur
         return $this;
     }
 
-    public function setId(int $id) {
+    public function setId($id) {
         $this->id = $id;
 
         return $this;

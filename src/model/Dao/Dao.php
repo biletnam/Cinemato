@@ -58,4 +58,12 @@ class Dao
 	public function getFilmDAO() {
 		return new FilmDAO(self::getInstance());
 	}
+
+	public function getGenreDAO() {
+		return new GenreDAO(self::getInstance());
+	}
+
+	public function getDistributeurDAO() {
+		return new DistributeurDAO(self::getInstance());
+	}
 }
