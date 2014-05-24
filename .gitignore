@@ -1,19 +1,28 @@
-# /vendor
+# Silex requirements
+/vendor
+/composer.phar
 
+# Mac OS X
 *.DS_Store
 
-# Gulp
+# Gulp - UI development specific files
 assets/.sass-cache
 assets/node_modules
 assets/components
 
+# Archives
 *.rar
 *.zip
+
+# IDE specific files
 .buildpath
 .project
 .settings
 
+# Tests
 /tests
 
+# Logs
+*.log
 
 *.dist
