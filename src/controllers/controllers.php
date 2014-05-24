@@ -23,4 +23,4 @@ $app->get('/films', function () use ($app) {
     $film = $filmDao->findAll();
 
     return new JsonResponse($films, 200);
-});
+})->bind('list-films');
