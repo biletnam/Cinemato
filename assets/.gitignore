@@ -1,0 +1,4 @@
+# Gulp - UI development specific files
+node_modules
+components
+.sass-cache

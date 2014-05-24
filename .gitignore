@@ -7,11 +7,6 @@
 # Mac OS X
 *.DS_Store
 
-# Gulp - UI development specific files
-assets/.sass-cache
-assets/node_modules
-assets/components
-
 # Archives
 *.rar
 *.zip
