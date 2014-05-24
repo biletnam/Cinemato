@@ -3,6 +3,7 @@
 namespace controllers;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use model\Dao\Dao;
 
@@ -15,4 +16,11 @@ $app->get('/DAO/test', function () use ($app) {
     $film = $filmDao->find(1);
 
     return new Response(print_r($film,true));
+});
+
+$app->get('/films', function () use ($app) {
+    $filmDao = Dao::getInstance()->getFilmDAO();
+    $film = $filmDao->findAll();
+
+    return new JsonResponse($films, 200);
 });

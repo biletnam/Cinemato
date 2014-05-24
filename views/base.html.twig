@@ -3,7 +3,10 @@
     <head>
         <meta charset='utf-8' />
         <title>{% block title %}UTC - NA17 - Cinémato{% endblock %}</title>
+        <link rel='shortcut icon' href='{{ asset('favicon.ico') }}' />
+        <link rel='icon' href='{{ asset('favicon.ico') }}' />
         {% block stylesheets %}
+            <link rel='stylesheet' href='{{ asset('assets/css/bootstrap.min.css') }}' />
             <link rel='stylesheet' href='{{ asset('assets/css/app.min.css') }}' />
         {% endblock %}
         {% block head_javascripts %}{% endblock %}
@@ -11,15 +14,35 @@
     <body>
         {% block body %}
             <header>
-                {% block header %}{% endblock %}
+                {% block header %}
+                    <nav class='navbar navbar-default navbar-fixed-top'>
+                        <div class='container'>
+                            <div class='navbar-header'>
+                                <a href='#' class='navbar-brand'><i class='icon icon-video-camera'></i> Cinémato</a>
+                                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='#navbar-main'>
+                                    <span class='icon-bar'></span>
+                                    <span class='icon-bar'></span>
+                                    <span class='icon-bar'></span>
+                                </button>
+                            </div>
+                            <div class='navbar-collapse collapse' id='navbar-main'>
+                                {% block nav_content %}{% endblock %}
+                            </div>
+                        </div>
+                    </nav>
+                {% endblock %}
             </header>
             <section id='app-container'>
-                {% block app_container %}{% endblock %}
+                <div class='container'>
+                    {% block app_container %}{% endblock %}
+                </div>
             </section>
             <footer>
                 {% block footer %}{% endblock %}
             </footer>
-            {% block javascripts %}{% endblock %}
+            {% block javascripts %}
+                <script src='{{ asset('assets/js/vendor/jquery-1.11.0.min.js') }}'></script>
+            {% endblock %}
         {% endblock %}
     </body>
 </html>
