@@ -29,11 +29,11 @@ class FilmDAO
 		}
 
 		$statement = $connection->prepare($query);
-		$request = $statement->execute(array(
+		$statement->execute(array(
 			'id' => $id
 		));
 
-		if ($donnees = $request->fetch()) {
+		if ($donnees = $statement->fetch(PDO::FETCH_OBJ)) {
 			$film = new Film();
 			$film->setId($donnees['pk_id_film']);
 			$film->setTitre($donnees['titre']);
