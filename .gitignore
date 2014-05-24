@@ -1,6 +1,7 @@
 # Silex requirements
 /vendor
 /composer.phar
+/app/config/parameters.yml
 
 # Mac OS X
 *.DS_Store
@@ -24,5 +25,3 @@ assets/components
 
 # Logs
 *.log
-
-*.dist
