@@ -19,6 +19,7 @@ assets/components
 .project
 .settings
 
+# Tests
 /tests
 
 # Logs
