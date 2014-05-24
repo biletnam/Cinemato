@@ -14,5 +14,5 @@ $app->get('/DAO/test', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $film = $filmDao->find(1);
 
-    return new Response('<pre>'.print_r($film,true).'</pre>');
+    return new Response(print_r($film,true));
 });
