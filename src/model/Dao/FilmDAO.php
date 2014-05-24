@@ -2,36 +2,51 @@
 
 namespace model\Dao;
 
-class FilmDAO {
-	private $instanceDAO;
-	public function __construct($instanceDAO) {
-		$this->instanceDAO = $instanceDAO;
+use model\Dao\Film;
+
+class FilmDAO
+{
+	private $dao;
+
+	public function __construct($dao) {
+		$this->dao = $dao;
 	}
+
+	private function getDao() {
+		return $this->dao;
+	}
+
 	public function find($id) {
+		// Film instance
+		$film = null;
+
 		$query = "SELECT * FROM tfilm WHERE pk_id_film = :id";
-		$connectioPDO = $this->instanceDAO->getConnexion ();
-		if ($connectioPDO == null)
+		$connection = $this->getDao()->getConnexion();
+
+		if (is_null($connection)) {
 			return;
-		$statement = $connectioPDO->prepare ( $query );
-		$statement->execute ( array (
-				'id' => $id 
-		) );
-		// Ici il ne devrait y avait qu'un film retourné
-		while ( $donnees = $req->fetch () ) {
-			$film = new Film ();
-			$film->setId ( $donnees ['pk_id_film'] );
-			$film->setTitre ( $donnees ['titre'] );
-			$film->setDateDeSortie ( $donnees ['date_sortie'] );
-			$film->setAgeMinimum ( $donnees ['age_min'] );
-			
-			// $genre = $instanceDAO->getGenreDAO()->find($donnees['fk_nom_genre']);
-			$film->setGenre ( $genre );
-			
-			// $distrib = $instanceDAO->getDistributeurDAO()->find($donnees['fk_id_distributeur']);
-			$film->setDistributeur ( $distrib );
 		}
-		$statement = null;
-		$connectioPDO = null;
+
+		$statement = $connection->prepare($query);
+		$request = $statement->execute(array(
+			'id' => $id
+		));
+
+		// Ici il ne devrait y avait qu'un film retourné
+		if ($donnees = $request->fetch()) {
+			$film = new Film();
+			$film->setId($donnees['pk_id_film']);
+			$film->setTitre($donnees['titre']);
+			$film->setDateDeSortie($donnees['date_sortie']);
+			$film->setAgeMinimum($donnees['age_min']);
+
+			$genre = $this->getDao()->getGenreDAO()->find($donnees['fk_nom_genre']);
+			$film->setGenre($genre);
+
+			$distributeur = $this->getDao()->getDistributeurDAO()->find($donnees['fk_id_distributeur']);
+			$film->setDistributeur($distributeur);
+		}
+
 		return film;
 	}
 }

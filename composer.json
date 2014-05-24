@@ -3,9 +3,11 @@
         "silex/silex": "~1.2",
         "twig/twig": ">=1.8,<2.0-dev",
         "symfony/twig-bridge": "~2.3",
-        "monolog/monolog": ">=1.0.0",
         "symfony/browser-kit": ">=2.3,<2.4-dev",
-        "entea/silex-twig-simple-asset-extension": "v1.0.0"
+        "symfony/yaml": "2.3",
+        "monolog/monolog": ">=1.0.0",
+        "entea/silex-twig-simple-asset-extension": "v1.0.0",
+        "deralex/yaml-config-service-provider": "1.0.*@dev"
     },
     "autoload": {
         "psr-0": {
