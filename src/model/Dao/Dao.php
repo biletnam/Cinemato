@@ -4,11 +4,11 @@ namespace model\Dao;
 
 class Dao {
 	private static $instance;
-	private static final $cHost = "tuxa.sme.utc";
-	private static final $cPort = "5432";
-	private static final $cDBNM = "dbnf17p157";
-	private static final $cUser = "nf17p157";
-	private static final $cPass = "1zlTCOp7";
+	const cHost = "tuxa.sme.utc";
+	const cPort = "5432";
+	const cDBNM = "dbnf17p157";
+	const cUser = "nf17p157";
+	const cPass = "1zlTCOp7";
 	private static function getInstance() {
 		if ($instance == NULL)
 			$this::$instance = new DAO ();
@@ -17,7 +17,7 @@ class Dao {
 	//il faut TOUJOURS finir par mettre votre statement PUIS votre connexion à NULL
 	public function getConnexion() {
 		try {
-			$conn = new PDO ( "pgsql:host=$this->cHost;dbname=$this->cDBNM;port=$this->cPort", "$this->cUser", "$this->cPass" );
+			$conn = new PDO ( "pgsql:host=SELF::cHost;dbname=SELF::cDBNM;port=SELF::cPort", SELF::cUser, SELF::cPass );
 		} catch ( PDOException $e ) {
 			$conn = null;
 		}
