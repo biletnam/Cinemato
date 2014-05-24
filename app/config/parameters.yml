@@ -1,0 +1,8 @@
+database:
+    driver: pdo_mysql
+    charset: utf8
+    db_host: tuxa.sme.utc
+    db_port: 5432
+    db_name: dbnf17p157
+    db_user: nf17p157
+    db_pass: 1zlTCOp7

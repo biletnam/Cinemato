@@ -5,6 +5,7 @@ use Silex\Application,
     Silex\Provider\MonologServiceProvider,
     Silex\Provider\TwigServiceProvider;
 
+use DerAlex\Silex\YamlConfigServiceProvider;
 use Entea\Twig\Extension\AssetExtension;
 
 $app = new Application();
@@ -20,6 +21,8 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new TwigServiceProvider(), array(
     'twig.path' => array(__DIR__ . '/../views')
 ));
+
+$app->register(new YamlConfigServiceProvider(__DIR__ . '/config/parameters.yml'));
 
 $twig = $app['twig'];
 $twig->addExtension(new AssetExtension($app));

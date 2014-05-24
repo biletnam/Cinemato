@@ -2,56 +2,62 @@
 
 namespace model\Dao;
 
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
+
+use \PDO;
+use \PDOException;
+
 class Dao
 {
 	private static $_instance = null;
 
-	const db_host = "tuxa.sme.utc";
-	const db_port = "5432";
-	const db_name = "dbnf17p157";
-	const db_user = "nf17p157";
-	const db_pass = "1zlTCOp7";
+	private $db_host;
+	private $db_port;
+	private $db_name;
+	private $db_user;
+	private $db_pass;
 
-	private static function getInstance() {
-<<<<<<< HEAD
+	public static function getInstance() {
 		if (is_null(self::$_instance)) {
-			self::$_instance = new Dao();
+			$yaml = new Parser();
+
+			try {
+				$parameters = $yaml->parse(file_get_contents(__DIR__ . '/../../../app/config/parameters.yml'));
+				self::$_instance = new Dao($parameters);
+			} catch (ParseException $e) {
+				die(printf("Unable to parse the YAML string: %s", $e->getMessage()));
+			}
 		}
+
+		return self::$_instance;
 	}
 
-=======
- 		if (self::$instance == NULL)
- 			self::$instance = new DAO ();
- 		return self::$instance;
- 	}
->>>>>>> 73a7133e1262ff34a0489e9c774ca0f8c5daae52
+	public function __construct($parameters) {
+		// echo '<pre>';
+		// exit(var_dump($parameters));
+		$this->db_host = $parameters['database']['db_host'];
+		$this->db_port = $parameters['database']['db_port'];
+		$this->db_name = $parameters['database']['db_name'];
+		$this->db_user = $parameters['database']['db_user'];
+		$this->db_pass = $parameters['database']['db_pass'];
+
+		return $this;
+	}
+
 	//Quand vous récupéré une connexion, vous utiliser ensuite une statement
 	//il faut TOUJOURS finir par mettre votre statement PUIS votre connexion à NULL
 	public function getConnexion() {
 		$connection = null;
 
 		try {
-<<<<<<< HEAD
-			$connection = new PDO("pgsql:host=self::db_host;dbname=self::db_name;port=self::db_port", self::db_user, self::db_pass);
+			$connection = new PDO('pgsql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';port=' . $this->db_port, $this->db_user, $this->db_pass);
 		} catch (PDOException $e) {}
 
 		return $connection;
-=======
-			$strConn = 'pgsql:host='.self::cHost.';dbname='.self::cDBNM.';port='.self::cPort;
-			$conn = new PDO ($strConn, self::cUser, self::cPass );
-		} catch ( PDOException $e ) {
-			$conn = null;
-		}
-		return $conn;
->>>>>>> 73a7133e1262ff34a0489e9c774ca0f8c5daae52
 	}
 
 	public function getFilmDAO() {
 		return new FilmDAO(self::getInstance());
-	}
-
-	public static function f1TestDAO() {
-		$film = self::getInstance()->getFilmDAO()->find(1);
-		return print_r($film,true);
 	}
 }

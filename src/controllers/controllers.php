@@ -9,5 +9,8 @@ $app->get('/', function() use ($app) {
 })->bind('home');
 
 $app->get('/DAO/test', function () use ($app) {
-    return Dao::f1TestDAO();
+    $filmDao = Dao::getInstance()->getFilmDAO();
+    $film = $filmDao->find(1);
+    echo '<pre>';
+    exit(var_dump($film));
 });
