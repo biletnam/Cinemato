@@ -5,7 +5,7 @@ namespace model\Dao;
 use \DateTime;
 use \PDO;
 
-use model\Dao\Film;
+use model\Entite\Film;
 
 class FilmDAO
 {
