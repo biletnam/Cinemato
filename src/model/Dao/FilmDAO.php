@@ -21,14 +21,14 @@ class FilmDAO {
 			$film = new Film ();
 			$film->setId ( $donnees ['pk_id_film'] );
 			$film->setTitre ( $donnees ['titre'] );
-			$film->setDateDeSortie ( $donnees ['date_sortie'] );
+			$film->setDateDeSortie ( Date('YYY-MM-DD',$donnees ['date_sortie']) );
 			$film->setAgeMinimum ( $donnees ['age_min'] );
 			
 			// $genre = $instanceDAO->getGenreDAO()->find($donnees['fk_nom_genre']);
-			$film->setGenre ( $genre );
+			//$film->setGenre ( $genre );
 			
 			// $distrib = $instanceDAO->getDistributeurDAO()->find($donnees['fk_id_distributeur']);
-			$film->setDistributeur ( $distrib );
+			//$film->setDistributeur ( $distrib );
 		}
 		$statement = null;
 		$connectioPDO = null;
