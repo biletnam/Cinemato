@@ -34,7 +34,7 @@ class FilmDAO
 			'id' => $id
 		));
 
-		if ($donnees = $statement->fetch(PDO::FETCH_OBJ)) {
+		if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
 			$film = new Film();
 			$film->setId($donnees['pk_id_film']);
 			$film->setTitre($donnees['titre']);
