@@ -34,8 +34,6 @@ class Dao
 	}
 
 	public function __construct($parameters) {
-		// echo '<pre>';
-		// exit(var_dump($parameters));
 		$this->db_host = $parameters['database']['db_host'];
 		$this->db_port = $parameters['database']['db_port'];
 		$this->db_name = $parameters['database']['db_name'];
@@ -45,13 +43,13 @@ class Dao
 		return $this;
 	}
 
-	//Quand vous récupéré une connexion, vous utiliser ensuite une statement
-	//il faut TOUJOURS finir par mettre votre statement PUIS votre connexion à NULL
+	// Quand vous récupérez une connexion, vous utilisez ensuite un statement
+	// Il faut toujours finir par mettre votre statement puis votre connexion à NULL
 	public function getConnexion() {
 		$connection = null;
-
 		try {
-			$connection = new PDO('pgsql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';port=' . $this->db_port, $this->db_user, $this->db_pass);
+			$connectionString = 'pgsql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';port=' . $this->db_port;
+			$connection = new PDO($connectionString, $this->db_user, $this->db_pass);
 		} catch (PDOException $e) {}
 
 		return $connection;
