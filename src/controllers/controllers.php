@@ -20,7 +20,7 @@ $app->get('/DAO/test', function () use ($app) {
 
 $app->get('/films', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
-    $film = $filmDao->findAll();
+    $films = $filmDao->findAll();
 
     return new JsonResponse($films, 200);
 })->bind('list-films');
