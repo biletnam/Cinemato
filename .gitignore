@@ -1,6 +1,6 @@
 # Silex requirements
 /vendor
-/components.phar
+/composer.phar
 
 # Mac OS X
 *.DS_Store
