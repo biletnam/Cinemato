@@ -24,7 +24,7 @@ var gulp         = require('gulp'),
 
 // Styles
 gulp.task('styles', function () {
-    return gulp.src(['sass/{,*/}*.scss', '!sass/{,*/}*_*.scss'])
+    return gulp.src(['sass/{,*/}*.scss', '!sass/{,*/}*_*.scss', '!sass/bourbon/{,*/}*.scss'])
         .pipe(sass({
             style: 'expanded',
             quiet: true,

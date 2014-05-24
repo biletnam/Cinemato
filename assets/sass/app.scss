@@ -1,7 +1,9 @@
-$icon-font-path: "../fonts";
-$fa-css-prefix: "icon";
-
-@import "../components/bootstrap-sass/vendor/assets/stylesheets/bootstrap";
-
 $fa-font-path: "../fonts";
+$fa-css-prefix: "icon";
 @import "../components/font-awesome/scss/font-awesome";
+
+html {
+    body {
+        padding: 70px 0 0 0;
+    }
+}
