@@ -10,14 +10,16 @@ class Dao {
 	const cUser = "nf17p157";
 	const cPass = "1zlTCOp7";
 	private static function getInstance() {
-		if ($instance == NULL)
-			$this::$instance = new DAO ();
-	}
+ 		if (self::$instance == NULL)
+ 			self::$instance = new DAO ();
+ 		return self::$instance;
+ 	}
 	//Quand vous récupéré une connexion, vous utiliser ensuite une statement
 	//il faut TOUJOURS finir par mettre votre statement PUIS votre connexion à NULL
 	public function getConnexion() {
 		try {
-			$conn = new PDO ( "pgsql:host=SELF::cHost;dbname=SELF::cDBNM;port=SELF::cPort", SELF::cUser, SELF::cPass );
+			$strConn = 'pgsql:host='.self::cHost.';dbname='.self::cDBNM.';port='.self::cPort;
+			$conn = new PDO ($strConn, self::cUser, self::cPass );
 		} catch ( PDOException $e ) {
 			$conn = null;
 		}
