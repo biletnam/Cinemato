@@ -3,6 +3,7 @@
 namespace model\Dao;
 
 use \DateTime;
+use \PDO;
 
 use model\Dao\Film;
 
