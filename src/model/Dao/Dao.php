@@ -47,10 +47,13 @@ class Dao
 	// Il faut toujours finir par mettre votre statement puis votre connexion à NULL
 	public function getConnexion() {
 		$connection = null;
+
 		try {
 			$connectionString = 'pgsql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';port=' . $this->db_port;
 			$connection = new PDO($connectionString, $this->db_user, $this->db_pass);
-		} catch (PDOException $e) {}
+		} catch (PDOException $e) {
+			die($e->getMessage());
+		}
 
 		return $connection;
 	}
