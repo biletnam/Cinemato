@@ -18,12 +18,22 @@ class Film
 
     private $distributeur;
 
+    public function __construct($titre = '', $dateDeSortie = null, $ageMinimum = 0, $genre = null, $distributeur = null) {
+        $this->setTitre($titre);
+        $this->setDateDeSortie($dateDeSortie);
+        $this->setAgeMinimum($ageMinimum);
+        $this->setGenre($genre);
+        $this->setDistributeur($distributeur);
+
+        return $this;
+    }
+
     public function setId($id) {
-    	$this->id = $id;
+        $this->id = $id;
     }
 
     public function getId(){
-    	return $this->id;
+        return $this->id;
     }
 
     public function setTitre($titre) {
@@ -96,5 +106,17 @@ class Film
      */
     public function toString() {
         return $this->titre;
+    }
+
+    /**
+     * Instantiate a new Film from database values array
+     *
+     * @param array $data
+     * @return Film
+     */
+    public static function mapFromData($data) {
+        $instance = new self($data['titre'], $data['date_sortie'], $data['age_min'], $data['genre'], $data['distributeur']);
+
+        return $instance;
     }
 }
