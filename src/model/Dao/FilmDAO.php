@@ -6,6 +6,7 @@ use \DateTime;
 use \PDO;
 
 use model\Entite\Film;
+use model\Query\SelectQuery;
 
 class FilmDAO
 {
@@ -22,14 +23,14 @@ class FilmDAO
     public function findAll() {
         $films = array();
 
-        $query = "SELECT * FROM tfilm";
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $statement = $connection->prepare($query);
-            $statement->execute();
+            $query = new SelectQuery($connection);
+            $query->setTable('tfilm f')
+                ->setFields('*');
 
-            $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $filmRows = $query->fetchAll(array(), PDO::FETCH_ASSOC);
 
             foreach ($filmRows as &$filmData) {
                 $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
