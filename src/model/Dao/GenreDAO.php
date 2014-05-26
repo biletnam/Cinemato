@@ -34,9 +34,8 @@ class GenreDAO
             'nom' => $nom
         ));
 
-        if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $genre = new Genre();
-            $genre->setNom($donnees['pk_nom_genre']);
+        if ($genreData = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $genre = Genre::mapFromData($genreData);
         }
 
         return $genre;

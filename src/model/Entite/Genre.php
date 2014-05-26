@@ -43,4 +43,16 @@ class Genre
     public function toString() {
         return $this->nom;
     }
+
+    /**
+     * Instantiate a new Genre from database values array
+     *
+     * @param array $data
+     * @return Genre
+     */
+    public static function mapFromData($data) {
+        $instance = new self($data['pk_nom_genre']);
+
+        return $instance;
+    }
 }

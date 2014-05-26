@@ -116,6 +116,7 @@ class Film
      */
     public static function mapFromData($data) {
         $instance = new self($data['titre'], $data['date_sortie'], $data['age_min'], $data['genre'], $data['distributeur']);
+        $instance->setId($data['pk_id_film']);
 
         return $instance;
     }

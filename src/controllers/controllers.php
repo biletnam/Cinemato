@@ -15,7 +15,14 @@ $app->get('/DAO/test', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $film = $filmDao->find(1);
 
-    return new Response(print_r($film,true));
+    $genreDao = Dao::getInstance()->getGenreDAO();
+    $genre = $genreDao->find('test genre');
+
+    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+    $distributeur = $distributeurDao->find(1);
+
+    echo '<pre>';
+    return new Response(print_r(array($film, $genre, $distributeur),true));
 });
 
 $app->get('/films', function () use ($app) {

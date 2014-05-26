@@ -34,13 +34,8 @@ class DistributeurDAO
             'id' => $id
         ));
 
-        if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $distributeur = new Distributeur();
-            $distributeur->setId($donnees['pk_id_distributeur']);
-            $distributeur->setNom($donnees['nom']);
-            $distributeur->setPrenom($donnees['prenom']);
-            $distributeur->setAdresse($donnees['adresse']);
-            $distributeur->setTelephone($donnees['tel']);
+        if ($distributeurData = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $distributeur = Distributeur::mapFromData($distributeurData);
         }
 
         return $distributeur;

@@ -94,4 +94,17 @@ class Distributeur
     public function toString() {
         return $this->prenom . ' ' . $this->nom;
     }
+
+    /**
+     * Instantiate a new Distributeur from database values array
+     *
+     * @param array $data
+     * @return Distributeur
+     */
+    public static function mapFromData($data) {
+        $instance = new self($data['nom'], $data['prenom'], $data['adresse'], $data['tel']);
+        $instance->setId($data['pk_id_distributeur']);
+
+        return $instance;
+    }
 }
