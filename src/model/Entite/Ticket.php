@@ -15,7 +15,7 @@ class Ticket
 
     private $note;
 
-    private $sceance;
+    private $seance;
 
     private $abonne;
 
@@ -23,9 +23,13 @@ class Ticket
 
     private $tarif;
 
-    public function __construct(DateTime $dateDeVente, int $note) {
+    public function __construct($dateDeVente=null, $note=null, $seance=null, $abonne=null, $vendeur=null, $tarif=null) {
         $this->dateDeVente = $dateDeVente;
         $this->note = $note;
+        $this->seance = $seance;
+        $this->abonne = $abonne;
+        $this->vendeur = $vendeur;
+        $this->tarif = $tarif;
 
         return $this;
     }
@@ -34,7 +38,7 @@ class Ticket
         return $this->id;
     }
 
-    public function setDateDeVente(DateTime $dateDeVente) {
+    public function setDateDeVente($dateDeVente) {
         $this->dateDeVente = $dateDeVente;
 
         return $this;
@@ -44,7 +48,7 @@ class Ticket
         return $this->dateDeVente;
     }
 
-    public function setNote(int $note) {
+    public function setNote($note) {
         $this->note = $note;
 
         return $this;
@@ -54,17 +58,17 @@ class Ticket
         return $this->note;
     }
 
-    public function setSceance(Sceance $sceance) {
-        $this->sceance = $sceance;
+    public function setSeance($seance) {
+        $this->seance = $seance;
 
         return $this;
     }
 
-    public function getSceance() {
-        return $this->sceance;
+    public function getSeance() {
+        return $this->seance;
     }
 
-    public function setAbonne(Abonne $abonne) {
+    public function setAbonne($abonne) {
         $this->abonne = $abonne;
 
         return $this;
@@ -74,7 +78,7 @@ class Ticket
         return $this->abonne;
     }
 
-    public function setVendeur(Vendeur $vendeur) {
+    public function setVendeur($vendeur) {
         $this->vendeur = $vendeur;
 
         return $this;
@@ -84,7 +88,7 @@ class Ticket
         return $this->vendeur;
     }
 
-    public function setTarif(Tarif $tarif) {
+    public function setTarif($tarif) {
         $this->tarif = $tarif;
 
         return $this;
@@ -94,3 +98,5 @@ class Ticket
         return $this->tarif;
     }
 }
+
+?>
