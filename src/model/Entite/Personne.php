@@ -10,7 +10,7 @@ class Personne {
 		return $this->id;
 	}
 	public function setId($id) {
-		$this->$id = $id;
+		$this->id = $id;
 		return $this;
 	}
 	public function setNom($nom) {

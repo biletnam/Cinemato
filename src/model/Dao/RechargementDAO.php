@@ -6,7 +6,7 @@ use \PDO;
 use model\Entite\Personne;
 use model\Entite\Rechargement;
 
-class RechargmentDAO {
+class RechargementDAO {
 	private $dao;
 	public function __construct($dao) {
 		$this->dao = $dao;

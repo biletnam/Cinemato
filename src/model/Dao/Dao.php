@@ -73,4 +73,10 @@ class Dao
 	public function getProduitDAO(){
 		return new ProduitDAO(self::getInstance());
 	}
+	public function getPersonneDAO(){
+		return new PersonneDAO(self::getInstance());
+	}
+	public function getRechargementDAO(){
+		return new RechargementDAO(self::getInstance());
+	}
 }
