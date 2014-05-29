@@ -31,13 +31,13 @@ abstract class Produit
         return $this->codeBarre;
     }
 
-    public function setNomDeProduit($nomDeProduit) {
+    public function setNom($nomDeProduit) {
         $this->nomDeProduit = $nomDeProduit;
 
         return $this;
     }
 
-    public function getNomDeProduit() {
+    public function getNom() {
         return $this->nomDeProduit;
     }
 
