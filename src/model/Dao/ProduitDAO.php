@@ -132,7 +132,7 @@ class ProduitDAO {
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
-				$statement->execute () );
+				$statement->execute ();
 				while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
 					$produit = self::bind ( $donnees );
 					array_push ( $produits, $produit );
@@ -153,7 +153,7 @@ class ProduitDAO {
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
-				$statement->execute () );
+				$statement->execute ();
 				while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
 					$produit = self::bind ( $donnees );
 					array_push ( $produits, $produit );

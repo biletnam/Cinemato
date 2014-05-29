@@ -53,8 +53,8 @@ CREATE TABLE tfilm(
 	titre					varchar(255),
 	date_sortie				date,
 	age_min 				integer,
-	fk_nom_genre			varchar(255),
-	fk_id_distributeur		integer
+	fk_nom_genre			varchar(255) NOT NULL,
+	fk_id_distributeur		integer NOT NULL
 	);
 CREATE TABLE tgenre(
 	pk_nom_genre			varchar(255)
@@ -69,12 +69,12 @@ CREATE TABLE tdistributeur(
 CREATE TABLE tseance(
 	pk_timestamp_seance		timestamp,
 	pkfk_nom_salle			varchar(255),
-	pkfk_id_film			integer,
+	fk_id_film				integer NOT NULL,
 	doublage				varchar(255)
 	);
 CREATE TABLE tsalle(
 	pk_nom_salle			varchar(255),
-	nb_place				integer
+	nb_place				integer NOT NULL
 	);
 CREATE TABLE tpersonne(
 	pk_id_personne			integer,
@@ -106,7 +106,6 @@ CREATE TABLE tticket(
 	note					float,
 	fk_timestamp_seance		timestamp,
 	fk_nom_salle_seance		varchar(255),
-	fk_id_film_seance		integer,
 	fk_id_personne_abonne	integer,
 	fk_id_personne_vendeur	integer,
 	fk_nom_tarif			varchar(255)
@@ -121,7 +120,7 @@ CREATE TABLE trechargement(
 
 CREATE TABLE ttarif(
 	pk_nom_tarif			varchar(255),
-	tarif					float
+	tarif					float NOT NULL
 );
 
 CREATE TABLE tproduit(
@@ -157,7 +156,7 @@ ALTER TABLE tdistributeur
 ADD CONSTRAINT pk_tdistributeur PRIMARY KEY (pk_id_distributeur);
 
 ALTER TABLE tseance
-ADD CONSTRAINT pk_tseance PRIMARY KEY (pk_timestamp_seance, pkfk_nom_salle, pkfk_id_film);
+ADD CONSTRAINT pk_tseance PRIMARY KEY (pk_timestamp_seance, pkfk_nom_salle);
 
 ALTER TABLE tsalle
 ADD CONSTRAINT pk_tsalle PRIMARY KEY (pk_nom_salle);
@@ -208,7 +207,7 @@ ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES 
 
 ALTER TABLE tseance
 ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle),
-ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (pkfk_id_film) REFERENCES tfilm(pk_id_film);
+ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film);
 
 ALTER TABLE tabonne
 ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
@@ -225,7 +224,7 @@ ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCE
 ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE tticket
-ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance, fk_id_film_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle, pkfk_id_film),
+ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle),
 ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne),
 ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne),
 ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif);
@@ -279,7 +278,56 @@ WHERE p.pk_code_barre_produit = a.pkfk_code_barre_produit;
 
 INSERT INTO tgenre(pk_nom_genre)
 VALUES('Horreur');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Comédie');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Romance');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Action');
+
 INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel) 
-VALUES (nextval('sequence_distributeur'), 'KarimCorp', 'KarimCorpi', 'PARIS', '06LOL');
+VALUES (nextval('sequence_distributeur'), 'Mars Distribution', '', 'PARIS', '');
+INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel) 
+VALUES (nextval('sequence_distributeur'), 'Studio Canal', '', 'PARIS', '');
+
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
-VALUES (nextval('sequence_film'),'Karim a Compiegne',TIMESTAMP '2011-05-16 15:36:38', 18, 'Horreur', 1);
+VALUES (nextval('sequence_film'),'Johnny English',TIMESTAMP '2003-07-23', 3, 'Comédie', 1);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Love Actualy',TIMESTAMP '2003-12-03', 12, 'Romance', 1);
+
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Lamouri','Karim');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Etienne','Homer');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Charles','Herlin');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Florent','Schildknecht');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Ahmed','Lounis');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Stéphane','Crozat');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Jason','Statham');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Quentin','Tarantino');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Ryan','Gosling');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Scarlett','Johansson');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Françis Ford','Coppola');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Uma','Thurman');
+INSERT INTO tpersonne(pk_id_personne,nom,prenom)
+VALUES(nextval('sequence_personne'),'Rowan','Atkinson');
+
+INSERT INTO tabonne(pkfk_id_personne, place_restante)
+VALUES(1, 99);
+INSERT INTO tabonne(pkfk_id_personne, place_restante)
+VALUES(3, 50);
+
+INSERT INTO tvendeur(pkfk_id_personne)
+VALUES(2);
+INSERT INTO tvendeur(pkfk_id_personne)
+VALUES(4);

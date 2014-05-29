@@ -56,7 +56,7 @@ class RechargmentDAO {
 		}
 		return $personnes;
 	}
-	public function findAllVendeur(){
+	public function findAllVendeur() {
 		$personnes = array ();
 		$query = 'SELECT *' . ' FROM tpersonne p' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
 		$connection = $this->getDao ()->getConnexion ();
@@ -65,7 +65,7 @@ class RechargmentDAO {
 			try {
 				$statement = $connection->prepare ( $query );
 				$statement->execute ( array (
-						'id' => $id
+						'id' => $id 
 				) );
 				while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
 					$personne = self::bind ( $donnees );
@@ -76,9 +76,8 @@ class RechargmentDAO {
 			}
 		}
 		return $personnes;
-		
 	}
-	public function findAllAbonne(){
+	public function findAllAbonne() {
 		$personnes = array ();
 		$query = 'SELECT *' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
 		$connection = $this->getDao ()->getConnexion ();
@@ -87,7 +86,7 @@ class RechargmentDAO {
 			try {
 				$statement = $connection->prepare ( $query );
 				$statement->execute ( array (
-						'id' => $id
+						'id' => $id 
 				) );
 				while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
 					$personne = self::bind ( $donnees );
@@ -115,16 +114,13 @@ class RechargmentDAO {
 					throw $e;
 				}
 			}
-			// TODO FAIRE LES RECHARGES
-			foreach ($personne->getRecharges() as $recharge){
-				if($recharge->getId() == null){
-					$this->getDao()->getRechargementDAO()->create($recharge,$personne);
-				}
-				//else()
-				$this->getDao()->getRechargementDAO()->update($recharge);
+			foreach ( $personne->getRecharges () as $recharge ) {
+				if ($recharge->getId () == null) {
+					$this->getDao ()->getRechargementDAO ()->create ( $recharge, $personne );
+				} else
+					$this->getDao ()->getRechargementDAO ()->update ( $recharge );
 			}
-			$this->getDao()->getRechargementDAO()->deleteRechargeOrphelineUser($personne);
-			
+			$this->getDao ()->getRechargementDAO ()->deleteRechargeOrphelineUser ( $personne );
 		}
 		$statement = null;
 		$connection = null;
@@ -158,10 +154,10 @@ class RechargmentDAO {
 					$statement = null;
 					$connection = null;
 				}
-				foreach ($personne->getRecharges() as $recharge){
-					$this->getDao()->getRechargementDAO()->delete($recharge);
+				foreach ( $personne->getRecharges () as $recharge ) {
+					$this->getDao ()->getRechargementDAO ()->delete ( $recharge );
 				}
-			} else {
+			} else if ($personne instanceof PersonneVendeur) {
 				$connection = $this->getDao ()->getConnexion ();
 				if (! is_null ( $connection )) {
 					$statement = $connection->prepare ( $query3 );
@@ -186,15 +182,19 @@ class RechargmentDAO {
 		}
 	}
 	public static function bind($donnes) {
-		if ($donnes ['a.pkfk_id_personne'] == null) {
+		if ($donnes ['v.pkfk_id_personne'] != null) {
 			$personne = new PersonneVendeur ();
 			$personne->setId ( $donnes ['p.pk_id_personne'] );
-		} else {
+		} else if ($donnes ['a.pkfk_id_personne'] != null) {
 			$personne = new PersonneAbonne ();
 			$personne->setId ( $donnes ['p.pk_id_personne'] );
 			$personne->setPlaceRestante ( $donnes ['a.place_restante'] );
 			$personne->setRecharges ( $this->getDao ()->getRechargementDAO ()->findAllByAbonne ( $personne ) );
+		} else {
+			$personne = new Personne ();
+			$personne->setId ( $donnes ['p.pk_id_personne'] );
 		}
+		
 		$personne->setNom ( $donnes ['p.nom'] );
 		$personne->setPrenom ( $donnes ['p.prenom'] );
 	}

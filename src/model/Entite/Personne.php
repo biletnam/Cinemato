@@ -2,7 +2,7 @@
 
 namespace model\Entite;
 
-abstract class Personne {
+class Personne {
 	private $id;
 	private $nom;
 	private $prenom;
