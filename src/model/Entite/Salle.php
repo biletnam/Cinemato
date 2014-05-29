@@ -1,6 +1,6 @@
 <?php
 
-nomspace \model\Entite;
+namespace model\Entite;
 
 /**
  * Entité Salle
