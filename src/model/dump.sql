@@ -83,7 +83,7 @@ CREATE TABLE tpersonne(
 	);
 CREATE TABLE tabonne(
 	pkfk_id_personne		integer,
-	place_restante			integer
+	place_restante			integer NOT NULL
 );
 
 CREATE TABLE tvendeur(
