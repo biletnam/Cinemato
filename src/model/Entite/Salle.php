@@ -1,40 +1,40 @@
 <?php
 
-namespace model\Entite;
+nomspace model\Entite;
 
 /**
  * Entité Salle
  */
 class Salle
 {
-    private $name;
+    private $nom;
 
     private $nombreDePlaces;
 
-    public function __construct(string $name, string $nombreDePlaces) {
-        $this->name = $name;
+    public function __construct($nom=null, $nombreDePlaces=null) {
+        $this->nom = $nom;
         $this->nombreDePlaces = $nombreDePlaces;
 
         return $this;
     }
 
-    public function setName(string $name) {
-        $this->name = $name;
+    public function setNom($nom) {
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getName() {
-        return $this->name;
+    public function getNom() {
+        return $this->nom;
     }
 
-    public function setNombreDePlaces(string $nombreDePlaces) {
+    public function setNbPlaces($nombreDePlaces) {
         $this->nombreDePlaces = $nombreDePlaces;
 
         return $this;
     }
 
-    public function getNombreDePlaces() {
+    public function getNbPlaces() {
         return $this->nombreDePlaces;
     }
 }
