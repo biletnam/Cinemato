@@ -3,12 +3,17 @@
 use Silex\Application,
     Silex\Provider\UrlGeneratorServiceProvider,
     Silex\Provider\MonologServiceProvider,
-    Silex\Provider\TwigServiceProvider;
+    Silex\Provider\TwigServiceProvider,
+    Silex\Provider\FormServiceProvider,
+    Silex\Provider\TranslationServiceProvider,
+    Silex\Provider\SessionServiceProvider;
 
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Entea\Twig\Extension\AssetExtension;
 
 $app = new Application();
+
+$app->register(new SessionServiceProvider());
 
 $app->register(new MonologServiceProvider(), array(
     'monolog.logfile'       => __DIR__.'/log/app.log',
@@ -17,6 +22,12 @@ $app->register(new MonologServiceProvider(), array(
 ));
 
 $app->register(new UrlGeneratorServiceProvider());
+
+$app->register(new FormServiceProvider());
+
+$app->register(new TranslationServiceProvider(), array(
+    'translator.messages' => array(),
+));
 
 $app->register(new TwigServiceProvider(), array(
     'twig.path' => array(__DIR__ . '/../views')

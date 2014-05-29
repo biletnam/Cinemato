@@ -2,7 +2,6 @@
 
 namespace model\Dao;
 
-use \DateTime;
 use \PDO;
 
 use model\Entite\Genre;
@@ -19,23 +18,45 @@ class GenreDAO
         return $this->dao;
     }
 
+    public function findAll() {
+        $genres = array();
+
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $query = 'SELECT * FROM tgenre';
+
+            $statement = $connection->prepare($query);
+            $statement->execute();
+
+            $genreRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($genreRows as &$genreData) {
+                $genres[] = Genre::mapFromData($genreData);
+            }
+        }
+
+        return $genres;
+    }
+
     public function find($nom) {
         $genre = null;
 
-        $query = "SELECT * FROM tgenre WHERE pk_nom_genre = :nom";
         $connection = $this->getDao()->getConnexion();
 
-        if (is_null($connection)) {
-            return;
-        }
+        if (!is_null($connection)) {
+            $query = 'SELECT * FROM tgenre WHERE pk_nom_genre = :nom';
 
-        $statement = $connection->prepare($query);
-        $statement->execute(array(
-            'nom' => $nom
-        ));
+            $statement = $connection->prepare($query);
+            $statement->execute(array(
+                'nom' => $nom
+            ));
 
-        if ($genreData = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $genre = Genre::mapFromData($genreData);
+            if ($genreData = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $genre = Genre::mapFromData($genreData);
+            }
+        } else {
+            exit(var_dump('connexion null'));
         }
 
         return $genre;

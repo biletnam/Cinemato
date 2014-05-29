@@ -7,9 +7,6 @@ require_once __DIR__.'/vendor/autoload.php';
 // Get bootstrapped application
 $app = require __DIR__.'/app/bootstrap.php';
 
-// Load controllers
-require __DIR__.'/src/controllers/controllers.php';
-
 if ((isset($app_env)) && (in_array($app_env, array('dev','test')))) {
     $app['env'] = $app_env;
     $app['debug'] = true;
@@ -20,6 +17,9 @@ if ((isset($app_env)) && (in_array($app_env, array('dev','test')))) {
         $app['env'] = 'dev';
     }
 }
+
+// Load controllers
+require_once __DIR__.'/src/controllers/controllers.php';
 
 if ($app['env'] === 'test') {
     return $app;

@@ -19,6 +19,9 @@ class Film
     private $distributeur;
 
     public function __construct($titre = '', $dateDeSortie = null, $ageMinimum = 0, $genre = null, $distributeur = null) {
+        if (is_null($dateDeSortie)) {
+            $dateDeSortie = new DateTime();
+        }
         $this->setTitre($titre);
         $this->setDateDeSortie($dateDeSortie);
         $this->setAgeMinimum($ageMinimum);

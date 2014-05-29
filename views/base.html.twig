@@ -34,6 +34,14 @@
             </header>
             <section id='app-container'>
                 <div class='container'>
+                    {% for type, messages in app.session.flashbag.all %}
+                        {% for message in messages %}
+                            <div class='alert alert-{{ type }} alert-dismissable'>
+                                <a href='#' class='close' data-dismiss='alert' aria-hidden='true'>&times;</a>
+                                <strong>{{ type }}!</strong><span> {{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
                     {% block app_container %}{% endblock %}
                 </div>
             </section>

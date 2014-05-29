@@ -46,10 +46,11 @@ class FilmDAO
     public function find($id) {
         $film = null;
 
-        $query = "SELECT * FROM tfilm WHERE pk_id_film = :id";
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
+            $query = 'SELECT * FROM tfilm WHERE pk_id_film = :id';
+
             $statement = $connection->prepare($query);
             $statement->execute(array(
                 'id' => $id
@@ -64,6 +65,31 @@ class FilmDAO
         }
 
         return $film;
+    }
+
+    public function create($film) {
+        $check = false;
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $query = "INSERT INTO tfilm (titre, date_sortie, age_min, fk_nom_genre, fk_id_distributeur) VALUES(:titre, :dateDeSortie, :ageMinimum, :genre_nom, :distributeur_id)";
+
+            try {
+                $statement = $connection->prepare($query);
+                $check = $statement->execute(array(
+                    'titre' => $film->getTitre(),
+                    'dateDeSortie' => $film->getDateDeSortie()->format('d m Y'),
+                    'ageMinimum' => $film->getAgeMinimum(),
+                    'genre_nom' => $film->getGenre()->getNom(),
+                    'distributeur_id' => $film->getDistributeur()->getId()
+                ));
+            }
+            catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $check;
     }
 }
 
