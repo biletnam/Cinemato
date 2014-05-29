@@ -7,25 +7,25 @@ namespace model\Entite;
  */
 class Tarif
 {
-	private $nomTarif;
+	private $nom;
 
 	private $tarif;
 
     public function __construct($nomTarif, $tarif) {
-        $this->nomTarif = $nomTarif;
+        $this->nom = $nomTarif;
         $this->tarif = $tarif;
 
         return $this;
     }
 
-    public function setNomTarif($nomTarif) {
-        $this->nomTarif = $nomTarif;
+    public function setNom($nomTarif) {
+        $this->nom = $nomTarif;
 
         return $this;
     }
 
-    public function getNomTarif() {
-        return $this->nomTarif;
+    public function getNom() {
+        return $this->nom;
     }
 
 
