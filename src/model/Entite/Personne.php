@@ -2,7 +2,7 @@
 
 namespace model\Entite;
 
-abstract class Personne {
+class Personne {
 	private $id;
 	private $nom;
 	private $prenom;
@@ -10,7 +10,7 @@ abstract class Personne {
 		return $this->id;
 	}
 	public function setId($id) {
-		$this->$id = $id;
+		$this->id = $id;
 		return $this;
 	}
 	public function setNom($nom) {

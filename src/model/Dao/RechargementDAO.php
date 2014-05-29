@@ -6,7 +6,7 @@ use \PDO;
 use model\Entite\Personne;
 use model\Entite\Rechargement;
 
-class RechargmentDAO {
+class RechargementDAO {
 	private $dao;
 	public function __construct($dao) {
 		$this->dao = $dao;
@@ -73,7 +73,7 @@ class RechargmentDAO {
 		}
 	}
 	public function delete($rechargement) {
-		$query = 'DELETE FROM trechargement WHERE id = :id';
+		$query = 'DELETE FROM trechargement WHERE pk_id_rechargement = :id';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
@@ -108,17 +108,25 @@ class RechargmentDAO {
 		}
 		return $rechargements;
 	}
-	public function create($recharge, $personne) {
-		$query = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire) VALUES(nextval(sequence_rechargement),:id, :nbPl, :prix )';
+	public function create(&$recharge, $personne) {
+		$query = "SELECT nextval('sequence_rechargement') as id";
+		$query2 = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire) VALUES(:idRe,:id, :nbPl, :prix )';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
+				$statement->execute ();
+				if ($donnees = $statement->fetch ( PDO::FETCH_ASSOC )) {
+					$recharge->setId ( $donnees ['id'] );
+				}
+				$statement = null;
+				$statement = $connection->prepare ( $query2 );
 				$statement->execute ( array (
+						'idRe' => $recharge->getId (),
 						'id' => $personne->getId (),
-						'nbPl' => $rechargement->getNombrePlace (),
-						'prix' => $rechargement->getPrixUnitaire () 
+						'nbPl' => $recharge->getNombrePlace (),
+						'prix' => $recharge->getPrixUnitaire () 
 				) );
 			} catch ( \PDOException $e ) {
 				throw $e;
@@ -127,15 +135,15 @@ class RechargmentDAO {
 	}
 	public function deleteRechargeOrphelineUser($personne) {
 		$rechargesIdHolder = '';
-		$paramQuery = array();
-		foreach ($personne->getRecharges() as $i => $recharge){
-			$rechargesIdHolder = $rechargesIdHolder . ':idRecharge'. $i .', ';
-			$paramQuery['idRecharge'. $i] = $recharge->getId();
+		$paramQuery = array ();
+		foreach ( $personne->getRecharges () as $i => $recharge ) {
+			$rechargesIdHolder = $rechargesIdHolder . ':idRecharge' . $i . ', ';
+			$paramQuery ['idRecharge' . $i] = $recharge->getId ();
 		}
-		$rechargesIdHolder = substr($rechargesIdHolder, 0, strlen($rechargesIdHolder)-2);
+		$rechargesIdHolder = substr ( $rechargesIdHolder, 0, strlen ( $rechargesIdHolder ) - 2 );
 		
 		$query = "DELETE FROM trechargement WHERE pkfk_id_personne_abonne = :id AND pk_id_rechargement NOT IN($rechargesIdHolder)";
-		$paramQuery['id'] =$personne->getId();
+		$paramQuery ['id'] = $personne->getId ();
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
@@ -146,11 +154,10 @@ class RechargmentDAO {
 				throw $e;
 			}
 		}
-		
 	}
 	public static function bind($donnees) {
 		$rechargement = new Rechargement ();
-		$rechargement->setId ( $donnees ['id'] );
+		$rechargement->setId ( $donnees ['pk_id_rechargement'] );
 		$rechargement->setNombrePlace ( $donnees ['nombre_place'] );
 		$rechargement->setPrixUnitaire ( $donnees ['prix_unitaire'] );
 		return $rechargement;
