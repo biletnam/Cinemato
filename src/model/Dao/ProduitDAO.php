@@ -16,13 +16,75 @@ class ProduitDAO {
 	private function getDao() {
 		return $this->dao;
 	}
+
+	public function create($produit) {
+		$query1 = 'INSERT INTO tproduit(pk_code_barre_produit, nom_produit, prix) VALUES(:code_barre, :nom, :prix )';
+		$query2 = 'INSRT INTO tproduit_alimentaire(fkpk_code_barre_produit) VALUES (:code_barre)';
+		$query3 = 'INSRT INTO tproduit_boisson(fkpk_code_barre_produit) VALUES (:code_barre)';
+		$query4 = 'INSRT INTO tproduit_autre(fkpk_code_barre_produit) VALUES (:code_barre)';
+		$connection = $this->getDao ()->getConnexion ();
+		
+		if (! is_null ( $connection )) {
+			try {
+				$statement = $connection->prepare ( $query1 );
+				$statement->execute ( array (
+						'code_barre' => $produit->getCodeBarre (),
+						'nom' => $produit->getNom(),
+						'prix' => $produit->getPrix()
+				) );
+			} catch ( \PDOException $e ) {
+				throw $e;
+			}
+		}
+		if($produit instanceof ProduitAlimentaire){
+			$connection = $this->getDao ()->getConnexion ();
+			if (! is_null ( $connection )) {
+				try {
+					$statement = $connection->prepare ( $query2 );
+					$statement->execute ( array (
+							'code_barre' => $produit->getCodeBarre ()
+					) );
+				} catch ( \PDOException $e ) {
+					throw $e;
+				}
+			}
+		}
+		else if($produit instanceof ProduitBoissons){
+			$connection = $this->getDao ()->getConnexion ();
+			if (! is_null ( $connection )) {
+				try {
+					$statement = $connection->prepare ( $query3 );
+					$statement->execute ( array (
+							'code_barre' => $produit->getCodeBarre ()
+					) );
+				} catch ( \PDOException $e ) {
+					throw $e;
+				}
+			}
+		}
+		else {
+			$connection = $this->getDao ()->getConnexion ();
+			if (! is_null ( $connection )) {
+				try {
+					$statement = $connection->prepare ( $query4 );
+					$statement->execute ( array (
+							'code_barre' => $produit->getCodeBarre ()
+					) );
+				} catch ( \PDOException $e ) {
+					throw $e;
+				}
+			}
+		}
+		}
+	}
+
 	public function find($id) {
 		$produit = null;
-		$query = 'SELECT *' . 'FROM tproduit p'.
-		'LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit'.
-		'LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit'.
-		'LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit'.
-		'WHERE p.pk_code_barre_produit= :id';
+		$query = 'SELECT *' . ' FROM tproduit p'.
+		' LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit'.
+		' LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit'.
+		' LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit'.
+		' WHERE p.pk_code_barre_produit= :id';
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
@@ -41,10 +103,10 @@ class ProduitDAO {
 	}
 	public function findAll() {
 		$produits = array ();
-		$query = 'SELECT *' . 'FROM tproduit p'.
-		'LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit'.
-		'LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit'.
-		'LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit';
+		$query = 'SELECT *' . ' FROM tproduit p'.
+		' LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit'.
+		' LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit'.
+		' LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
@@ -66,8 +128,8 @@ class ProduitDAO {
 
 	public function findAllAlimentaire(){
 		$produits = array ();
-		$query = 'SELECT *' . 'FROM tproduit p'.
-		'LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit';
+		$query = 'SELECT *' . ' FROM tproduit p'.
+		' LEFT JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.fkpk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
@@ -89,8 +151,8 @@ class ProduitDAO {
 
 	public function findAllBoisson(){
 		$produits = array ();
-		$query = 'SELECT *' . 'FROM tproduit p'.
-		'LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit';
+		$query = 'SELECT *' . ' FROM tproduit p'.
+		' LEFT JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.fkpk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
@@ -112,8 +174,8 @@ class ProduitDAO {
 
 	public function findAllAutres() {
 		$produits = array ();
-		$query = 'SELECT *' . 'FROM tproduit p'.
-		'LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit';
+		$query = 'SELECT *' . ' FROM tproduit p'.
+		' LEFT JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.fkpk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 		
 		if (! is_null ( $connection )) {
