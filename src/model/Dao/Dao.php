@@ -69,4 +69,8 @@ class Dao
 	public function getDistributeurDAO() {
 		return new DistributeurDAO(self::getInstance());
 	}
+
+	public function getProduitDAO(){
+		return new ProduitDAO(self::getInstance());
+	}
 }
