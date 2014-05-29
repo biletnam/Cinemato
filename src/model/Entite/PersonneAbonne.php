@@ -29,6 +29,8 @@ class PersonneAbonne extends Personne {
 		array_push ( $this->getRecharges (), $recharge );
 	}
 	public function deleteRecharge($indice) {
-		unset ( $this->getRecharges ()[$indice] );
+		$recharges = $this->getRecharges ();
+		unset ( $recharges[$indice] );
+		$this->setRecharges($recharges);
 	}
 }

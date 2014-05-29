@@ -48,8 +48,12 @@ class PersonneDAO {
 								'nbPlace' => $personne->getPlaceRestante () 
 						) );
 						foreach ( $personne->getRecharges () as $recharge ) {
-							$this->getDao ()->getRechargmentDAO ()->create ( $recharge );
+							if ($recharge->getId () == null) {
+								$this->getDao ()->getRechargementDAO ()->create ( $recharge, $personne );
+							} else
+								$this->getDao ()->getRechargementDAO ()->update ( $recharge );
 						}
+						$this->getDao ()->getRechargementDAO ()->deleteRechargeOrphelineUser ( $personne );
 					}
 				}
 				$statement = null;
