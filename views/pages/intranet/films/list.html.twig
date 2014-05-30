@@ -7,12 +7,14 @@
 {% block entity_add_label %}Ajouter un film{% endblock %}
 
 {% block entity_table_headers %}
+    <th>Id</th>
     <th>Titre</th>
     <th>Sortie</th>
     <th>Âge minimum</th>
 {% endblock %}
 
 {% block entity_table_content %}
+    <th>{{ entity.id }}</th>
     <th>{{ entity.titre }}</th>
     <th>{{ entity.dateDeSortie|date('d-m-Y') }}</th>
     <th>{{ entity.ageMinimum }}</th>

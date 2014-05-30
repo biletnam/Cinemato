@@ -82,4 +82,102 @@ $filmsControllers->get('/{id}', function ($id) use ($app) {
     ));
 })->bind('intranet-films-detail');
 
+$filmsControllers->get('/{id}/edit', function ($id) use ($app) {
+    $filmDao = Dao::getInstance()->getFilmDao();
+    $film = $filmDao->find($id);
+
+    if (!$film) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
+
+    $genreDao = Dao::getInstance()->getGenreDAO();
+    $genres = $genreDao->findAll();
+
+    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+    $distributeurs = $distributeurDao->findAll();
+
+    $dateDeSortie = new DateTime($film->getDateDeSortie());
+
+    $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
+        'titre' => $film->getTitre(),
+        'dateDeSortie' => $dateDeSortie,
+        'ageMinimum' => $film->getAgeMinimum(),
+        'genre' => $film->getGenre()->getNom(),
+        'distributeur' => $film->getDistributeur()->getId(),
+    ));
+
+    return $app['twig']->render('pages/intranet/films/new.html.twig', array(
+        'form' => $form->createView()
+    ));
+})->bind('intranet-films-edit');
+
+$filmsControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
+    $filmDao = Dao::getInstance()->getFilmDao();
+    $film = $filmDao->find($id);
+
+    if (!$film) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
+
+    $genreDao = Dao::getInstance()->getGenreDAO();
+    $genres = $genreDao->findAll();
+
+    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+    $distributeurs = $distributeurDao->findAll();
+
+    $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
+        'titre' => $film->getTitre(),
+        'dateDeSortie' => $film->getDateDeSortie(),
+        'ageMinimum' => $film->getAgeMinimum(),
+        'genre' => $film->getGenre()->getNom(),
+        'distributeur' => $film->getDistributeur()->getId(),
+    ));
+
+    if ($request->getMethod() === 'POST') {
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+
+            $genre = $genreDao->find($data['genre']);
+            $distributeur = $distributeurDao->find((int) $data['distributeur']);
+
+            $film->setTitre($data['titre']);
+            $film->setDateDeSortie($data['dateDeSortie']);
+            $film->setAgeMinimum($data['ageMinimum']);
+            $film->setGenre($genre);
+            $film->setDistributeur($distributeur);
+
+            if ($filmDao->update($film)) {
+                $app['session']->getFlashBag()->add('success', 'Le film est bien mis à jour !');
+
+                return $app->redirect('/intranet/films');
+            } else {
+                $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être mis à jour.');
+            }
+        }
+    }
+
+    return $app['twig']->render('pages/intranet/films/new.html.twig', array(
+        'form' => $form->createView()
+    ));
+})->bind('intranet-films-update');
+
+$filmsControllers->post('/{id}/delete', function (Request $request, $id) use ($app) {
+    $filmDao = Dao::getInstance()->getFilmDao();
+    $film = $filmDao->find($id);
+
+    if (!$film) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
+
+    if ($filmDao->delete($film)) {
+        $app['session']->getFlashBag()->add('success', 'Le film a bien été supprimé !');
+    } else {
+        $app['session']->getFlashBag()->add('success', 'Le film n\'a pas pu être supprimé...');
+    }
+
+    return $app->redirect('/intranet/films');
+})->bind('intranet-films-update');
+
 $app->mount('/intranet/films', $filmsControllers);
