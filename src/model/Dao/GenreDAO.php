@@ -3,6 +3,7 @@
 namespace model\Dao;
 
 use \PDO;
+use \PDOException;
 
 use model\Entite\Genre;
 
@@ -26,13 +27,18 @@ class GenreDAO
         if (!is_null($connection)) {
             $query = 'SELECT * FROM tgenre';
 
-            $statement = $connection->prepare($query);
-            $statement->execute();
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute();
 
-            $genreRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $genreRows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($genreRows as &$genreData) {
-                $genres[] = Genre::mapFromData($genreData);
+                foreach ($genreRows as &$genreData) {
+                    $genres[] = self::map($genreData);
+                }
+            }
+            catch (PDOException $e) {
+                throw $e;
             }
         }
 
@@ -47,17 +53,72 @@ class GenreDAO
         if (!is_null($connection)) {
             $query = 'SELECT * FROM tgenre WHERE pk_nom_genre = :nom';
 
-            $statement = $connection->prepare($query);
-            $statement->execute(array(
-                'nom' => $nom
-            ));
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute(array(
+                    'nom' => $nom
+                ));
 
-            if ($genreData = $statement->fetch(PDO::FETCH_ASSOC)) {
-                $genre = Genre::mapFromData($genreData);
+                if ($genreData = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $genre = self::map($genreData);
+                }
             }
-        } else {
-            exit(var_dump('connexion null'));
+            catch (PDOException $e) {
+                throw $e;
+            }
         }
+
+        return $genre;
+    }
+
+    public function create($genre) {
+        $check = false;
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $query = 'INSERT INTO tgenre (pk_nom_genre) VALUES(:pk_nom_genre)';
+
+            try {
+                $statement = $connection->prepare($query);
+                $check = $statement->execute(array(
+                    'pk_nom_genre' => $genre->getNom()
+                ));
+            }
+            catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $check;
+    }
+
+    public function delete(&$genre) {
+        $check = false;
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $query = 'DELETE FROM tgenre WHERE pk_nom_genre = :pk_nom_genre LIMIT 0, 1';
+
+            try {
+                $statement = $connection->prepare($query);
+                $check = $statement->execute(array(
+                    'pk_nom_genre' => $genre->getNom()
+                ));
+
+                if ($check) {
+                    $genre = null;
+                }
+            }
+            catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $check;
+    }
+
+    public function map($donnees) {
+        $genre = new Genre($donnees['pk_nom_genre']);
 
         return $genre;
     }

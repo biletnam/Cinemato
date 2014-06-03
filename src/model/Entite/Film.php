@@ -35,7 +35,7 @@ class Film
         $this->id = $id;
     }
 
-    public function getId(){
+    public function getId() {
         return $this->id;
     }
 
@@ -109,18 +109,5 @@ class Film
      */
     public function toString() {
         return $this->titre;
-    }
-
-    /**
-     * Instantiate a new Film from database values array
-     *
-     * @param array $data
-     * @return Film
-     */
-    public static function mapFromData($data) {
-        $instance = new self($data['titre'], $data['date_sortie'], $data['age_min'], $data['genre'], $data['distributeur']);
-        $instance->setId($data['pk_id_film']);
-
-        return $instance;
     }
 }
