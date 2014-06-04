@@ -34,7 +34,7 @@ class DistributeurDAO
                 $distributeurRows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($distributeurRows as &$distributeurData) {
-                    $distributeurs[] = Distributeur::mapFromData($distributeurData);
+                    $distributeurs[] = self::map($distributeurData);
                 }
             }
             catch (PDOException $e) {
@@ -60,7 +60,7 @@ class DistributeurDAO
                 ));
 
                 if ($distributeurData = $statement->fetch(PDO::FETCH_ASSOC)) {
-                    $distributeur = Distributeur::mapFromData($distributeurData);
+                    $distributeur = self::map($distributeurData);
                 }
             }
             catch (PDOException $e) {
