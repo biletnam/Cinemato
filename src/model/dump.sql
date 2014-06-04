@@ -285,9 +285,9 @@ VALUES('Romance');
 INSERT INTO tgenre(pk_nom_genre)
 VALUES('Action');
 
-INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel) 
+INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
 VALUES (nextval('sequence_distributeur'), 'Mars Distribution', '', 'PARIS', '');
-INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel) 
+INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
 VALUES (nextval('sequence_distributeur'), 'Studio Canal', '', 'PARIS', '');
 
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)

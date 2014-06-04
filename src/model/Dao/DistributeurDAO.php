@@ -33,7 +33,7 @@ class DistributeurDAO
 
                 $distributeurRows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach ($distributeurRows as &$distributeurData) {
+                foreach ($distributeurRows as $distributeurData) {
                     $distributeurs[] = self::map($distributeurData);
                 }
             }
@@ -146,8 +146,8 @@ class DistributeurDAO
     }
 
     public function map($donnees) {
-        $instance = new Distributeur($donnees['nom'], $donnees['prenom'], $donnees['adresse'], $donnees['tel']);
-        $instance->setId($donnees['pk_id_distributeur']);
+        $distributeur = new Distributeur($donnees['nom'], $donnees['prenom'], $donnees['adresse'], $donnees['tel']);
+        $distributeur->setId($donnees['pk_id_distributeur']);
 
         return $distributeur;
     }

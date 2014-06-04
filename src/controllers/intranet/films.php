@@ -75,10 +75,19 @@ $filmsControllers->post('/create', function (Request $request) use ($app) {
 
 $filmsControllers->get('/{id}', function ($id) use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
-    $films = $filmDao->find($id);
+    $film = $filmDao->find($id);
+
+    if (!$film) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
+
+    $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
+        ->add('id', 'hidden')
+        ->getForm();
 
     return $app['twig']->render('pages/intranet/films/detail.html.twig', array(
-        'film' => $film
+        'entity' => $film,
+        'delete_form' => $deleteForm->createView()
     ));
 })->bind('intranet-films-detail');
 
@@ -106,8 +115,14 @@ $filmsControllers->get('/{id}/edit', function ($id) use ($app) {
         'distributeur' => $film->getDistributeur()->getId(),
     ));
 
-    return $app['twig']->render('pages/intranet/films/new.html.twig', array(
-        'form' => $form->createView()
+    $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
+        ->add('id', 'hidden')
+        ->getForm();
+
+    return $app['twig']->render('pages/intranet/films/edit.html.twig', array(
+        'entity' => $film,
+        'form' => $form->createView(),
+        'delete_form' => $deleteForm->createView()
     ));
 })->bind('intranet-films-edit');
 
@@ -158,8 +173,14 @@ $filmsControllers->post('/{id}/update', function (Request $request, $id) use ($a
         }
     }
 
-    return $app['twig']->render('pages/intranet/films/new.html.twig', array(
-        'form' => $form->createView()
+    $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
+        ->add('id', 'hidden')
+        ->getForm();
+
+    return $app['twig']->render('pages/intranet/films/edit.html.twig', array(
+        'entity' => $film,
+        'form' => $form->createView(),
+        'delete_form' => $deleteForm->createView()
     ));
 })->bind('intranet-films-update');
 
@@ -174,10 +195,10 @@ $filmsControllers->post('/{id}/delete', function (Request $request, $id) use ($a
     if ($filmDao->delete($film)) {
         $app['session']->getFlashBag()->add('success', 'Le film a bien été supprimé !');
     } else {
-        $app['session']->getFlashBag()->add('success', 'Le film n\'a pas pu être supprimé...');
+        $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être supprimé...');
     }
 
     return $app->redirect('/intranet/films');
-})->bind('intranet-films-update');
+})->bind('intranet-films-delete');
 
 $app->mount('/intranet/films', $filmsControllers);

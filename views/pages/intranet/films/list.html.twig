@@ -11,6 +11,7 @@
     <th>Titre</th>
     <th>Sortie</th>
     <th>Âge minimum</th>
+    <th>Actions</th>
 {% endblock %}
 
 {% block entity_table_content %}
@@ -18,4 +19,12 @@
     <th>{{ entity.titre }}</th>
     <th>{{ entity.dateDeSortie|date('d-m-Y') }}</th>
     <th>{{ entity.ageMinimum }}</th>
+    <th>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-films-detail', { 'id': entity.id }) }}'>Détail</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-films-edit', { 'id': entity.id }) }}'>Editer</a>
+        </div>
+    </th>
 {% endblock %}

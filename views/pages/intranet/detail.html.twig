@@ -1,4 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'pages/intranet/intranet.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel='stylesheet' href='{{ asset('assets/css/vendor/bootstrap/bootstrap-datetimepicker.min.css') }}' />
+{% endblock %}
 
 {% block app_container %}
     <div class='page-header'>
@@ -27,9 +32,9 @@
         {% endblock %}
         {% block additional_links %}{% endblock %}
         {% block entity_delete_form %}
-            <form {% block entity_delete_path %}{% endblock %} class='inline-block' method='post'>
+            <form id='delete-form' {% block entity_delete_path %}{% endblock %} class='inline-block' method='post'>
                 {{ form_widget(delete_form) }}
-                <input class='btn btn-warning btn-confirm' data-modal='#confirmation-modal' type='submit' name='submit' value='Supprimer' />
+                <a href='#confirmation-modal' data-toggle='modal' class='btn btn-warning'>Supprimer</a>
             </form>
         {% endblock %}
     </div>
@@ -45,9 +50,16 @@
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn btn-default' data-dismiss='modal'>Annuler</button>
-                    <button type='button' class='btn btn-primary confirmation-modal-submit' data-dismiss='modal'>Confirmer</button>
+                    <button type='button' class='btn btn-primary confirmation-modal-submit' data-form='#delete-form' data-dismiss='modal'>Confirmer</button>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src='{{ asset('assets/js/vendor/bootstrap/bootstrap-3.1.1.min.js') }}'></script>
+    <script src='{{ asset('assets/js/vendor/bootstrap/bootstrap-datetimepicker.min.js') }}'></script>
+    <script src='{{ asset('assets/js/plugins.js') }}'></script>
 {% endblock %}

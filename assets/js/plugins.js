@@ -22,11 +22,18 @@
 }());
 
 (function($) {
-    $.fn.toggleDisabled = function() {
-        return this.each(function() {
+    $.fn.toggleDisabled = function () {
+        return this.each(function () {
             return this.disabled = !this.disabled;
         });
     };
 
     $('.datetimepicker').datetimepicker();
+
+    $('.confirmation-modal-submit').on('click', function (e) {
+        if ($($(this).data('form')).length > 0) {
+            console.log($($(this).data('form')));
+            $($(this).data('form')).submit();
+        }
+    })
 })(jQuery);

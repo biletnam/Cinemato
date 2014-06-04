@@ -11,7 +11,7 @@
         {% endblock %}
         {% block head_javascripts %}{% endblock %}
     </head>
-    <body>
+    <body {% block body_class %}{% endblock %}>
         {% block body %}
             <header>
                 {% block header %}

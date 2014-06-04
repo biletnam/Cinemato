@@ -83,17 +83,23 @@ class FilmDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'INSERT INTO tfilm (pk_id_film, titre, date_sortie, age_min, fk_nom_genre, fk_id_distributeur) VALUES(nextval(sequence_film), :titre, :dateDeSortie, :ageMinimum, :genre_nom, :distributeur_id)';
+            $query = 'INSERT INTO tfilm (pk_id_film, titre, date_sortie, age_min, fk_nom_genre, fk_id_distributeur) VALUES (nextval(\'sequence_film\'), :titre, :dateDeSortie, :ageMinimum, :genre_nom, :distributeur_id)';
 
             try {
                 $statement = $connection->prepare($query);
-                $check = $statement->execute(array(
+                $params = array(
                     'titre' => $film->getTitre(),
                     'dateDeSortie' => $film->getDateDeSortie()->format('d m Y'),
                     'ageMinimum' => $film->getAgeMinimum(),
                     'genre_nom' => $film->getGenre()->getNom(),
                     'distributeur_id' => $film->getDistributeur()->getId()
-                ));
+                );
+                $check = $statement->execute($params);
+
+                if (!$check) {
+                    die($statement->errorInfo());
+                }
+
             }
             catch (PDOException $e) {
                 throw $e;
@@ -134,7 +140,7 @@ class FilmDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'DELETE FROM tfilm WHERE pk_id_film = :id LIMIT 0, 1';
+            $query = 'DELETE FROM tfilm WHERE pk_id_film = :id';
 
             try {
                 $statement = $connection->prepare($query);
@@ -144,6 +150,8 @@ class FilmDAO
 
                 if ($check) {
                     $film = null;
+                } else {
+                    exit(var_dump($statement->errorInfo()));
                 }
             }
             catch (PDOException $e) {
