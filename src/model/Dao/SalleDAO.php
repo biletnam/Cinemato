@@ -15,7 +15,7 @@ class SalleDAO {
 	}
 
 	public function create($salle) {
-		$query = 'INSERT INTO tsalle(pk_nom_salle, nb_place) VALUES(:nom, :nbplace');
+		$query = 'INSERT INTO tsalle(pk_nom_salle, nb_place) VALUES(:nom, :nbplace)';
 	
 		$connection = $this->getDao ()->getConnexion ();
 		
