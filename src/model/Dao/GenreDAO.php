@@ -97,7 +97,7 @@ class GenreDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'DELETE FROM tgenre WHERE pk_nom_genre = :pk_nom_genre LIMIT 0, 1';
+            $query = 'DELETE FROM tgenre WHERE pk_nom_genre = :pk_nom_genre';
 
             try {
                 $statement = $connection->prepare($query);

@@ -76,14 +76,14 @@ class DistributeurDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'INSERT INTO tdistributeur (pk_id_distributeur, nom, prenom, addresse, tel) VALUES(nextval(sequence_distributeur), :nom, :prenom, :addresse, :tel)';
+            $query = 'INSERT INTO tdistributeur (pk_id_distributeur, nom, prenom, adresse, tel) VALUES(nextval(\'sequence_distributeur\'), :nom, :prenom, :adresse, :tel)';
 
             try {
                 $statement = $connection->prepare($query);
                 $check = $statement->execute(array(
                     'nom' => $distributeur->getNom(),
                     'prenom' => $distributeur->getPrenom(),
-                    'adresse' => $distributeur->getAddrese(),
+                    'adresse' => $distributeur->getAdresse(),
                     'tel' => $distributeur->getTelephone()
                 ));
             }
@@ -100,7 +100,7 @@ class DistributeurDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'UPDATE tdistributeur SET nom = :nom, prenom = :prenom, addresse = :addresse, tel = :tel WHERE pk_id_distributeur = :id';
+            $query = 'UPDATE tdistributeur SET nom = :nom, prenom = :prenom, adresse = :adresse, tel = :tel WHERE pk_id_distributeur = :id';
 
             try {
                 $statement = $connection->prepare($query);
@@ -108,7 +108,7 @@ class DistributeurDAO
                     'id' => $distributeur->getId(),
                     'nom' => $distributeur->getNom(),
                     'prenom' => $distributeur->getPrenom(),
-                    'adresse' => $distributeur->getAddrese(),
+                    'adresse' => $distributeur->getAdresse(),
                     'tel' => $distributeur->getTelephone()
                 ));
             }
@@ -125,7 +125,7 @@ class DistributeurDAO
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'DELETE FROM tdistributeur WHERE pk_id_distributeur = :id LIMIT 0, 1';
+            $query = 'DELETE FROM tdistributeur WHERE pk_id_distributeur = :id';
 
             try {
                 $statement = $connection->prepare($query);

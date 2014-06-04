@@ -1,0 +1,28 @@
+{% extends 'pages/intranet/list.html.twig' %}
+
+{% block entity_title %}Distributeurs{% endblock %}
+
+{% block entity_add_path %}href='{{ app.url_generator.generate('intranet-distributeurs-new') }}'{% endblock %}
+
+{% block entity_add_label %}Ajouter un distributeur{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Id</th>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Actions</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <th>{{ entity.id }}</th>
+    <th>{{ entity.prenom }}</th>
+    <th>{{ entity.nom }}</th>
+    <th>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-distributeurs-detail', { 'id': entity.id }) }}'>Détail</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-distributeurs-edit', { 'id': entity.id }) }}'>Editer</a>
+        </div>
+    </th>
+{% endblock %}

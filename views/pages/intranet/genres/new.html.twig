@@ -1,0 +1,7 @@
+{% extends 'pages/intranet/new.html.twig' %}
+
+{% block entity_title %}Genre{% endblock %}
+
+{% block entity_create_path %}action='{{ app.url_generator.generate('intranet-genres-create') }}'{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('intranet-genres-list') }}'{% endblock %}

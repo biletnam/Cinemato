@@ -95,11 +95,6 @@ class FilmDAO
                     'distributeur_id' => $film->getDistributeur()->getId()
                 );
                 $check = $statement->execute($params);
-
-                if (!$check) {
-                    die($statement->errorInfo());
-                }
-
             }
             catch (PDOException $e) {
                 throw $e;
@@ -150,8 +145,6 @@ class FilmDAO
 
                 if ($check) {
                     $film = null;
-                } else {
-                    exit(var_dump($statement->errorInfo()));
                 }
             }
             catch (PDOException $e) {
