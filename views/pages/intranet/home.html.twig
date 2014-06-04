@@ -1,0 +1,13 @@
+{% extends 'pages/intranet/intranet.html.twig' %}
+
+{% block app_container %}
+    <section class='jumbotron'>
+        <h1>Intranet</h1>
+        <p class='lead'>Gestion des ressources internes</p>
+        <ul class='nav nav-tabs nav-justified'>
+            <li><a href='{{ app.url_generator.generate('intranet-distributeurs-list') }}' class='btn btn-primary'>Distributeurs</a></li>
+            <li><a href='{{ app.url_generator.generate('intranet-genres-list') }}' class='btn btn-primary'>Genres</a></li>
+            <li><a href='{{ app.url_generator.generate('intranet-films-list') }}' class='btn btn-primary'>Films</a></li>
+        </ul>
+    </section>
+{% endblock %}
