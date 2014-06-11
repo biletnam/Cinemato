@@ -8,6 +8,7 @@
         {% block stylesheets %}
             <link rel='stylesheet' href='{{ asset('assets/css/bootstrap.min.css') }}' />
             <link rel='stylesheet' href='{{ asset('assets/css/app.min.css') }}' />
+            <link rel='stylesheet' href='{{ asset('assets/css/vendor/bootstrap/bootstrap-datetimepicker-3.0.0.min.css') }}' />
         {% endblock %}
         {% block head_javascripts %}{% endblock %}
     </head>
@@ -68,7 +69,10 @@
             </footer>
             {% block javascripts %}
                 <script src='{{ asset('assets/js/vendor/jquery-1.11.0.min.js') }}'></script>
+                <script src='{{ asset('assets/js/vendor/moment-2.5.1.min.js') }}'></script>
                 <script src='{{ asset('assets/js/vendor/bootstrap/bootstrap-3.1.1.min.js') }}'></script>
+                <script src='{{ asset('assets/js/vendor/bootstrap/bootstrap-datetimepicker-3.0.0.min.js') }}'></script>
+                <script src='{{ asset('assets/js/plugins.js') }}'></script>
             {% endblock %}
         {% endblock %}
     </body>

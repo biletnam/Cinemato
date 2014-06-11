@@ -61,7 +61,7 @@ $filmsControllers->post('/create', function (Request $request) use ($app) {
             if ($filmDao->create($film)) {
                 $app['session']->getFlashBag()->add('success', 'Le film est bien enregistré !');
 
-                return $app->redirect('/intranet/films');
+                return $app->redirect($app['url_generator']->generate('intranet-films-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être enregistré.');
             }

@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class FilmForm extends AbstractType
 {
     protected $genres;
+    protected $distributeurs;
 
     public function __construct($genres, $distributeurs) {
         $this->genres = $genres;

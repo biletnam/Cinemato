@@ -1,0 +1,10 @@
+{% extends 'pages/public/public.html.twig' %}
+
+{% block app_container %}
+    <h2>FILMS</h2>
+    <ul>
+        {% for film in films %}
+            <li><a href='{{ app.url_generator.generate('public-films-detail', { 'id': film.id }) }}'>{{ film.titre }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
