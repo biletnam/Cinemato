@@ -29,6 +29,12 @@
     };
 
     $('.datetimepicker').datetimepicker();
+    $('.datepicker').datetimepicker({
+        pickTime: false
+    });
+    $('.timepicker').datetimepicker({
+        pickDate: false
+    });
 
     $('.confirmation-modal-submit').on('click', function (e) {
         if ($($(this).data('form')).length > 0) {

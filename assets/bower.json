@@ -10,18 +10,14 @@
     "jquery-ui": "~1.10.3",
     "bootstrap": "~3.1.1",
     "bootstrap-sass": "git://github.com/twbs/bootstrap-sass.git#~3.1.1",
-    "bootstrap-datetimepicker": "~0.0.11",
     "tinymce": "~4.0.16",
     "ResponsiveFilemanager": "https://github.com/trippo/ResponsiveFilemanager",
-    "momentjs": "~2.5.1"
+    "momentjs": "~2.5.1",
+    "eonasdan-bootstrap-datetimepicker": "~3.0.0"
   },
   "devDependencies": {
     "buzz": "~1.1.0",
     "bootstrap": "~3.1.1",
-    "bootstrap-datetimepicker": "~0.0.11",
     "bootstrap-sass": "git://github.com/twbs/bootstrap-sass.git#~3.1.1"
-  },
-  "resolutions": {
-    "bootstrap": "~3.1.1"
   }
 }

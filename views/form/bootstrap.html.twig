@@ -68,7 +68,7 @@
 {% spaceless %}
     <div class='form-group'>
         {{ form_label(form) }}
-        <div class='input-group datetimepicker'>
+        <div class='input-group datetimepicker' data-date-format='DD-MM-YYYY hh:mm:ss'>
             {{ form_widget(form) }}
             <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         </div>
@@ -94,7 +94,7 @@
 {% spaceless %}
     <div class='form-group'>
         {{ form_label(form) }}
-        <div class='input-group datepicker'>
+        <div class='input-group datepicker' data-date-format='DD-MM-YYYY'>
             {{ form_widget(form) }}
             <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         </div>
@@ -107,7 +107,7 @@
 {% spaceless %}
     <div class='form-group'>
         {{ form_label(form) }}
-        <div class='input-group timepicker'>
+        <div class='input-group timepicker' data-date-format='hh:mm:ss'>
             {{ form_widget(form) }}
             <span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span>
         </div>

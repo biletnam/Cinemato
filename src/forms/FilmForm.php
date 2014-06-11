@@ -27,7 +27,7 @@ class FilmForm extends AbstractType
 
         $builder
             ->add('titre', 'text', array('label' => 'Titre', 'required' => true))
-            ->add('dateDeSortie', 'datetime', array('label' => 'Date de sortie', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'dd-MM-yyyy', 'attr' => array('data-format' => 'dd-MM-yyyy')))
+            ->add('dateDeSortie', 'date', array('label' => 'Date de sortie', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'dd-MM-yyyy', 'attr' => array('data-format' => 'DD-MM-YYYY')))
             ->add('ageMinimum', 'integer', array('label' => 'Age requis', 'required' => true))
             ->add('genre', 'choice', array('label' => 'Genre', 'required' => true, 'choices' => $genres))
             ->add('distributeur', 'choice', array('label' => 'Distributeur', 'required' => true, 'choices' => $distributeurs))
