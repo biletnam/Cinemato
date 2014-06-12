@@ -79,4 +79,10 @@ class Dao
 	public function getRechargementDAO(){
 		return new RechargementDAO(self::getInstance());
 	}
+	public function getSeanceDAO(){
+		return new SeanceDAO(self::getInstance());
+	}
+	public function getSalleDAO(){
+		return new SalleDAO(self::getInstance());
+	}
 }
