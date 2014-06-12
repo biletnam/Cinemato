@@ -34,6 +34,7 @@ class SalleDAO {
 
 	public function find($nom) {
 		$salle = null;
+		$connection = $this->getDao ()->getConnexion ();
 		$query = 'SELECT *' . ' FROM tsalle s'.
 		' WHERE p.pk_nom_salle= :nom';
 		if (! is_null ( $connection )) {
