@@ -18,14 +18,7 @@ class Seance
 
     private $doublage;
 
-	public function __construct($dateSeance, $salle, $film, $doublage) {
-		$this->dateSeance = $dateSeance;
-		$this->salle = $salle;
-		$this->film = $film;
-		$this->doublage = $doublage;
-	}
-
-    public function setDateSeance(DateTime $dateSeance) {
+    public function setDateSeance($dateSeance) {
         $this->dateSeance = $dateSeance;
 
         return $this;
@@ -35,7 +28,7 @@ class Seance
         return $this->dateSeance;
     }
 
-    public function setSalle(Salle $salle) {
+    public function setSalle($salle) {
         $this->salle = $salle;
 
         return $this;
@@ -45,7 +38,7 @@ class Seance
         return $this->salle;
     }
 
-    public function setFilm(Film $film) {
+    public function setFilm($film) {
         $this->film = $film;
 
         return $this;
