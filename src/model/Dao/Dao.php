@@ -87,4 +87,10 @@ class Dao
 	public function getSalleDAO(){
 		return new SalleDAO(self::getInstance());
 	}
+	public function getTarifDao(){
+	    return new TarifDAO(self::getInstance());
+	}
+	public function getTicketDao(){
+	    return new TicketDAO(self::getInstance());
+	}
 }

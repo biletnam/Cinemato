@@ -11,13 +11,6 @@ class Tarif
 
 	private $tarif;
 
-    public function __construct($nomTarif, $tarif) {
-        $this->nom = $nomTarif;
-        $this->tarif = $tarif;
-
-        return $this;
-    }
-
     public function setNom($nomTarif) {
         $this->nom = $nomTarif;
 
@@ -29,7 +22,7 @@ class Tarif
     }
 
 
-    public function setTarif(float $tarif) {
+    public function setTarif($tarif) {
         $this->tarif = $tarif;
 
         return $this;
