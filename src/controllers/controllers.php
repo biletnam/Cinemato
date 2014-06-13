@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 use model\Dao\Dao;
 use model\Entite\Salle;
+use model\Entite\ProduitAlimentaire;
+use model\Entite\ProduitAutre;
+use model\Entite\ProduitBoissons;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
@@ -16,14 +19,12 @@ $app->get('/', function() use ($app) {
 })->bind('home');
 
 $app->get('/DAO/test', function () use ($app) {
-    $salleDao = Dao::getInstance()->getSalleDAO();
-    $salle = $salleDao->find('Salle Zinédine Zidane');
-    $salle2 = new Salle();
-    $salle2->setNom('KARIM');
-    $salle2->setNbPlaces(3);
-    $salleDao->create($salle2);
-    $salleDao->delete($salle);
-
+    $produitDao = Dao::getInstance()->getProduitDAO();
+    $produits = new ProduitBoissons();
+    $produits->setCodeBarre(633);
+    $produits->setNom('Chouffe');
+    $produits->setPrix(3.1);
+    $produitDao->create($produits);
     echo '<pre>';
-    return new Response(print_r($salle, true));
+    return new Response(print_r($produits, true));
 });

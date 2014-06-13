@@ -98,7 +98,6 @@ class SalleDAO {
 			$connection = $this->getDao ()->getConnexion ();
 			if (! is_null ( $connection )) {
 				$statement = $connection->prepare ( $query );
-				//exit(var_dump($statement));
 				$statement->execute ( array (
 						'nom' => $salle->getNom () 
 				) );
