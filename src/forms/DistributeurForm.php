@@ -12,7 +12,7 @@ class DistributeurForm extends AbstractType
     {
         $builder
             ->add('nom', 'text', array('label' => 'Nom', 'required' => true))
-            ->add('prenom', 'text', array('label' => 'Prénom', 'required' => true))
+            ->add('prenom', 'text', array('label' => 'Prénom', 'required' => false))
             ->add('adresse', 'textarea', array('label' => 'Adresse', 'required' => false))
             ->add('telephone', 'text', array('label' => 'N° de téléphone', 'required' => false))
         ;
