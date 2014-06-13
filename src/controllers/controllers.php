@@ -8,6 +8,7 @@ use model\Dao\Dao;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
+require_once __DIR__.'/vente/vente.php';
 require_once __DIR__.'/public/public.php';
 
 $app->get('/', function() use ($app) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace model\Entite;
 
 class PersonneAbonne extends Personne
