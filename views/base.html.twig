@@ -43,6 +43,9 @@
                                                 <li><a href='{{ app.url_generator.generate('intranet-films-list') }}'><i class='icon icon-list'></i> Films</a></li>
                                                 <li><a href='{{ app.url_generator.generate('intranet-films-new') }}'><i class='icon icon-plus'></i> Ajouter un film</a></li>
                                             </ul>
+                                            <a href='{{ app.url_generator.generate('public') }}'><i class='icon icon-database'></i> Public <b class='caret'></b></a>
+                                            <ul class='dropdown-menu'>
+                                            </ul>
                                         </li>
                                     </ul>
                                 {% endblock %}

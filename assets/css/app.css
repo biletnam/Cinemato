@@ -2052,7 +2052,6 @@ html body.intranet form div .uneditable-input,
 html body.intranet form div select {
   margin-top: 5px;
 }
-html body.intranet form div.input-append {
   display: block;
 }
 html body.intranet form div.input-append .add-on {
