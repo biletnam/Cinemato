@@ -22,8 +22,7 @@ class SeanceDAO
 
     public function find($dateSeance, $salle) {
     	$seance = null;
-    	
-    	$query = "SELECT * FROM tseance WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle";
+    	$query = "SELECT * FROM tseance WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle";
     	$connection = $this->getDao()->getConnexion();
     	
     	if (is_null($connection)) {
@@ -32,7 +31,7 @@ class SeanceDAO
     	
     	$statement = $connection->prepare($query);
     	$statement->execute(array(
-    			'dateSeance' => $dateSeance,
+    			'dateSeance' => $dateSeance->format('Y-m-d H:i:s'),
     			'nomSalle' => $salle->getNom()
     	));
     	
@@ -71,7 +70,7 @@ class SeanceDAO
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
-    					'dateSeance' => $seance->getDateSeance(),
+    					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
     					'nomSalle' => $seance->getSalle()->getNom(),
     					'nomFilm' => $seance->getFilm()->getId(),
     					'doublage' => $seance->getDoublage()
@@ -83,14 +82,14 @@ class SeanceDAO
     }
     
     public function update($seance){
-    	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :nomFilm WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle ';
+    	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :nomFilm WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle ';
     	$connection = $this->getDao ()->getConnexion ();
     	
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
-    					'dateSeance' => $seance->getDateSeance(),
+    					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
     					'nomSalle' => $seance->getSalle()->getNom(),
     					'nomFilm' => $seance->getFilm()->getId(),
     					'doublage' => $seance->getDoublage()
@@ -101,14 +100,14 @@ class SeanceDAO
     	}
     }
     public function delete($seance){
-    	$query = 'DELETE FROM tseance WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle';
+    	$query = 'DELETE FROM tseance WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle';
     	$connection = $this->getDao ()->getConnexion ();
     	
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
-    					'dateSeance' => $seance->getDateSeance(),
+    					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
     					'nomSalle' => $seance->getSalle()->getNom()
     			) );
     		} catch ( \PDOException $e ) {
