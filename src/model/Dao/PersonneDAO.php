@@ -28,7 +28,7 @@ class PersonneDAO
 
         $query = "select nextval('sequence_personne') as val";
         $query2 = "INSERT INTO tpersonne(pk_id_personne, nom, prenom)" . " VALUES(:id,:nom,:prenom)";
-        $query3 = "INSERT INTO tabonne(pkfk_id_personne, place_restante)" . " VALUES(:id, :nbPlace)";
+        $query3 = "INSERT INTO tabonne(pkfk_id_personne)" . " VALUES(:id)";
         $query4 = "INSERT INTO tvendeur(pkfk_id_personne)" . " VALUES(:id)";
         $connection = $this->getDao()->getConnexion();
         if (! is_null($connection)) {
@@ -91,7 +91,7 @@ class PersonneDAO
     public function find($id)
     {
         $personne = null;
-        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' a.place_restante as place_restante' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' . ' WHERE p.pk_id_personne = :id';
+        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' . ' WHERE p.pk_id_personne = :id';
         $connection = $this->getDao()->getConnexion();
         if (! is_null($connection)) {
             try {
@@ -113,7 +113,7 @@ class PersonneDAO
     public function findAll()
     {
         $personnes = array();
-        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' a.place_restante as place_restante' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
+        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -154,7 +154,7 @@ class PersonneDAO
     public function findAllAbonne()
     {
         $personnes = array();
-        $query = 'SELECT p.pk_id_personne as idp,' . 'p.nom as nom,' . ' p.prenom as prenom,' . ' a.pkfk_id_personne as ida,' . ' a.place_restante as place_restante' . ' FROM tpersonne p' . ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
+        $query = 'SELECT p.pk_id_personne as idp,' . 'p.nom as nom,' . ' p.prenom as prenom,' . ' a.pkfk_id_personne as ida,' . ' FROM tpersonne p' . ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -174,41 +174,31 @@ class PersonneDAO
 
     public function update($personne)
     {
-        $query = 'UPDATE tabonne SET place_restante = :placeRest WHERE fkpk_id_personne = :id';
-        $query2 = 'UPDATE tpersonne SET nom = :nom, prenom = :prenom WHERE pk_id_personne = :id';
+        $query = 'UPDATE tpersonne SET nom = :nom, prenom = :prenom WHERE pk_id_personne = :id';
         $connection = $this->getDao()->getConnexion();
         if ($personne instanceof PersonneAbonne) {
             if (! is_null($connection)) {
-                try {
-                    $statement = $connection->prepare($query);
-                    $statement->execute(array(
-                        'id' => $personne->getId(),
-                        'placeRest' => $personne->getPlaceRestante()
-                    ));
-                } catch (\PDOException $e) {
-                    throw $e;
+                foreach ($personne->getRecharges() as $recharge) {
+                    if ($recharge->getId() == null) {
+                        $this->getDao()
+                            ->getRechargementDAO()
+                            ->create($recharge, $personne);
+                    } else
+                        $this->getDao()
+                            ->getRechargementDAO()
+                            ->update($recharge);
                 }
+                $this->getDao()
+                    ->getRechargementDAO()
+                    ->deleteRechargeOrphelineUser($personne);
             }
-            foreach ($personne->getRecharges() as $recharge) {
-                if ($recharge->getId() == null) {
-                    $this->getDao()
-                        ->getRechargementDAO()
-                        ->create($recharge, $personne);
-                } else
-                    $this->getDao()
-                        ->getRechargementDAO()
-                        ->update($recharge);
-            }
-            $this->getDao()
-                ->getRechargementDAO()
-                ->deleteRechargeOrphelineUser($personne);
         }
         $statement = null;
         $connection = null;
         $connection = $this->getDao()->getConnexion();
         if (! is_null($connection)) {
             try {
-                $statement = $connection->prepare($query2);
+                $statement = $connection->prepare($query);
                 $statement->execute(array(
                     'id' => $personne->getId(),
                     'nom' => $personne->getNom(),
@@ -276,7 +266,6 @@ class PersonneDAO
             if (array_key_exists('ida', $donnes) && $donnes['ida'] != null) {
                 $personne = new PersonneAbonne();
                 $personne->setId($donnes['idp']);
-                $personne->setPlaceRestante($donnes['place_restante']);
                 $personne->setRecharges($this->getDao()
                     ->getRechargementDAO()
                     ->findAllByAbonne($personne));

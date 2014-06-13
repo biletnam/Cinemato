@@ -128,21 +128,20 @@ class SeanceDAO
     		$intervalStartWeek = $offsetWeek;
     		$intervalEndWeek = $offsetWeek +1;
     		$seances = array();
-    		exit(print($query));
+    		
     		try {
     			$statement = $connection->prepare($query);
     			$statement->execute();
-    			 
+    			
 	    		while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
-	     				$seance = $this->bind ( $donnees );
-	    				array_push ( $seances, $seance );
+	     				$seance = $this->bind($donnees);
+	    				array_push ($seances, $seance);
 	    			}
     		}
     		catch (PDOException $e) {
     			throw $e;
     		}
     	}
-    	exit(print_r($seances, true));
     	return $seances;
     }
     
@@ -152,6 +151,7 @@ class SeanceDAO
     	$seance->setSalle($this->getDao()->getSalleDAO()->find($donnees['pkfk_nom_salle']));
     	$seance->setFilm($this->getDao()->getFilmDAO()->find($donnees['fk_id_film']));
     	$seance->setDoublage($donnees['doublage']);
+    	return $seance;
     }
     
 }

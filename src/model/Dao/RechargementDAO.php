@@ -67,7 +67,7 @@ class RechargementDAO
 
     public function update($rechargement)
     {
-        $query = 'UPDATE trechargement SET nombre_place = :nbPl, prix_unitaire = :prix  WHERE pk_id_rechargement = :id';
+        $query = 'UPDATE trechargement SET nombre_place = :nbPl, prix_unitaire = :prix, places_utilises = :plcUtil   WHERE pk_id_rechargement = :id';
         $connection = $this->getDao()->getConnexion();
         
         if (! is_null($connection)) {
@@ -76,7 +76,8 @@ class RechargementDAO
                 $statement->execute(array(
                     'id' => $rechargement->getId(),
                     'nbPl' => $rechargement->getNombrePlace(),
-                    'prix' => $rechargement->getPrixUnitaire()
+                    'prix' => $rechargement->getPrixUnitaire(),
+                    'plcUtil' =>$recharge->getPlacesUtilise()
                 ));
             } catch (\PDOException $e) {
                 throw $e;
@@ -127,7 +128,7 @@ class RechargementDAO
     public function create(&$recharge, $personne)
     {
         $query = "SELECT nextval('sequence_rechargement') as id";
-        $query2 = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire) VALUES(:idRe,:id, :nbPl, :prix )';
+        $query2 = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises) VALUES(:idRe,:id, :nbPl, :prix, :plcUtil )';
         $connection = $this->getDao()->getConnexion();
         
         if (! is_null($connection)) {
@@ -143,7 +144,8 @@ class RechargementDAO
                     'idRe' => $recharge->getId(),
                     'id' => $personne->getId(),
                     'nbPl' => $recharge->getNombrePlace(),
-                    'prix' => $recharge->getPrixUnitaire()
+                    'prix' => $recharge->getPrixUnitaire(),
+                    'plcUtil' =>$recharge->getPlacesUtilise()
                 ));
             } catch (\PDOException $e) {
                 throw $e;
@@ -179,6 +181,7 @@ class RechargementDAO
     {
         $rechargement = new Rechargement();
         $rechargement->setId($donnees['pk_id_rechargement']);
+        $rechargement->setPlacesUtilise($donnees['places_utilises']);
         $rechargement->setNombrePlace($donnees['nombre_place']);
         $rechargement->setPrixUnitaire($donnees['prix_unitaire']);
         return $rechargement;
