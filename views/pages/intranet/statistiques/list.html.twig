@@ -1,0 +1,26 @@
+{% extends 'pages/intranet/intranet.html.twig' %}
+
+{% block app_container %}
+    <div class='page-header'>
+        <h1>Statistiques</h1>
+    </div>
+
+    {% block extra_before_list %}{% endblock %}
+
+    <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
+        <thead>
+            <tr>
+                {% block entity_table_headers %}{% endblock %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                {% block entity_table_content %}{% endblock %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% block extra_after_list %}{% endblock %}
+{% endblock %}
