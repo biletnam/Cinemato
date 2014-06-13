@@ -92,7 +92,7 @@ class SalleDAO {
 	}
 
 	public function delete($salle) {
-		$query = "DELETE FROM tsalle WHERE pk_nom_salle = :nom";
+		$query = "DELETE FROM tsalle WHERE pk_nom_salle like :nom";
 		
 		try {
 			$connection = $this->getDao ()->getConnexion ();
