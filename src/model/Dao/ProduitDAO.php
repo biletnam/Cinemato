@@ -227,7 +227,7 @@ class ProduitDAO {
 		}
 	}
 
-	/* SI ON VEUT FAIRE IL FAUT UN CASCADE DONC ON FAIT PAS public function delete($produit) {
+	public function delete($produit) {
 		$query1 = 'DELETE FROM tproduit_alimentaire WHERE pkfk_code_barre_produit = :id';
 		$query2 = 'DELETE FROM tproduit_boisson WHERE pkfk_code_barre_produit = :id';
 		$query3 = 'DELETE FROM tproduit_alimentaire WHERE pkfk_code_barre_produit = :id';
@@ -277,7 +277,7 @@ class ProduitDAO {
 		} catch ( \PDOException $e ) {
 			throw $e;
 		}
-	} */
+	}
 	public static function bind($donnees) {
 	    //exit(var_dump($donnees));
 		if ($donnees ['palcod'] != null) {
