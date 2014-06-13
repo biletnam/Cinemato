@@ -83,7 +83,6 @@ CREATE TABLE tpersonne(
 	);
 CREATE TABLE tabonne(
 	pkfk_id_personne		integer,
-	place_restante			integer NOT NULL
 );
 
 CREATE TABLE tvendeur(
@@ -115,7 +114,8 @@ CREATE TABLE trechargement(
 	pk_id_rechargement		integer,
 	pkfk_id_personne_abonne	integer,
 	nombre_place			integer,
-	prix_unitaire			float
+	prix_unitaire			float,
+	places_utilises			integer
 );
 
 CREATE TABLE ttarif(
@@ -302,6 +302,8 @@ INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_dis
 VALUES (nextval('sequence_film'),'Rough Fight',TIMESTAMP '2010-12-03', 25, 'Horreur', 3);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Le dépeceur de l oise',TIMESTAMP '2008-08-03', 18, 'Horreur', 3);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Karim à Compiègne',TIMESTAMP '2014-06-18', 21, 'Horreur', 2);
 
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
 VALUES(nextval('sequence_personne'),'Lamouri','Karim');
@@ -330,10 +332,10 @@ VALUES(nextval('sequence_personne'),'Uma','Thurman');
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
 VALUES(nextval('sequence_personne'),'Rowan','Atkinson');
 
-INSERT INTO tabonne(pkfk_id_personne, place_restante)
-VALUES(1, 99);
-INSERT INTO tabonne(pkfk_id_personne, place_restante)
-VALUES(3, 50);
+INSERT INTO tabonne(pkfk_id_personne)
+VALUES(1);
+INSERT INTO tabonne(pkfk_id_personne)
+VALUES(3);
 
 INSERT INTO tvendeur(pkfk_id_personne)
 VALUES(2);
@@ -408,12 +410,12 @@ VALUES( nextval('sequence_ticket'), '2014-06-26 21:02:00', 18.99, TIMESTAMP '201
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), '2014-06-24 13:45:00', 12.6, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer' , NULL, 4, 'Retraité');
 
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 1, 10, 4.5);
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 1, 15, 4.5);
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 3, 25, 4.40);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 1, 10, 4.5, 10);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 1, 15, 4.5, 5);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 3, 25, 4.40, 4);
 
 INSERT INTO tproduit(pk_code_barre_produit, nom_produit, prix)
 VALUES( 232, 'Glace vanille', 3);
@@ -455,7 +457,3 @@ INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
 VALUES( 451, 2);
 INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
 VALUES( 663, 2);
-
-
-
-

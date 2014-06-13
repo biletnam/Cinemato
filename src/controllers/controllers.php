@@ -5,6 +5,7 @@ namespace controllers;
 use Symfony\Component\HttpFoundation\Response;
 
 use model\Dao\Dao;
+use model\Entite\Salle;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
@@ -15,15 +16,14 @@ $app->get('/', function() use ($app) {
 })->bind('home');
 
 $app->get('/DAO/test', function () use ($app) {
-    $filmDao = Dao::getInstance()->getFilmDAO();
-    $film = $filmDao->find(1);
-
-    $genreDao = Dao::getInstance()->getGenreDAO();
-    $genre = $genreDao->find('test genre');
-
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeur = $distributeurDao->find(1);
+    $salleDao = Dao::getInstance()->getSalleDAO();
+    $salle = $salleDao->find('Salle Zinédine Zidane');
+    $salle2 = new Salle();
+    $salle2->setNom('KARIM');
+    $salle2->setNbPlaces(3);
+    $salleDao->create($salle2);
+    $salleDao->delete($salle);
 
     echo '<pre>';
-    return new Response(print_r(array($film, $genre, $distributeur), true));
+    return new Response(print_r($salle, true));
 });
