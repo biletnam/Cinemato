@@ -36,7 +36,7 @@ class SalleDAO {
 		$salle = null;
 		$connection = $this->getDao ()->getConnexion ();
 		$query = 'SELECT *' . ' FROM tsalle s'.
-		' WHERE p.pk_nom_salle= :nom';
+		' WHERE s.pk_nom_salle= :nom';
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
@@ -76,7 +76,7 @@ class SalleDAO {
 	
 
 	public function update($salle) {
-		$query = 'UPDATE tproduit SET  nb_place = :nbplace WHERE pk_nom_salle = :nom';
+		$query = "UPDATE tsalle SET  nb_place = :nbplace WHERE pk_nom_salle = :nom";
 		$connection = $this->getDao ()->getConnexion ();
 		if (! is_null ( $connection )) {
 			try {
@@ -92,7 +92,7 @@ class SalleDAO {
 	}
 
 	public function delete($salle) {
-		$query = 'DELETE FROM tsalle WHERE pk_nom_salle = :nom';
+		$query = "DELETE FROM tsalle WHERE pk_nom_salle like :nom";
 		
 		try {
 			$connection = $this->getDao ()->getConnexion ();
@@ -101,8 +101,6 @@ class SalleDAO {
 				$statement->execute ( array (
 						'nom' => $salle->getNom () 
 				) );
-				$statement = null;
-				$connection = null;
 			}
 		} catch ( \PDOException $e ) {
 			throw $e;

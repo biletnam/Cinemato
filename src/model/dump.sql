@@ -82,8 +82,7 @@ CREATE TABLE tpersonne(
 	prenom					varchar(255)
 	);
 CREATE TABLE tabonne(
-	pkfk_id_personne		integer,
-	place_restante			integer NOT NULL
+	pkfk_id_personne		integer
 );
 
 CREATE TABLE tvendeur(
@@ -115,7 +114,8 @@ CREATE TABLE trechargement(
 	pk_id_rechargement		integer,
 	pkfk_id_personne_abonne	integer,
 	nombre_place			integer,
-	prix_unitaire			float
+	prix_unitaire			float,
+	places_utilises			integer
 );
 
 CREATE TABLE ttarif(
@@ -202,51 +202,51 @@ ADD CONSTRAINT pk_tvente_produit PRIMARY KEY (pkfk_code_barre, pkfk_id_personne_
 
 
 ALTER TABLE tfilm
-ADD CONSTRAINT fk_tfilm_tgenre FOREIGN KEY(fk_nom_genre) REFERENCES tgenre(pk_nom_genre),
-ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES tdistributeur(pk_id_distributeur);
+ADD CONSTRAINT fk_tfilm_tgenre FOREIGN KEY(fk_nom_genre) REFERENCES tgenre(pk_nom_genre) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES tdistributeur(pk_id_distributeur) ON DELETE CASCADE;
 
 ALTER TABLE tseance
-ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle),
-ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film);
+ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE;
 
 ALTER TABLE tabonne
-ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
+ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
 
 ALTER TABLE tvendeur
-ADD CONSTRAINT fk_tvendeur_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
+ADD CONSTRAINT fk_tvendeur_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
 
 ALTER TABLE tproducteurs_film
-ADD CONSTRAINT fk_tproducteurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film),
-ADD CONSTRAINT fk_tproducteurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
+ADD CONSTRAINT fk_tproducteurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tproducteurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
 
 ALTER TABLE trealisateurs_film
-ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film),
-ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
+ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE,
+ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
 
 ALTER TABLE tticket
-ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle),
-ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne),
-ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne),
-ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif);
+ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif) ON DELETE CASCADE;
 
 ALTER TABLE trechargement
-ADD CONSTRAINT fk_trechargement FOREIGN KEY (pkfk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne);
+ADD CONSTRAINT fk_trechargement FOREIGN KEY (pkfk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne) ON DELETE CASCADE;
 
 
 
 ALTER TABLE tproduit_boisson
-ADD CONSTRAINT fk_tproduit_boisson_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
+ADD CONSTRAINT fk_tproduit_boisson_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
 
 ALTER TABLE tproduit_alimentaire
-ADD CONSTRAINT fk_tproduit_alimentaire_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
+ADD CONSTRAINT fk_tproduit_alimentaire_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
 
 ALTER TABLE tproduit_autre
-ADD CONSTRAINT fk_tproduit_autre_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
+ADD CONSTRAINT fk_tproduit_autre_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
 
 
 ALTER TABLE tvente_produit
-ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (pkfk_code_barre) REFERENCES tproduit(pk_code_barre_produit),
-ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (pkfk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne);
+ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (pkfk_code_barre) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (pkfk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE;
 
 
 
@@ -257,7 +257,7 @@ FROM tpersonne p, tvendeur v
 WHERE p.pk_id_personne = v.pkfk_id_personne;
 
 CREATE OR REPLACE VIEW vabonne AS
-SELECT a.pkfk_id_personne, p.nom, p.prenom , a.place_restante
+SELECT a.pkfk_id_personne, p.nom, p.prenom
 FROM tpersonne p, tabonne a
 WHERE p.pk_id_personne = a.pkfk_id_personne;
 
@@ -302,6 +302,8 @@ INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_dis
 VALUES (nextval('sequence_film'),'Rough Fight',TIMESTAMP '2010-12-03', 25, 'Horreur', 3);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Le dépeceur de l oise',TIMESTAMP '2008-08-03', 18, 'Horreur', 3);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Karim à Compiègne',TIMESTAMP '2014-06-18', 21, 'Horreur', 2);
 
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
 VALUES(nextval('sequence_personne'),'Lamouri','Karim');
@@ -330,10 +332,10 @@ VALUES(nextval('sequence_personne'),'Uma','Thurman');
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
 VALUES(nextval('sequence_personne'),'Rowan','Atkinson');
 
-INSERT INTO tabonne(pkfk_id_personne, place_restante)
-VALUES(1, 99);
-INSERT INTO tabonne(pkfk_id_personne, place_restante)
-VALUES(3, 50);
+INSERT INTO tabonne(pkfk_id_personne)
+VALUES(1);
+INSERT INTO tabonne(pkfk_id_personne)
+VALUES(3);
 
 INSERT INTO tvendeur(pkfk_id_personne)
 VALUES(2);
@@ -408,12 +410,12 @@ VALUES( nextval('sequence_ticket'), '2014-06-26 21:02:00', 18.99, TIMESTAMP '201
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), '2014-06-24 13:45:00', 12.6, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer' , NULL, 4, 'Retraité');
 
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 1, 10, 4.5);
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 1, 15, 4.5);
-INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire)
-VALUES( nextval('sequence_rechargement'), 3, 25, 4.40);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 1, 10, 4.5, 10);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 1, 15, 4.5, 5);
+INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
+VALUES( nextval('sequence_rechargement'), 3, 25, 4.40, 4);
 
 INSERT INTO tproduit(pk_code_barre_produit, nom_produit, prix)
 VALUES( 232, 'Glace vanille', 3);
@@ -455,7 +457,3 @@ INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
 VALUES( 451, 2);
 INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
 VALUES( 663, 2);
-
-
-
-

@@ -5,6 +5,10 @@ namespace controllers;
 use Symfony\Component\HttpFoundation\Response;
 
 use model\Dao\Dao;
+use model\Entite\Salle;
+use model\Entite\ProduitAlimentaire;
+use model\Entite\ProduitAutre;
+use model\Entite\ProduitBoissons;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
@@ -15,15 +19,12 @@ $app->get('/', function() use ($app) {
 })->bind('home');
 
 $app->get('/DAO/test', function () use ($app) {
-    $filmDao = Dao::getInstance()->getFilmDAO();
-    $film = $filmDao->find(1);
-
-    $genreDao = Dao::getInstance()->getGenreDAO();
-    $genre = $genreDao->find('test genre');
-
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeur = $distributeurDao->find(1);
-
+    $produitDao = Dao::getInstance()->getProduitDAO();
+    $produits = new ProduitBoissons();
+    $produits->setCodeBarre(633);
+    $produits->setNom('Chouffe');
+    $produits->setPrix(3.1);
+    $produitDao->create($produits);
     echo '<pre>';
-    return new Response(print_r(array($film, $genre, $distributeur), true));
+    return new Response(print_r($produits, true));
 });
