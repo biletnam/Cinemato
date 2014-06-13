@@ -48,7 +48,7 @@ class Rechargement
         return  $this->placesUtilise;
     }
     public function setPlacesUtilise($placesUtilise){
-        $this->placesUtilise = placesUtilise;
+        $this->placesUtilise = $placesUtilise;
         return $this;
     }
 }

@@ -5,10 +5,12 @@ namespace controllers;
 use Symfony\Component\HttpFoundation\Response;
 
 use model\Dao\Dao;
+use model\Entite\Tarif;
 use model\Entite\Salle;
 use model\Entite\ProduitAlimentaire;
 use model\Entite\ProduitAutre;
 use model\Entite\ProduitBoissons;
+use model\Dao\TicketDAO;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
@@ -19,12 +21,18 @@ $app->get('/', function() use ($app) {
 })->bind('home');
 
 $app->get('/DAO/test', function () use ($app) {
-    $produitDao = Dao::getInstance()->getProduitDAO();
-    $produits = new ProduitBoissons();
-    $produits->setCodeBarre(633);
-    $produits->setNom('Chouffe');
-    $produits->setPrix(3.1);
-    $produitDao->create($produits);
+    $seanceDao = Dao::getInstance()->getSeanceDAO();
+    //$salleDao = Dao::getInstance()->getSalleDAO();
+    //$salle = $salleDao->find('Salle Zinédine Zidane');
+    //$seance = $seanceDao->find(new \DateTime('2014-06-25 14:00:00'),$salle);
+    //$seance->setDateSeance(new \DateTime('2014-06-25 14:00:00'));
+    //$seance->setDoublage('LOLESQUE');
+    //$seanceDao->findSeancesOfTheWeek(0);
+    //$seanceDao->create($seance);
+    $ticketDao = Dao::getInstance()->getTicketDao();
+    $ticket = $ticketDao->find(9);
+    $ticket->setNote(20);
+    $ticketDao->delete($ticket);
     echo '<pre>';
-    return new Response(print_r($produits, true));
+    return new Response(var_dump($ticket));
 });

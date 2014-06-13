@@ -23,17 +23,6 @@ class Ticket
 
     private $tarif;
 
-    public function __construct($dateDeVente=null, $note=null, $seance=null, $abonne=null, $vendeur=null, $tarif=null) {
-        $this->dateDeVente = $dateDeVente;
-        $this->note = $note;
-        $this->seance = $seance;
-        $this->abonne = $abonne;
-        $this->vendeur = $vendeur;
-        $this->tarif = $tarif;
-
-        return $this;
-    }
-
     public function getId() {
         return $this->id;
     }

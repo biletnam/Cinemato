@@ -146,7 +146,7 @@ class SeanceDAO
     
     public function bind($donnees){
     	$seance = new Seance();
-    	$seance->setDateSeance($donnees['pk_timestamp_seance']);
+    	$seance->setDateSeance(new \DateTime($donnees['pk_timestamp_seance']));
     	$seance->setSalle($this->getDao()->getSalleDAO()->find($donnees['pkfk_nom_salle']));
     	$seance->setFilm($this->getDao()->getFilmDAO()->find($donnees['fk_id_film']));
     	$seance->setDoublage($donnees['doublage']);
