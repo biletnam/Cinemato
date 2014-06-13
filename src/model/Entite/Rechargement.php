@@ -9,6 +9,8 @@ class Rechargement
     private $nombrePlace;
 
     private $prixUnitaire;
+    
+    private $placesUtilise;
 
     public function getId()
     {
@@ -40,6 +42,13 @@ class Rechargement
     public function setPrixUnitaire($prixUnitaire)
     {
         $this->prixUnitaire = $prixUnitaire;
+        return $this;
+    }
+    public function getPlacesUtilise(){
+        return  $this->placesUtilise;
+    }
+    public function setPlacesUtilise($placesUtilise){
+        $this->placesUtilise = placesUtilise;
         return $this;
     }
 }

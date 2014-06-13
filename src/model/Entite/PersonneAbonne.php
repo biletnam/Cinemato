@@ -13,15 +13,11 @@ class PersonneAbonne extends Personne
 
     public function getPlaceRestante()
     {
-        if ($this->placeRestante == null)
-            $this->placeRestante = 0;
-        return $this->placeRestante;
-    }
-
-    public function setPlaceRestante($placeRestante)
-    {
-        $this->placeRestante = $placeRestante;
-        return $this;
+        $cmp = 0;
+        foreach ($this->getRecharges() as $recharge){
+            $cmp = $cmp + ($recharge->getNombrePlace()-$recharge->getPlacesUtilise());
+        }
+        return $cmp;
     }
 
     public function getRecharges()
