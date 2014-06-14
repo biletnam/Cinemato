@@ -11,6 +11,7 @@ use model\Entite\ProduitAlimentaire;
 use model\Entite\ProduitAutre;
 use model\Entite\ProduitBoissons;
 use model\Dao\TicketDAO;
+use model\Entite\ProduitVendeur;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
@@ -29,10 +30,25 @@ $app->get('/DAO/test', function () use ($app) {
     //$seance->setDoublage('LOLESQUE');
     //$seanceDao->findSeancesOfTheWeek(0);
     //$seanceDao->create($seance);
-    $ticketDao = Dao::getInstance()->getTicketDao();
+    /*$ticketDao = Dao::getInstance()->getTicketDao();
     $ticket = $ticketDao->find(9);
     $ticket->setNote(20);
-    $ticketDao->delete($ticket);
+    $ticketDao->delete($ticket);*/
+    $produitVendeurDao = Dao::getInstance()->getProduitVendeurDao();
+    $produitDao = Dao::getInstance()->getProduitDAO();
+    $vendeurDao = Dao::getInstance()->getPersonneDAO();
+    
+    $produit = $produitDao->find(663);
+    $vendeur = $vendeurDao->find(4);
+    $date = new \DateTime("now");
+    
+    $produitVendeur = $produitVendeurDao->findAllByVendeur($vendeur);
+    //$produitVendeur->setDate($date);
+    //$produitVendeur->setVendeur($vendeur);
+    //$produitVendeur->setProduit($produit);
+    //$produitVendeurDao->delete($produitVendeur);
+    
+    //$produitVente = $produitVendeurDao->findAll();
     echo '<pre>';
-    return new Response(var_dump($ticket));
+    return new Response(var_dump($produitVendeur));
 });
