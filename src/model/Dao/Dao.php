@@ -93,4 +93,7 @@ class Dao
 	public function getTicketDao(){
 	    return new TicketDAO(self::getInstance());
 	}
+	public function getProduitVendeurDao(){
+	    return new ProduitVendeurDAO(self::getInstance());
+	}
 }

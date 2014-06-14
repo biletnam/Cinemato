@@ -3,6 +3,7 @@
 namespace model\Entite;
 
 class ProduitVendeur {
+    private $id;
 	private $vendeur;
 	private $produit;
 	private $date;
@@ -15,6 +16,9 @@ class ProduitVendeur {
 	public function getDate() {
 		return $this->date;
 	}
+	public function getId() {
+	    return $this->id;
+	}
 	public function setVendeur($vendeur) {
 		$this->vendeur = $vendeur;
 		return $this;
@@ -24,7 +28,11 @@ class ProduitVendeur {
 		return $this;
 	}
 	public function setDate($date) {
-		$this->date = date;
+		$this->date = $date;
 		return $this;
+	}
+	public function setId($id) {
+	    $this->id = $id;
+	    return $this;
 	}
 }
