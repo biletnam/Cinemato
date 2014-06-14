@@ -1,0 +1,23 @@
+{% extends 'pages/public/list.html.twig' %}
+
+{% block entity_title %}Vos séances de la semaine :{% endblock %}
+
+{% block entity_add_path %}href='{{ app.url_generator.generate('public') }}'{% endblock %}
+
+{% block entity_add_label %}Noter un film{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Titre</th>
+    <th>Horaire</th>
+    <th>Salle</th>
+    <th>Doublage</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <th>{{ entity.film.titre }}</th>
+    <th>{{ entity.dateSeance }}</th>
+    <th>{{ entity.salle.nom }}</th>
+    <th>{{ entity.doublage }}</th>
+{% endblock %}
+
+
