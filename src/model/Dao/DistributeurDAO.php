@@ -71,15 +71,23 @@ class DistributeurDAO
         return $distributeur;
     }
 
-    public function create($distributeur) {
+    public function create(&$distributeur) {
         $check = false;
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'INSERT INTO tdistributeur (pk_id_distributeur, nom, prenom, adresse, tel) VALUES(nextval(\'sequence_distributeur\'), :nom, :prenom, :adresse, :tel)';
+            $query1 = "select nextval('sequence_personne') as val";
+            $query2 = 'INSERT INTO tdistributeur (pk_id_distributeur, nom, prenom, adresse, tel) VALUES(nextval(\'sequence_distributeur\'), :nom, :prenom, :adresse, :tel)';
 
             try {
-                $statement = $connection->prepare($query);
+ 
+                $statement = $connection->prepare($query1);
+                $statement->execute();
+                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $distributeur->setId($donnees['val']);
+                }
+                $statement = null;
+                $statement = $connection->prepare($query2);
                 $check = $statement->execute(array(
                     'nom' => $distributeur->getNom(),
                     'prenom' => $distributeur->getPrenom(),

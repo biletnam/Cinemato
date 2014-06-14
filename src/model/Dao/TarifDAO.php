@@ -111,6 +111,7 @@ class TarifDAO
     public static function bind($donnees){
     	$tarif = new Tarif();
     	$tarif->setNom($donnees['pk_nom_tarif']);
-    	$tarif->setTarif($donnees['tarif']);
+    	$tarif->setTarif(floatval($donnees['tarif']));
+    	return $tarif;
     }
 }

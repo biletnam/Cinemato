@@ -6,21 +6,20 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class DistributeurForm extends AbstractType
+class PersonneAbonneForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('nom', 'text', array('label' => 'Nom', 'required' => true))
-            ->add('prenom', 'text', array('label' => 'Prénom', 'required' => false))
-            ->add('adresse', 'textarea', array('label' => 'Adresse', 'required' => false))
-            ->add('telephone', 'text', array('label' => 'N° de téléphone', 'required' => false))
+            ->add('prenom', 'text', array('label' => 'Prénom', 'required' => true))
+            ->add('placeRestante', 'integer', array('label' => 'Places restantes', 'required' => true))
         ;
     }
 
     public function getName()
     {
-        return 'distributeur_form';
+        return 'personne_abonne_form';
     }
 
     public function getDefaultOptions(array $options)
@@ -28,8 +27,15 @@ class DistributeurForm extends AbstractType
         return array();
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'model\Entite\PersonneAbonne'
+        ));
+    }
+
     public function getExtendedType()
     {
-        return 'distributeur';
+        return 'personne_abonne';
     }
 }

@@ -51,6 +51,8 @@ class Dao
 		try {
 			$connectionString = 'pgsql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';port=' . $this->db_port;
 			$connection = new PDO($connectionString, $this->db_user, $this->db_pass);
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		} catch (PDOException $e) {
 			die($e->getMessage());
 		}
@@ -84,5 +86,11 @@ class Dao
 	}
 	public function getSalleDAO(){
 		return new SalleDAO(self::getInstance());
+	}
+	public function getTarifDao(){
+	    return new TarifDAO(self::getInstance());
+	}
+	public function getTicketDao(){
+	    return new TicketDAO(self::getInstance());
 	}
 }
