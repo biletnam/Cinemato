@@ -82,7 +82,7 @@ CREATE TABLE tpersonne(
 	prenom					varchar(255)
 	);
 CREATE TABLE tabonne(
-	pkfk_id_personne		integer,
+	pkfk_id_personne		integer
 );
 
 CREATE TABLE tvendeur(
@@ -372,6 +372,10 @@ INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'Aucun');
 INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
