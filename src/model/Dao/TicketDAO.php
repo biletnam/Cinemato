@@ -23,31 +23,31 @@ class TicketDAO
 
     public function find($id) {
     	$ticket = null;
-    	
+
     	$query = "SELECT * FROM tticket WHERE pk_id_ticket = :id";
     	$connection = $this->getDao()->getConnexion();
-    	
+
     	if (is_null($connection)) {
     		return;
     	}
-    	
+
     	$statement = $connection->prepare($query);
     	$statement->execute(array(
     			'id' => $id
     	));
-    	
+
     	if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
     		$ticket = $this->bind($donnees);
     	}
-    	
+
     	return $ticket;
     }
-    
+
     public function findAll() {
     	$tickets = array ();
     	$query = 'SELECT * FROM tticket';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -62,17 +62,17 @@ class TicketDAO
     	}
     	return $tickets;
     }
-    
+
     public function create(&$ticket) {
         $queryId = "select nextval('sequence_ticket') as val";
     	$query = 'INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif) VALUES(:id, :dateVente, :note, :dateSeance, :salle, :abonne, :vendeur, :tarif)';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare($queryId);
     			$statement->execute();
-    			
+
     			if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
     			    $ticket->setId($donnees['val']);
     			}
@@ -95,11 +95,11 @@ class TicketDAO
     		}
     	}
     }
-    
+
     public function update($ticket){
     	$query = 'UPDATE tticket SET timestamp_vente = :dateVente, note = :note, fk_timestamp_seance = :dateSeance, fk_nom_salle_seance = :salle, fk_id_personne_abonne = :abonne, fk_id_personne_vendeur = :vendeur, fk_nom_tarif = :tarif WHERE pk_id_ticket = :id';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -121,7 +121,7 @@ class TicketDAO
     public function delete($ticket){
     	$query = 'DELETE FROM tticket WHERE pk_id_ticket = :id ';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -133,7 +133,7 @@ class TicketDAO
     		}
     	}
     }
-    
+
     public function bind($donnees){
     	$ticket = new Ticket();
     	//exit(var_dump($donnees));
@@ -147,5 +147,5 @@ class TicketDAO
     	$ticket->setTarif($this->getDao()->getTarifDAO()->find($donnees['fk_nom_tarif']));
     	return $ticket;
     }
-    
+
 }
