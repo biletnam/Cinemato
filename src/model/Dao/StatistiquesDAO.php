@@ -4,6 +4,7 @@ namespace model\Dao;
 
 use \PDO;
 use \PDOException;
+use model\Entite\Seance;
 
 
 class StatistiquesDAO
@@ -18,7 +19,26 @@ class StatistiquesDAO
         return $this->dao;
     }
     public function getTauxOccupationSeance($seance){
+        $occ = null;
         
+        $query = 'SELECT tauxOccupationSeance(:date, :salle) as occ';
+        $connection = $this->getDao()->getConnexion();
+         
+        if (is_null($connection)) {
+            return;
+        }
+         
+        $statement = $connection->prepare($query);
+        $statement->execute(array(
+        	'date' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
+            'salle' => $seance->getSalle()->getNom()
+        ));
+        
+        if ($donne = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $occ = $donne['occ'];
+        }
+         
+        return $occ;
     }
     public function getNbAbonne(){
         $nbAbonne = null;
