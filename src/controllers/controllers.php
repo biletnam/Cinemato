@@ -34,7 +34,7 @@ $app->get('/DAO/test', function () use ($app) {
     $ticket = $ticketDao->find(9);
     $ticket->setNote(20);
     $ticketDao->delete($ticket);*/
-    $produitVendeurDao = Dao::getInstance()->getProduitVendeurDao();
+    /*$produitVendeurDao = Dao::getInstance()->getProduitVendeurDao();
     $produitDao = Dao::getInstance()->getProduitDAO();
     $vendeurDao = Dao::getInstance()->getPersonneDAO();
     
@@ -42,13 +42,15 @@ $app->get('/DAO/test', function () use ($app) {
     $vendeur = $vendeurDao->find(4);
     $date = new \DateTime("now");
     
-    $produitVendeur = $produitVendeurDao->findAllByVendeur($vendeur);
+    $produitVendeur = $produitVendeurDao->findAllByVendeur($vendeur);*/
     //$produitVendeur->setDate($date);
     //$produitVendeur->setVendeur($vendeur);
     //$produitVendeur->setProduit($produit);
     //$produitVendeurDao->delete($produitVendeur);
     
     //$produitVente = $produitVendeurDao->findAll();
+    $filmDao = Dao::getInstance()->getFilmDAO();
+    $films = $filmDao->findFilmSemaine(1);
     echo '<pre>';
-    return new Response(var_dump($produitVendeur));
+    return new Response(var_dump($films));
 });

@@ -96,4 +96,7 @@ class Dao
 	public function getProduitVendeurDao(){
 	    return new ProduitVendeurDAO(self::getInstance());
 	}
+	public function getStatistiquesDao(){
+	    return new StatistiquesDAO(self::getInstance());
+	}
 }

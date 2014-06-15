@@ -62,6 +62,26 @@ class SeanceDAO
     	return $seances;
     }
     
+    public function findByFilm($film) {
+        $seances = array ();
+        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film';
+        $connection = $this->getDao ()->getConnexion ();
+         
+        if (! is_null ( $connection )) {
+            try {
+                $statement = $connection->prepare ( $query );
+                $statement->execute ( array ('film' => $film->getId()) );
+                while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
+                    $seance = $this->bind ( $donnees );
+                    array_push ( $seances, $seance );
+                }
+            } catch ( \PDOException $e ) {
+                throw $e;
+            }
+        }
+        return $seances;
+    }
+    
     public function create($seance) {
     	$query = 'INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage) VALUES(:dateSeance, :nomSalle, :nomFilm, :doublage)';
     	$connection = $this->getDao ()->getConnexion ();
@@ -116,6 +136,7 @@ class SeanceDAO
     	}
     }
     public function findSeancesOfTheWeek( $offsetWeek) {
+        
     	$connection = $this->getDao()->getConnexion();
     	 
     	if (!is_null($connection)) {

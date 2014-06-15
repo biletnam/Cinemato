@@ -4,10 +4,27 @@
     <div class='page-header'>
         <h1>Statistiques</h1>
     </div>
-
-    {% block extra_before_list %}{% endblock %}
-
-    <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
+    Nombre d'abonné au cinéma : <strong>{{nbAbonne}}</strong><br/>
+    Nombre de film cette semaine : <strong>{{nbFilm}}</strong>
+    
+    <div class='page-header'>
+        <h2>Statistiques des films projeté la semaine du {{dateDebutSemaine | date('d/m/Y')}} au {{dateFinSemaine | date('d/m/Y')}}</h2>
+    </div>
+    {% for item in tabFilmSeance %}
+            <strong>{{ item['film'].titre }}</strong> :<br/>
+            <ul>
+		<li>Taux d'occupation des séances :<br/>
+			<ul>
+			{% for seance in item['seance'] %}
+				<li>Séance du <strong>{{seance.dateSeance | date('d/m/Y H:i')}}</strong> : <strong>234%</strong></li>
+			{% endfor %}
+			</ul>
+		</li>
+		<li>Entrés générées par le film (depuis le début) : <strong>{{item['entre']}}</strong></li>
+		<li>Revenus générés par le film (depuis le début) : <strong>{%if item['revenue'] is null %}0{%else%}{{item['revenue']}}{%endif%} &euro;</strong></li>
+	</ul>	
+    {% endfor %}
+    <!--<table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
         <thead>
             <tr>
                 {% block entity_table_headers %}{% endblock %}
@@ -20,7 +37,7 @@
             </tr>
         {% endfor %}
         </tbody>
-    </table>
+    </table>-->
 
     {% block extra_after_list %}{% endblock %}
 {% endblock %}
