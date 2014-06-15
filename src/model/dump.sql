@@ -380,6 +380,12 @@ INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
 INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-15 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
@@ -417,6 +423,7 @@ INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk
 VALUES( nextval('sequence_ticket'), '2014-06-26 21:02:00', 18.99, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura' , 3, 2, 'Normal');
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), '2014-06-24 13:45:00', 12.6, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer' , NULL, 4, 'Retraité');
+
 
 INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)
 VALUES( nextval('sequence_rechargement'), 1, 10, 4.5, 10);

@@ -161,7 +161,7 @@ class FilmDAO
 
         return $film;
     }
-    public function findFilmSemaine($offset) {
+    public function findFilmSemaine($offsetWeek) {
         $films = array();
     
         $connection = $this->getDao()->getConnexion();
@@ -170,13 +170,33 @@ class FilmDAO
             $query = "SELECT *".
                 " FROM tfilm f".
                 " WHERE f.pk_id_film IN (SELECT s.fk_id_film FROM tseance s WHERE s.pk_timestamp_seance".
-                " BETWEEN date_trunc('week', (NOW() + INTERVAL '$offset weeks')) + INTERVAL '2 day'".
-                " AND date_trunc('week', (NOW() + INTERVAL '(".($offset+1)." weeks')) + INTERVAL '2 day')";
+                "  BETWEEN date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'".
+    		" AND date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " END".
+                " )) + INTERVAL '2 day')";
     
             try {
                 $statement = $connection->prepare($query);
+                //exit(var_dump($statement));
                 $statement->execute();
-    
                 $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
     
                 foreach ($filmRows as &$filmData) {
