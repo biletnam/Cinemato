@@ -187,7 +187,7 @@ class FilmDAO
     }
 
     public function map($donnees) {
-        $film = new Film($donnees['titre'], $donnees['date_sortie'], $donnees['age_min'], $donnees['genre'], $donnees['distributeur']);
+        $film = new Film($donnees['titre'], new \DateTime(($donnees['date_sortie'].' 00:00:00')), $donnees['age_min'], $donnees['genre'], $donnees['distributeur']);
         $film->setId($donnees['pk_id_film']);
 
         return $film;
