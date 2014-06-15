@@ -32,11 +32,70 @@ CREATE OR REPLACE FUNCTION nbFilmSemaine(offsetSemaine integer) RETURNS integer 
 DECLARE
     nbFilm integer;
 BEGIN
-    SELECT INTO nbFilm count(*)
+SELECT INTO nbFilm count(fk_id_film)
+FROM ( select distinct fk_id_film FROM tseance
+WHERE pk_timestamp_seance
+BETWEEN
+date_trunc('week',
+ (NOW() + 
+ CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 3 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 4 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 5 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 6 THEN (offsetSemaine || ' weeks')::INTERVAL
+ END
+ )) + INTERVAL '2 day'
+AND
+date_trunc('week',
+ (NOW() +
+ CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 3 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 4 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 5 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 6 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ END
+ )) + INTERVAL '2 day') as s
+ ;
+	
+    return nbFilm;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION nbSeanceSemaine(offsetSemaine integer) RETURNS integer AS $$
+DECLARE
+    nbFilm integer;
+BEGIN
+    SELECT INTO nbFilm count(fk_id_film)
 FROM tseance
 WHERE pk_timestamp_seance
-BETWEEN date_trunc('week', (NOW() + (offsetSemaine || ' weeks')::INTERVAL)) + INTERVAL '2 day'
-AND date_trunc('week', (NOW() + (offsetSemaine+1 || ' weeks')::INTERVAL)) + INTERVAL '2 day';
+BETWEEN
+date_trunc('week',
+ (NOW() + 
+ CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 3 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 4 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 5 THEN (offsetSemaine || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 6 THEN (offsetSemaine || ' weeks')::INTERVAL
+ END
+ )) + INTERVAL '2 day'
+AND
+date_trunc('week',
+ (NOW() +
+ CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 +1 || ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 3 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 4 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 5 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ WHEN EXTRACT(DOW FROM NOW()) = 6 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
+ END
+ )) + INTERVAL '2 day';
 	
     return nbFilm;
 END;
