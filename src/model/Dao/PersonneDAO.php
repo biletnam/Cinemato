@@ -91,7 +91,7 @@ class PersonneDAO
     public function find($id)
     {
         $personne = null;
-        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' . ' WHERE p.pk_id_personne = :id';
+        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' . ' WHERE p.pk_id_personne = :id';
         $connection = $this->getDao()->getConnexion();
         if (! is_null($connection)) {
             try {
@@ -110,10 +110,33 @@ class PersonneDAO
         return $personne;
     }
 
+    public function findFirstVendeur()
+    {
+        $personne = null;
+
+        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV' . ' FROM tpersonne p' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne ORDER BY p.pk_id_personne ASC LIMIT 1';
+        $connection = $this->getDao()->getConnexion();
+
+        if (! is_null($connection)) {
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute();
+
+                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $personne = $this->bind($donnees);
+                }
+            } catch (\PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $personne;
+    }
+
     public function findAll()
     {
         $personnes = array();
-        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA,' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
+        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV,' . ' a.pkfk_id_personne as idA' . ' FROM tpersonne p' . ' LEFT JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -154,7 +177,7 @@ class PersonneDAO
     public function findAllAbonne()
     {
         $personnes = array();
-        $query = 'SELECT p.pk_id_personne as idp,' . 'p.nom as nom,' . ' p.prenom as prenom,' . ' a.pkfk_id_personne as ida,' . ' FROM tpersonne p' . ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
+        $query = 'SELECT p.pk_id_personne as idp,' . 'p.nom as nom,' . ' p.prenom as prenom,' . ' a.pkfk_id_personne as ida' . ' FROM tpersonne p' . ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {

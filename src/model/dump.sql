@@ -49,101 +49,101 @@ CREATE SEQUENCE sequence_personne;
 CREATE SEQUENCE sequence_rechargement;
 
 CREATE TABLE tfilm(
-	pk_id_film				integer,
-	titre					varchar(255),
-	date_sortie				date,
-	age_min 				integer,
-	fk_nom_genre			varchar(255) NOT NULL,
-	fk_id_distributeur		integer NOT NULL
-	);
+    pk_id_film              integer,
+    titre                   varchar(255),
+    date_sortie             date,
+    age_min                 integer,
+    fk_nom_genre            varchar(255) NOT NULL,
+    fk_id_distributeur      integer NOT NULL
+    );
 CREATE TABLE tgenre(
-	pk_nom_genre			varchar(255)
-	);
+    pk_nom_genre            varchar(255)
+    );
 CREATE TABLE tdistributeur(
-	pk_id_distributeur 		integer,
-	nom						varchar(255),
-	prenom					varchar(255),
-	adresse					varchar(255),
-	tel						varchar(20)
-	);
+    pk_id_distributeur      integer,
+    nom                     varchar(255),
+    prenom                  varchar(255),
+    adresse                 varchar(255),
+    tel                     varchar(20)
+    );
 CREATE TABLE tseance(
-	pk_timestamp_seance		timestamp,
-	pkfk_nom_salle			varchar(255),
-	fk_id_film				integer NOT NULL,
-	doublage				varchar(255)
-	);
+    pk_timestamp_seance     timestamp,
+    pkfk_nom_salle          varchar(255),
+    fk_id_film              integer NOT NULL,
+    doublage                varchar(255)
+    );
 CREATE TABLE tsalle(
-	pk_nom_salle			varchar(255),
-	nb_place				integer NOT NULL
-	);
+    pk_nom_salle            varchar(255),
+    nb_place                integer NOT NULL
+    );
 CREATE TABLE tpersonne(
-	pk_id_personne			integer,
-	nom						varchar(255),
-	prenom					varchar(255)
-	);
+    pk_id_personne          integer,
+    nom                     varchar(255),
+    prenom                  varchar(255)
+    );
 CREATE TABLE tabonne(
-	pkfk_id_personne		integer
+    pkfk_id_personne        integer
 );
 
 CREATE TABLE tvendeur(
-	pkfk_id_personne		integer
+    pkfk_id_personne        integer
 );
 
 CREATE TABLE tproducteurs_film(
-	pkfk_id_film			integer,
-	pkfk_id_personne		integer
+    pkfk_id_film            integer,
+    pkfk_id_personne        integer
 );
 
 CREATE TABLE trealisateurs_film(
-	pkfk_id_film			integer,
-	pkfk_id_personne		integer
+    pkfk_id_film            integer,
+    pkfk_id_personne        integer
 );
 
 CREATE TABLE tticket(
-	pk_id_ticket			integer,
-	timestamp_vente			timestamp,
-	note					float,
-	fk_timestamp_seance		timestamp,
-	fk_nom_salle_seance		varchar(255),
-	fk_id_personne_abonne	integer,
-	fk_id_personne_vendeur	integer,
-	fk_nom_tarif			varchar(255)
+    pk_id_ticket            integer,
+    timestamp_vente         timestamp,
+    note                    float,
+    fk_timestamp_seance     timestamp,
+    fk_nom_salle_seance     varchar(255),
+    fk_id_personne_abonne   integer,
+    fk_id_personne_vendeur  integer,
+    fk_nom_tarif            varchar(255)
 );
 
 CREATE TABLE trechargement(
-	pk_id_rechargement		integer,
-	pkfk_id_personne_abonne	integer,
-	nombre_place			integer,
-	prix_unitaire			float,
-	places_utilises			integer
+    pk_id_rechargement      integer,
+    pkfk_id_personne_abonne integer,
+    nombre_place            integer,
+    prix_unitaire           float,
+    places_utilises         integer
 );
 
 CREATE TABLE ttarif(
-	pk_nom_tarif			varchar(255),
-	tarif					float NOT NULL
+    pk_nom_tarif            varchar(255),
+    tarif                   float NOT NULL
 );
 
 CREATE TABLE tproduit(
-	pk_code_barre_produit	integer,
-	nom_produit				varchar(255),
-	prix					float
+    pk_code_barre_produit   integer,
+    nom_produit             varchar(255),
+    prix                    float
 );
 
 CREATE TABLE tproduit_boisson(
-	pkfk_code_barre_produit	integer
+    pkfk_code_barre_produit integer
 );
 
 CREATE TABLE tproduit_alimentaire(
-	pkfk_code_barre_produit	integer
+    pkfk_code_barre_produit integer
 );
 
 CREATE TABLE tproduit_autre(
-	pkfk_code_barre_produit	integer
+    pkfk_code_barre_produit integer
 );
 
 CREATE TABLE tvente_produit(
-	pkfk_code_barre			integer,
-	pkfk_id_personne_vendeur	integer
+    pkfk_code_barre         integer,
+    pkfk_id_personne_vendeur    integer
 );
 
 ALTER TABLE tfilm
@@ -202,51 +202,51 @@ ADD CONSTRAINT pk_tvente_produit PRIMARY KEY (pkfk_code_barre, pkfk_id_personne_
 
 
 ALTER TABLE tfilm
-ADD CONSTRAINT fk_tfilm_tgenre FOREIGN KEY(fk_nom_genre) REFERENCES tgenre(pk_nom_genre) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES tdistributeur(pk_id_distributeur) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tfilm_tgenre FOREIGN KEY(fk_nom_genre) REFERENCES tgenre(pk_nom_genre),
+ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES tdistributeur(pk_id_distributeur);
 
 ALTER TABLE tseance
-ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle),
+ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film);
 
 ALTER TABLE tabonne
-ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE tvendeur
-ADD CONSTRAINT fk_tvendeur_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tvendeur_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE tproducteurs_film
-ADD CONSTRAINT fk_tproducteurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tproducteurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tproducteurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film),
+ADD CONSTRAINT fk_tproducteurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE trealisateurs_film
-ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE,
-ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCES tfilm(pk_id_film),
+ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE tticket
-ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle),
+ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne),
+ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne),
+ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif);
 
 ALTER TABLE trechargement
-ADD CONSTRAINT fk_trechargement FOREIGN KEY (pkfk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_trechargement FOREIGN KEY (pkfk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne);
 
 
 
 ALTER TABLE tproduit_boisson
-ADD CONSTRAINT fk_tproduit_boisson_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tproduit_boisson_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
 
 ALTER TABLE tproduit_alimentaire
-ADD CONSTRAINT fk_tproduit_alimentaire_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tproduit_alimentaire_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
 
 ALTER TABLE tproduit_autre
-ADD CONSTRAINT fk_tproduit_autre_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tproduit_autre_tproduit FOREIGN KEY (pkfk_code_barre_produit) REFERENCES tproduit(pk_code_barre_produit);
 
 
 ALTER TABLE tvente_produit
-ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (pkfk_code_barre) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE,
-ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (pkfk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE;
+ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (pkfk_code_barre) REFERENCES tproduit(pk_code_barre_produit),
+ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (pkfk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne);
 
 
 

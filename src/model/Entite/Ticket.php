@@ -23,7 +23,10 @@ class Ticket
 
     private $tarif;
 
-    public function __construct($dateDeVente=null, $note=null, $seance=null, $abonne=null, $vendeur=null, $tarif=null) {
+    public function __construct($dateDeVente = null, $note=null, $seance=null, $abonne=null, $vendeur=null, $tarif=null) {
+        if (is_null($dateDeVente)) {
+            $dateDeVente = new DateTime();
+        }
         $this->dateDeVente = $dateDeVente;
         $this->note = $note;
         $this->seance = $seance;
@@ -37,7 +40,7 @@ class Ticket
     public function getId() {
         return $this->id;
     }
-    
+
     public function setId($id) {
     	$this->id = $id;
     	return $this;
@@ -103,5 +106,3 @@ class Ticket
         return $this->tarif;
     }
 }
-
-?>

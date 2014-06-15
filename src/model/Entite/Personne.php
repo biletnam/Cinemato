@@ -6,6 +6,15 @@ class Personne {
 	private $id;
 	private $nom;
 	private $prenom;
+
+	public function __construct($nom = '', $prenom = '')
+	{
+		$this->setNom($nom);
+		$this->setPrenom($prenom);
+
+		return $this;
+	}
+
 	public function getId() {
 		return $this->id;
 	}
@@ -15,7 +24,7 @@ class Personne {
 	}
 	public function setNom($nom) {
 		$this->nom = $nom;
-		
+
 		return $this;
 	}
 	public function getNom() {
@@ -23,7 +32,7 @@ class Personne {
 	}
 	public function setPrenom($prenom) {
 		$this->prenom = $prenom;
-		
+
 		return $this;
 	}
 	public function getPrenom() {

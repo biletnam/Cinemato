@@ -22,32 +22,30 @@ class SeanceDAO
 
     public function find($dateSeance, $salle) {
     	$seance = null;
-    	
-    	$query = "SELECT * FROM tseance WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle";
+
+    	$query = "SELECT * FROM tseance WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle";
     	$connection = $this->getDao()->getConnexion();
-    	
-    	if (is_null($connection)) {
-    		return;
-    	}
-    	
-    	$statement = $connection->prepare($query);
-    	$statement->execute(array(
-    			'dateSeance' => $dateSeance,
-    			'nomSalle' => $salle->getNom()
-    	));
-    	
-    	if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-    		$seance = $this->bind($donnees);
-    	}
-    	
+
+    	if (!is_null($connection) && $salle) {
+        	$statement = $connection->prepare($query);
+        	$statement->execute(array(
+        			'dateSeance' => $dateSeance,
+        			'nomSalle' => $salle->getNom()
+        	));
+
+        	if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+        		$seance = $this->bind($donnees);
+        	}
+        }
+
     	return $seance;
     }
-    
+
     public function findAll() {
     	$seances = array ();
     	$query = 'SELECT * FROM tseance';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -62,11 +60,11 @@ class SeanceDAO
     	}
     	return $seances;
     }
-    
+
     public function create($seance) {
     	$query = 'INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage) VALUES(:dateSeance, :nomSalle, :nomFilm, :doublage)';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -81,11 +79,11 @@ class SeanceDAO
     		}
     	}
     }
-    
+
     public function update($seance){
     	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :nomFilm WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle ';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -103,7 +101,7 @@ class SeanceDAO
     public function delete($seance){
     	$query = 'DELETE FROM tseance WHERE pk_timestamp_seance = :dateSeance, pkfk_nom_salle = :nomSalle';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -118,7 +116,7 @@ class SeanceDAO
     }
     public function findSeancesOfTheWeek( $offsetWeek) {
     	$connection = $this->getDao()->getConnexion();
-    	 
+
     	if (!is_null($connection)) {
     		$query = 'SELECT *'.
     		' FROM tseance '.
@@ -128,11 +126,11 @@ class SeanceDAO
     		$intervalStartWeek = $offsetWeek;
     		$intervalEndWeek = $offsetWeek +1;
     		$seances = array();
-    		
+
     		try {
     			$statement = $connection->prepare($query);
     			$statement->execute();
-    			
+
 	    		while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
 	     				$seance = $this->bind($donnees);
 	    				array_push ($seances, $seance);
@@ -144,7 +142,7 @@ class SeanceDAO
     	}
     	return $seances;
     }
-    
+
     public function bind($donnees){
     	$seance = new Seance();
     	$seance->setDateSeance($donnees['pk_timestamp_seance']);
@@ -153,5 +151,5 @@ class SeanceDAO
     	$seance->setDoublage($donnees['doublage']);
     	return $seance;
     }
-    
+
 }
