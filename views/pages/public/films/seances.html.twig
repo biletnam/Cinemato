@@ -14,7 +14,7 @@
 
 {% block entity_table_content %}
     
-    <th>{{ entity.dateSeance | date("d/m/Y H:i:s") }}</th>
+    <th>{{ entity.dateSeance | date("d/m/Y H:i") }}</th>
     <th>{{ entity.salle.nom }}</th>
     <th>{{ entity.doublage }}</th>
 {% endblock %}

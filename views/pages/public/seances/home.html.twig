@@ -1,23 +1,29 @@
-{% extends 'pages/public/list.html.twig' %}
+{% extends 'pages/public/public.html.twig' %}
 
-{% block entity_title %}Vos séances de la semaine :{% endblock %}
-
-{% block entity_add_path %}href='{{ app.url_generator.generate('public-notation') }}'{% endblock %}
-
-{% block entity_add_label %}Noter un film{% endblock %}
-
-{% block entity_table_headers %}
-    <th>Titre</th>
-    <th>Horaire</th>
-    <th>Salle</th>
-    <th>Doublage</th>
-{% endblock %}
-
-{% block entity_table_content %}
-    <th>{{ entity.film.titre }}</th>
-    <th>{{ entity.dateSeance | date("d/m/Y H:i:s") }}</th>
-    <th>{{ entity.salle.nom }}</th>
-    <th>{{ entity.doublage }}</th>
+{% block app_container %}
+    <div class='page-header'>
+        <h1>Les séances de la semaine :</h1>
+    </div>
+    <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
+        <thead>
+            <tr>
+                <th>Titre</th>
+    			<th>Horaire</th>
+    			<th>Salle</th>
+    			<th>Doublage</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <th><a href="{{ app.url_generator.generate('public-films-detail', {id: entity.film.id}) }}">{{ entity.film.titre }}</a></th>
+    			<th>{{ entity.dateSeance | date("d/m/Y H:i") }}</th>
+    			<th>{{ entity.salle.nom }}</th>
+    			<th>{{ entity.doublage }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 
