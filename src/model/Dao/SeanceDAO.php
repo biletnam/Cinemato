@@ -44,7 +44,7 @@ class SeanceDAO
     
     public function findAll() {
     	$seances = array ();
-    	$query = 'SELECT * FROM tseance';
+    	$query = 'SELECT * FROM tseance ORDER BY pk_timestamp_seance';
     	$connection = $this->getDao ()->getConnexion ();
     	
     	if (! is_null ( $connection )) {
@@ -64,7 +64,7 @@ class SeanceDAO
     
     public function findByFilm($film) {
         $seances = array ();
-        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film';
+        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY pk_timestamp_seance';
         $connection = $this->getDao ()->getConnexion ();
          
         if (! is_null ( $connection )) {

@@ -1,0 +1,13 @@
+{% extends 'pages/public/list.html.twig' %}
+
+{% block entity_title %}Les films :{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Titre</th>
+    <th>Date de sortie</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <th><a href='{{ app.url_generator.generate('public-films-detail', { 'id': entity.id }) }}'>{{ entity.titre }}</a></th>
+    <th>{{ entity.dateDeSortie | date("d/m/Y H:i:s") }}</th>
+{% endblock %}
