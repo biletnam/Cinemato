@@ -1,10 +1,18 @@
 {% extends 'pages/intranet/list.html.twig' %}
 
+{% form_theme form 'form/pages/intranet/films/search.html.twig' %}
+
 {% block entity_title %}Films{% endblock %}
 
 {% block entity_add_path %}href='{{ app.url_generator.generate('intranet-films-new') }}'{% endblock %}
 
 {% block entity_add_label %}Ajouter un film{% endblock %}
+
+{% block extra_before_list %}
+    <form action='{{ app.url_generator.generate('intranet-films-search') }}' method='post' {{ form_enctype(form) }} role='search'>
+        {{ form_widget(form) }}
+    </form>
+{% endblock %}
 
 {% block entity_table_headers %}
     <th>Id</th>

@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use model\Dao\Dao;
 use model\Entite\Film;
 use forms\FilmForm;
+use forms\FilmRechercheForm;
 
 $filmsControllers = $app['controllers_factory'];
 
@@ -12,10 +13,32 @@ $filmsControllers->get('/', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $films = $filmDao->findAll();
 
+    $form = $app['form.factory']->create(new FilmRechercheForm());
+
     return $app['twig']->render('pages/intranet/films/list.html.twig', array(
-        'entities' => $films
+        'entities' => $films,
+        'form' => $form->createView()
     ));
 })->bind('intranet-films-list');
+
+$filmsControllers->post('/search', function (Request $request) use ($app) {
+    $films = array();
+    $form = $app['form.factory']->create(new FilmRechercheForm());
+
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+        $filmDao = Dao::getInstance()->getFilmDAO();
+        $data = $form->getData();
+
+        $films = $filmDao->findAllByTitle($data['titre']);
+    }
+
+    return $app['twig']->render('pages/intranet/films/list.html.twig', array(
+        'entities' => $films,
+        'form' => $form->createView()
+    ));
+})->bind('intranet-films-search');
 
 $filmsControllers->get('/new', function () use ($app) {
     $genreDao = Dao::getInstance()->getGenreDAO();
