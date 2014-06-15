@@ -2,7 +2,7 @@
 
 {% block entity_title %}Vos séances de la semaine :{% endblock %}
 
-{% block entity_add_path %}href='{{ app.url_generator.generate('public') }}'{% endblock %}
+{% block entity_add_path %}href='{{ app.url_generator.generate('public-notation') }}'{% endblock %}
 
 {% block entity_add_label %}Noter un film{% endblock %}
 
@@ -15,7 +15,7 @@
 
 {% block entity_table_content %}
     <th>{{ entity.film.titre }}</th>
-    <th>{{ entity.dateSeance }}</th>
+    <th>{{ entity.dateSeance | date("d/m/Y H:i:s") }}</th>
     <th>{{ entity.salle.nom }}</th>
     <th>{{ entity.doublage }}</th>
 {% endblock %}
