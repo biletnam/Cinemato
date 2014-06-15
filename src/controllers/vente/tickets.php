@@ -22,14 +22,9 @@ $ticketsControllers->get('/new', function () use ($app) {
     $tarifsDao = Dao::getInstance()->getTarifDAO();
     $seanceDao = Dao::getInstance()->getSeanceDAO();
 
-    $vendeur = $personneDao->findFirstVendeur();
-
-    $tarifs = $tarifsDao->findAll();
     $seances = $seanceDao->findAll();
     $abonnes = $personneDao->findAllAbonnes();
-
-    $ticket = new Ticket();
-    $ticket->setVendeur($vendeur);
+    $tarifs = $tarifsDao->findAll();
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
@@ -39,18 +34,13 @@ $ticketsControllers->get('/new', function () use ($app) {
 })->bind('vente-tickets-new');
 
 $ticketsControllers->post('/create', function (Request $request) use ($app) {
-    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $personnesDao = Dao::getInstance()->getPersonneDAO();
     $tarifsDao = Dao::getInstance()->getTarifDAO();
-    $seanceDao = Dao::getInstance()->getSeanceDAO();
-
-    $vendeur = $personneDao->findFirstVendeur();
+    $seancesDao = Dao::getInstance()->getSeanceDAO();
 
     $tarifs = $tarifsDao->findAll();
-    $seances = $seanceDao->findAll();
-    $abonnes = $personneDao->findAllAbonnes();
-
-    $ticket = new Ticket();
-    $ticket->setVendeur($vendeur);
+    $seances = $seancesDao->findAll();
+    $abonnes = $personnesDao->findAllAbonnes();
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
@@ -59,20 +49,43 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
 
         if ($form->isValid()) {
             $data = $form->getData();
+            $ticket = new Ticket();
 
-            echo '<pre>';
-            exit(var_dump($data));
+            $vendeur = $personnesDao->findFirstVendeur();
+            $ticket->setVendeur($vendeur);
 
-            $seance = $seanceDao->find($data['seance']);
+            $seance = $seancesDao->find($data['seance']);
+            $abonne = $personnesDao->findAbonne($data['abonne']);
+            $tarif = $tarifsDao->find($data['tarif']);
 
-            $ticketDao = Dao::getInstance()->getTicketDAO();
-
-            if ($ticketDao->create($ticket)) {
-                $app['session']->getFlashBag()->add('success', 'Le ticket est bien enregistré !');
-
-                return $app->redirect($app['url_generator']->generate('vente-tickets-list'));
+            if ($seance) {
+                $ticket->setSeance($seance);
             } else {
-                $app['session']->getFlashBag()->add('error', 'Le ticket n\'a pas pu être enregistré.');
+                $app['session']->getFlashBag()->add('error', 'Cette séance n\'existe pas.');
+            }
+
+            if ($abonne) {
+                $ticket->setAbonne($abonne);
+            } else {
+                $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+            }
+
+            if ($tarif) {
+                $ticket->setTarif($tarif);
+            } else {
+                $app['session']->getFlashBag()->add('error', 'Ce tarif n\'existe pas.');
+            }
+
+            if ($seance && $abonne && $tarif) {
+                $ticketsDao = Dao::getInstance()->getTicketDAO();
+
+                if ($ticketsDao->create($ticket)) {
+                    $app['session']->getFlashBag()->add('success', 'Le ticket est bien enregistré !');
+
+                    return $app->redirect($app['url_generator']->generate('vente-tickets-list'));
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Le ticket n\'a pas pu être enregistré.');
+                }
             }
         }
     }
@@ -108,7 +121,15 @@ $ticketsControllers->get('/{id}/edit', function ($id) use ($app) {
         $app->abort(404, 'Ce ticket n\'existe pas...');
     }
 
-    $form = $app['form.factory']->create(new TicketForm(), $ticket);
+    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $tarifsDao = Dao::getInstance()->getTarifDAO();
+    $seanceDao = Dao::getInstance()->getSeanceDAO();
+
+    $seances = $seanceDao->findAll();
+    $abonnes = $personneDao->findAllAbonnes();
+    $tarifs = $tarifsDao->findAll();
+
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
     $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
         ->add('id', 'hidden')
@@ -122,25 +143,57 @@ $ticketsControllers->get('/{id}/edit', function ($id) use ($app) {
 })->bind('vente-tickets-edit');
 
 $ticketsControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
-    $ticketDao = Dao::getInstance()->getTicketDAO();
-    $ticket = $ticketDao->find($id);
+    $ticketsDao = Dao::getInstance()->getTicketDAO();
+    $ticket = $ticketsDao->find($id);
 
     if (!$ticket) {
         $app->abort(404, 'Ce ticket n\'existe pas...');
     }
 
-    $form = $app['form.factory']->create(new TicketForm(), $ticket);
+    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $tarifsDao = Dao::getInstance()->getTarifDAO();
+    $seanceDao = Dao::getInstance()->getSeanceDAO();
+
+    $seances = $seanceDao->findAll();
+    $abonnes = $personneDao->findAllAbonnes();
+    $tarifs = $tarifsDao->findAll();
+
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
     if ($request->getMethod() === 'POST') {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if ($ticketDao->update($ticket)) {
-                $app['session']->getFlashBag()->add('success', 'Le ticket est bien mis à jour !');
+            $seance = $seancesDao->find($data['seance']);
+            $abonne = $personnesDao->findAbonne($data['abonne']);
+            $tarif = $tarifsDao->find($data['tarif']);
 
-                return $app->redirect($app['url_generator']->generate('vente-tickets-list'));
+            if ($seance) {
+                $ticket->setSeance($seance);
             } else {
-                $app['session']->getFlashBag()->add('error', 'Le ticket n\'a pas pu être mis à jour.');
+                $app['session']->getFlashBag()->add('error', 'Cette séance n\'existe pas.');
+            }
+
+            if ($abonne) {
+                $ticket->setAbonne($abonne);
+            } else {
+                $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+            }
+
+            if ($tarif) {
+                $ticket->setTarif($tarif);
+            } else {
+                $app['session']->getFlashBag()->add('error', 'Ce tarif n\'existe pas.');
+            }
+
+            if ($seance && $abonne && $tarif) {
+                if ($ticketsDao->update($ticket)) {
+                    $app['session']->getFlashBag()->add('success', 'Le ticket est bien mis à jour !');
+
+                    return $app->redirect($app['url_generator']->generate('vente-tickets-list'));
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Le ticket n\'a pas pu être mis à jour.');
+                }
             }
         }
     }

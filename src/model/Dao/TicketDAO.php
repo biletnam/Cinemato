@@ -5,6 +5,7 @@ namespace model\Dao;
 use \DateTime;
 
 use \PDO;
+use \PDOException;
 
 use model\Entite\Seance;
 use model\Entite\Ticket;
@@ -22,33 +23,39 @@ class TicketDAO
     }
 
     public function find($id) {
-    	$ticket = null;
+        $ticket = null;
 
-    	$query = "SELECT * FROM tticket WHERE pk_id_ticket = :id";
-    	$connection = $this->getDao()->getConnexion();
+        $connection = $this->getDao()->getConnexion();
 
-    	if (is_null($connection)) {
-    		return;
-    	}
+        if (!is_null($connection)) {
+            $query = "SELECT * FROM tticket WHERE pk_id_ticket = :id";
 
-    	$statement = $connection->prepare($query);
-    	$statement->execute(array(
-    			'id' => $id
-    	));
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute(array(
+                    'id' => $id
+                ));
 
-    	if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-    		$ticket = $this->bind($donnees);
-    	}
+                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $ticket = $this->bind($donnees);
+                }
+            }
+            catch (PDOException $e) {
+                throw $e;
+            }
+        }
 
-    	return $ticket;
+
+        return $ticket;
     }
 
     public function findAll() {
     	$tickets = array ();
-    	$query = 'SELECT * FROM tticket';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
+            $query = 'SELECT * FROM tticket';
+
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array () );
@@ -56,7 +63,7 @@ class TicketDAO
     				$ticket = $this->bind ( $donnees );
     				array_push ( $tickets, $ticket );
     			}
-    		} catch ( \PDOException $e ) {
+    		} catch (PDOException $e) {
     			throw $e;
     		}
     	}
@@ -64,96 +71,96 @@ class TicketDAO
     }
 
     public function create(&$ticket) {
-        $queryId = 'select nextval(\'sequence_ticket\') as val';
-    	$query = 'INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif) VALUES(:id, :dateVente, :note, :dateSeance, :salle, :abonne, :vendeur, :tarif)';
+        $success = false;
+
+    	$connection = $this->getDao()->getConnexion();
+
+        if (! is_null ( $connection )) {
+            $query = 'INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif) VALUES(nextval(\'sequence_ticket\'), :dateVente, :note, :seance, :abonne, :vendeur, :tarif)';
+
+            try {
+                $statement = $connection->prepare($query);
+                $success = $statement->execute ( array (
+                    'dateVente' => $ticket->getDateDeVente()->format('Y-m-d H:i:s'),
+                    'note' => $ticket->getNote(),
+                    'seance' => $ticket->getSeance()->getId(),
+                    'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
+                    'vendeur' => $ticket->getVendeur()->getId(),
+                    'tarif' => $ticket->getTarif()->getNom()
+                ));
+            } catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $success;
+    }
+
+    public function update($ticket) {
+        $success = false;
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
-    		try {
-    			$statement = $connection->prepare($queryId);
-    			$statement->execute();
+            $query = 'UPDATE tticket SET timestamp_vente = :dateVente, note = :note, fk_id_seance = :seance, fk_id_personne_abonne = :abonne, fk_id_personne_vendeur = :vendeur, fk_nom_tarif = :tarif WHERE pk_id_ticket = :id';
 
-    			if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-    			    $ticket->setId($donnees['val']);
-    			}
-
-    			$statement = null;
-
-                echo '<pre>';
-                exit(var_dump($ticket));
-
-
-    			if (! is_null($connection)) {
-                    $statement = $connection->prepare($query);
-        			$statement->execute ( array (
-        			        'id' => $ticket->getId(),
-        					'dateVente' => $ticket->getDateDeVente(),
-        					'note' => $ticket->getNote(),
-        					'dateSeance' => $ticket->getSeance()->getDateSeance()->format('Y-m-d H:i:s'),
-        					'salle' => $ticket->getSeance()->getSalle()->getNom(),
-        					'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
-        					'vendeur' => $ticket->getVendeur()->getId(),
-        					'tarif' => $ticket->getTarif()->getNom()
-        			) );
-                }
-    		} catch ( \PDOException $e ) {
+            try {
+    			$statement = $connection->prepare ( $query );
+    			$success = $statement->execute ( array (
+					'id' => $ticket->getId(),
+					'dateVente' => $ticket->getDateDeVente()->format('Y-m-d H:i:s'),
+					'note' => $ticket->getNote(),
+                    'seance' => $ticket->getSeance()->getId(),
+					'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
+					'vendeur' => $ticket->getVendeur()->getId(),
+					'tarif' => $ticket->getTarif()->getNom()
+    			) );
+    		} catch (PDOException $e) {
     			throw $e;
     		}
     	}
     }
-
-    public function update($ticket){
-    	$query = 'UPDATE tticket SET timestamp_vente = :dateVente, note = :note, fk_timestamp_seance = :dateSeance, fk_nom_salle_seance = :salle, fk_id_personne_abonne = :abonne, fk_id_personne_vendeur = :vendeur, fk_nom_tarif = :tarif WHERE pk_id_ticket = :id';
+    public function delete($ticket) {
+        $success = false;
     	$connection = $this->getDao ()->getConnexion ();
 
-    	if (! is_null ( $connection )) {
-    		try {
-    			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
-    					'id' => $ticket->getId(),
-    					'dateVente' => $ticket->getDateDeVente(),
-    					'note' => $ticket->getNote(),
-    					'dateSeance' => $ticket->getSeance()->getDateSeance()->format('Y-m-d H:i:s'),
-    					'salle' => $ticket->getSeance()->getSalle()->getNom(),
-    					'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
-    					'vendeur' => $ticket->getVendeur()->getId(),
-    					'tarif' => $ticket->getTarif()->getNom()
-    			) );
-    		} catch ( \PDOException $e ) {
-    			throw $e;
-    		}
-    	}
-    }
-    public function delete($ticket){
-    	$query = 'DELETE FROM tticket WHERE pk_id_ticket = :id ';
-    	$connection = $this->getDao ()->getConnexion ();
+        if (! is_null ( $connection )) {
+            $query = 'DELETE FROM tticket WHERE pk_id_ticket = :id ';
 
-    	if (! is_null ( $connection )) {
-    		try {
-    			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
-					'id' => $ticket->getId()
-    			) );
-    		} catch ( \PDOException $e ) {
-    			throw $e;
-    		}
-    	}
+            try {
+                $statement = $connection->prepare ( $query );
+                $success = $statement->execute ( array (
+                    'id' => $ticket->getId()
+                ));
+            } catch (PDOException $e ) {
+                throw $e;
+            }
+        }
+
+        return $success;
     }
 
     public function bind($donnees) {
         $ticket = new Ticket();
         $ticket->setId($donnees['pk_id_ticket']);
-        $ticket->setDateDeVente($donnees['timestamp_vente']);
+        $ticket->setDateDeVente(new DateTime($donnees['timestamp_vente']));
+
         $ticket->setNote($donnees['note']);
 
-        $ticket->setSeance($this->getDao()->getSeanceDAO()->find(new \DateTime($donnees['fk_timestamp_seance']), $this->getDao()->getSalleDao()->find($donnees['fk_nom_salle_seance'])));
+        if (!is_null($donnees['fk_id_seance'])) {
+            $ticket->setSeance($this->getDao()->getSeanceDAO()->find($donnees['fk_id_seance']));
+        }
 
-        if ($donnees['fk_id_personne_abonne'] != NULL) {
+        if (!is_null($donnees['fk_id_personne_abonne'])) {
            $ticket->setAbonne($this->getDao()->getPersonneDAO()->find($donnees['fk_id_personne_abonne']));
         }
 
-        $ticket->setVendeur($this->getDao()->getPersonneDAO()->find($donnees['fk_id_personne_vendeur']));
-        $ticket->setTarif($this->getDao()->getTarifDAO()->find($donnees['fk_nom_tarif']));
+        if (!is_null($donnees['fk_id_personne_vendeur'])) {
+           $ticket->setVendeur($this->getDao()->getPersonneDAO()->find($donnees['fk_id_personne_vendeur']));
+        }
+
+        if (!is_null($donnees['fk_nom_tarif'])) {
+           $ticket->setTarif($this->getDao()->getTarifDAO()->find($donnees['fk_nom_tarif']));
+        }
 
         return $ticket;
     }

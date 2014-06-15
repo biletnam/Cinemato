@@ -19,6 +19,11 @@ class Seance
 
     private $doublage;
 
+    public function __toString()
+    {
+        return $this->getFilm()->getTitre() . ' le ' . $this->getDateSeance()->format('d-m-Y H:i');
+    }
+
     public function toString()
     {
         return $this->getFilm()->getTitre() . ' le ' . $this->getDateSeance()->format('d-m-Y H:i');

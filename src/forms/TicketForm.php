@@ -23,7 +23,7 @@ class TicketForm extends AbstractType
     {
         $seances = array();
         foreach ($this->seances as $seance) {
-            $seances[$seance->getTimestamp()] = $seance->toString();
+            $seances[$seance->getId()] = $seance->toString();
         }
 
         $abonnes = array();
@@ -37,9 +37,9 @@ class TicketForm extends AbstractType
         }
 
         $builder
-            ->add('seance', 'choice', array('label' => 'Séance', 'required' => true, 'choices' => $seances))
-            ->add('abonne', 'choice', array('label' => 'Abonné', 'required' => true, 'choices' => $abonnes))
-            ->add('tarif', 'choice', array('label' => 'Tarif', 'required' => true, 'choices' => $tarifs))
+            ->add('seance', 'choice', array('label' => 'Séance', 'required' => true, 'choices' => $seances, 'empty_value' => 'Choisissez la séance'))
+            ->add('abonne', 'choice', array('label' => 'Abonné', 'required' => true, 'choices' => $abonnes, 'empty_value' => 'Choisissez le compte abonné'))
+            ->add('tarif', 'choice', array('label' => 'Tarif', 'required' => true, 'choices' => $tarifs, 'empty_value' => 'Choisissez le tarif'))
         ;
     }
 

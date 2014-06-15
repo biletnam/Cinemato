@@ -4,6 +4,7 @@ namespace model\Dao;
 
 use \DateTime;
 use \PDO;
+use \PDOException;
 
 use model\Entite\Seance;
 
@@ -22,9 +23,10 @@ class SeanceDAO
     public function find($id) {
     	$seance = null;
 
+        $connection = $this->getDao()->getConnexion();
+
     	if (!is_null($connection)) {
             $query = 'SELECT * FROM tseance WHERE pk_id_seance = :id';
-            $connection = $this->getDao()->getConnexion();
 
             $statement = $connection->prepare($query);
             $statement->execute(array(
@@ -41,10 +43,11 @@ class SeanceDAO
 
     public function findAll() {
     	$seances = array ();
-    	$query = 'SELECT * FROM tseance ORDER BY timestamp_seance';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
+            $query = 'SELECT * FROM tseance ORDER BY timestamp_seance';
+
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array () );
@@ -52,19 +55,21 @@ class SeanceDAO
     				$seance = $this->bind ( $donnees );
     				array_push ( $seances, $seance );
     			}
-    		} catch ( \PDOException $e ) {
+    		} catch ( PDOException $e ) {
     			throw $e;
     		}
     	}
+
     	return $seances;
     }
 
     public function findByFilm($film) {
         $seances = array ();
-        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY timestamp_seance';
         $connection = $this->getDao ()->getConnexion ();
 
         if (! is_null ( $connection )) {
+            $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY timestamp_seance';
+
             try {
                 $statement = $connection->prepare ( $query );
                 $statement->execute ( array ('film' => $film->getId()) );
@@ -72,7 +77,7 @@ class SeanceDAO
                     $seance = $this->bind ( $donnees );
                     array_push ( $seances, $seance );
                 }
-            } catch ( \PDOException $e ) {
+            } catch ( PDOException $e ) {
                 throw $e;
             }
         }
@@ -116,7 +121,7 @@ class SeanceDAO
                     array_push ( $seances, $seance );
                 }
 
-            } catch ( \PDOException $e ) {
+            } catch ( PDOException $e ) {
                 throw $e;
             }
         }
@@ -124,57 +129,69 @@ class SeanceDAO
     }
 
     public function create($seance) {
-    	$query = 'INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage) VALUES(nextval(\'sequance_seance\'), :dateSeance, :nomSalle, :idFilm, :doublage)';
+        $success = false;
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
+            $query = 'INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage) VALUES(nextval(\'sequance_seance\'), :dateSeance, :nomSalle, :idFilm, :doublage)';
+
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
 					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
 					'nomSalle' => $seance->getSalle()->getNom(),
 					'idFilm' => $seance->getFilm()->getId(),
 					'doublage' => $seance->getDoublage()
     			) );
-    		} catch ( \PDOException $e ) {
+    		} catch ( PDOException $e ) {
     			throw $e;
     		}
     	}
+
+        return $success;
     }
 
     public function update($seance){
-    	$query = 'UPDATE tseance SET timestamp_seance = :dateSeance, fk_nom_salle = :nomSalle, fk_id_film = :idFilm, doublage = :doublage WHERE id = :id';
+        $success = false;
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
+            $query = 'UPDATE tseance SET timestamp_seance = :dateSeance, fk_nom_salle = :nomSalle, fk_id_film = :idFilm, doublage = :doublage WHERE id = :id';
+
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
                     'id' => $seance->getId(),
                     'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
                     'nomSalle' => $seance->getSalle()->getNom(),
                     'idFilm' => $seance->getFilm()->getId(),
                     'doublage' => $seance->getDoublage()
     			) );
-    		} catch ( \PDOException $e ) {
+    		} catch ( PDOException $e ) {
     			throw $e;
     		}
     	}
+
+        return $success;
     }
-    public function delete($seance){
-    	$query = 'DELETE FROM tseance WHERE pk_id_seance = :id';
+    public function delete($seance) {
+        $success = false;
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
+            $query = 'DELETE FROM tseance WHERE pk_id_seance = :id';
+
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
 					'id' => $seance->getId()
     			) );
-    		} catch ( \PDOException $e ) {
+    		} catch ( PDOException $e ) {
     			throw $e;
     		}
     	}
+
+        return $success;
     }
     public function findSeancesOfTheWeek( $offsetWeek) {
 
@@ -228,7 +245,7 @@ class SeanceDAO
 
     public function bind($donnees){
     	$seance = new Seance();
-        $seance->setId($donnes['pk_id_seance']);
+        $seance->setId($donnees['pk_id_seance']);
     	$seance->setDateSeance(new DateTime($donnees['timestamp_seance']));
     	$seance->setSalle($this->getDao()->getSalleDAO()->find($donnees['fk_nom_salle']));
     	$seance->setFilm($this->getDao()->getFilmDAO()->find($donnees['fk_id_film']));

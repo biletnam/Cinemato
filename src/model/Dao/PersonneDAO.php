@@ -2,6 +2,7 @@
 namespace model\Dao;
 
 use \PDO;
+use \PDOException;
 use model\Entite\Personne;
 use model\Entite\PersonneAbonne;
 use model\Entite\PersonneVendeur;
@@ -113,6 +114,66 @@ class PersonneDAO
                     $personne = $this->bind($donnees);
                 }
             } catch (\PDOException $e) {
+                throw $e;
+            }
+        }
+        return $personne;
+    }
+
+    public function findAbonne($id)
+    {
+        $personne = null;
+
+        $query = 'SELECT p.pk_id_personne as idP,' .
+            ' p.nom as nom,' .
+            ' p.prenom as prenom,' .
+            ' a.pkfk_id_personne as idA' .
+            ' FROM tpersonne p' .
+            ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne' .
+            ' WHERE p.pk_id_personne = :id';
+
+        $connection = $this->getDao()->getConnexion();
+        if (! is_null($connection)) {
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute(array(
+                    'id' => $id
+                ));
+
+                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $personne = $this->bind($donnees);
+                }
+            } catch (PDOException $e) {
+                throw $e;
+            }
+        }
+        return $personne;
+    }
+
+    public function findVendeur($id)
+    {
+        $personne = null;
+
+        $query = 'SELECT p.pk_id_personne as idP,' .
+            ' p.nom as nom,' .
+            ' p.prenom as prenom,' .
+            ' v.pkfk_id_personne as idV' .
+            ' FROM tpersonne p' .
+            ' JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' .
+            ' WHERE p.pk_id_personne = :id';
+
+        $connection = $this->getDao()->getConnexion();
+        if (! is_null($connection)) {
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute(array(
+                    'id' => $id
+                ));
+
+                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $personne = $this->bind($donnees);
+                }
+            } catch (PDOException $e) {
                 throw $e;
             }
         }

@@ -19,38 +19,36 @@ class TarifDAO
     }
 
     public function find($id) {
-    	$tarif = null;
-    	
-    	$query = "SELECT * FROM ttarif WHERE pk_nom_tarif = :id";
-    	$connection = $this->getDao()->getConnexion();
-    	
-    	if (is_null($connection)) {
-    		return;
-    	}
-    	
-    	$statement = $connection->prepare($query);
-    	$statement->execute(array(
-    			'id' => $id
-    	));
-    	
-    	if ($tarifData = $statement->fetch(PDO::FETCH_ASSOC)) {
-    		$tarif = self::bind($tarifData);
-    	}
-    	
-    	return $tarif;
+        $tarif = null;
+
+        $query = "SELECT * FROM ttarif WHERE pk_nom_tarif = :id";
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $statement = $connection->prepare($query);
+            $statement->execute(array(
+                'id' => $id
+            ));
+
+            if ($tarifData = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $tarif = $this->bind($tarifData);
+            }
+        }
+
+        return $tarif;
     }
-    
+
     public function findAll() {
     	$tarifs = array ();
     	$query = 'SELECT * FROM ttarif';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array () );
     			while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
-    				$tarif = self::bind($donnees);
+    				$tarif = $this->bind($donnees);
     				array_push ( $tarifs, $tarif );
     			}
     		} catch ( \PDOException $e ) {
@@ -59,11 +57,11 @@ class TarifDAO
     	}
     	return $tarifs;
     }
-    
+
     public function create($tarif) {
     	$query = 'INSERT INTO ttarif(pk_nom_tarif, tarif) VALUES(:nomTarif, :tarif)';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -76,11 +74,11 @@ class TarifDAO
     		}
     	}
     }
-    
+
     public function update($tarif){
     	$query = 'UPDATE ttarif SET tarif = :tarif WHERE pk_nom_tarif = :nomTarif';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -96,7 +94,7 @@ class TarifDAO
     public function delete($tarif){
     	$query = 'DELETE FROM ttarif WHERE pk_nom_tarif = :nomTarif';
     	$connection = $this->getDao ()->getConnexion ();
-    	
+
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
@@ -108,10 +106,12 @@ class TarifDAO
     		}
     	}
     }
-    public static function bind($donnees){
-    	$tarif = new Tarif();
-    	$tarif->setNom($donnees['pk_nom_tarif']);
-    	$tarif->setTarif(floatval($donnees['tarif']));
-    	return $tarif;
+
+    protected function bind($donnees) {
+        $tarif = new Tarif();
+        $tarif->setNom($donnees['pk_nom_tarif']);
+        $tarif->setTarif(floatval($donnees['tarif']));
+
+        return $tarif;
     }
 }
