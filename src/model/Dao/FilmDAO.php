@@ -78,6 +78,37 @@ class FilmDAO
         return $film;
     }
 
+    public function find($titre){
+        $films = array();
+
+        $connection = $this->getDao()->getConnexion();
+
+        if (!is_null($connection)) {
+            $query = 'SELECT * FROM tfilm WHERE LOWER(titre) LIKE LOWER(:titre)';
+
+            try {
+                $statement = $connection->prepare($query);
+                $statement->execute(array(
+                    'titre' =>$titre
+                ));
+
+                $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($filmRows as &$filmData) {
+                    $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
+                    $filmData['distributeur'] = $this->getDao()->getDistributeurDAO()->find($filmData['fk_id_distributeur']);
+
+                    $films[] = self::map($filmData);
+                }
+            }
+            catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $films;
+    }
+
     public function create($film) {
         $check = false;
         $connection = $this->getDao()->getConnexion();
