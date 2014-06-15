@@ -128,7 +128,7 @@ $filmsControllers->get('/{id}/edit', function ($id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDAO();
     $distributeurs = $distributeurDao->findAll();
 
-    $dateDeSortie = new DateTime($film->getDateDeSortie());
+    $dateDeSortie = $film->getDateDeSortie();
 
     $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
         'titre' => $film->getTitre(),

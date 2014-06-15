@@ -23,7 +23,7 @@ $notationControllers->post('/save', function (Request $request) use ($app) {
 		if ($form->isValid()) {
 			$data = $form->getData();
 			if($data['note'] < 0 || $data['note'] > 20){
-				$app['session']->getFlashBag()->add('error', 'Saisissez une note entre 0 et 20 !');
+				$app['session']->getFlashBag()->add('Erreur', 'Saisissez une note entre 0 et 20 !');
 			}
 			else
 			{
@@ -32,7 +32,7 @@ $notationControllers->post('/save', function (Request $request) use ($app) {
 				$ticket = $ticketDao->find($data['id']);
 				if($ticket != NULL){
 					if($ticket->getNote() != NULL)
-						$app['session']->getFlashBag()->add('error', 'Vous avez déja noté ce film avec ce ticket !');
+						$app['session']->getFlashBag()->add('Erreur', 'Vous avez déja noté ce film avec ce ticket !');
 					else {
 						$ticket->setNote($data['note']);
 						try{
@@ -43,13 +43,13 @@ $notationControllers->post('/save', function (Request $request) use ($app) {
 								return $app['twig']->render('pages/public/notation.html.twig', array(
 								'form' => $form->createView()));
 		   				} 
-						$app['session']->getFlashBag()->add('success', 'Vote note a bien enregistrée !');
-						return $app->redirect('/cinemato');
+						$app['session']->getFlashBag()->add('Validé', 'Vote note a bien enregistrée !');
+						return $app->redirect($app['url_generator']->generate('public'));
 					}
 				}
 				else
 				{
-					$app['session']->getFlashBag()->add('error', 'Ce ticket n\'existe pas !');
+					$app['session']->getFlashBag()->add('Validé', 'Ce ticket n\'existe pas !');
 				}
 			}
 		}

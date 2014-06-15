@@ -5,7 +5,8 @@
         <h1>Statistiques</h1>
     </div>
     Nombre d'abonné au cinéma : <strong>{{nbAbonne}}</strong><br/>
-    Nombre de film cette semaine : <strong>{{nbFilm}}</strong>
+    Nombre de film cette semaine : <strong>{{nbFilm}}</strong><br/>
+    Nombre de séance cette semaine : <strong>{{nbSeance}}</strong><br/>
     
     <div class='page-header'>
         <h2>Statistiques des films projeté la semaine du {{dateDebutSemaine | date('d/m/Y')}} au {{dateFinSemaine | date('d/m/Y')}}</h2>
@@ -14,7 +15,7 @@
     Il n'y a aucun film projeté cette semaine !
 	{%else%}
     {% for item in tabFilmSeance %}
-            <strong>{{ item['film'].titre }}</strong> :<br/>
+            <strong><a href="{{ app.url_generator.generate('intranet-films-detail', {id: item['film'].id}) }}">{{ item['film'].titre }}</a></strong> :<br/>
             <ul>
 		<li>Taux d'occupation des séances :<br/>
 			<ul>

@@ -44,7 +44,7 @@ class SeanceDAO
     
     public function findAll() {
     	$seances = array ();
-    	$query = 'SELECT * FROM tseance';
+    	$query = 'SELECT * FROM tseance ORDER BY pk_timestamp_seance';
     	$connection = $this->getDao ()->getConnexion ();
     	
     	if (! is_null ( $connection )) {
@@ -64,7 +64,7 @@ class SeanceDAO
     
     public function findByFilm($film) {
         $seances = array ();
-        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film';
+        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY pk_timestamp_seance';
         $connection = $this->getDao ()->getConnexion ();
          
         if (! is_null ( $connection )) {
@@ -75,6 +75,49 @@ class SeanceDAO
                     $seance = $this->bind ( $donnees );
                     array_push ( $seances, $seance );
                 }
+            } catch ( \PDOException $e ) {
+                throw $e;
+            }
+        }
+        return $seances;
+    }
+    public function findByFilmAndWeek($film, $offsetWeek) {
+        $seances = array ();
+        $query = "SELECT * FROM tseance WHERE fk_id_film = :film and pk_timestamp_seance ".
+            " BETWEEN date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'".
+    		" AND date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'";
+        $connection = $this->getDao ()->getConnexion ();
+         
+        if (! is_null ( $connection )) {
+            try {
+                $statement = $connection->prepare ( $query );
+                $statement->execute ( array ('film' => $film->getId()) );
+                //exit(var_dump($statement));
+                while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
+                    $seance = $this->bind ( $donnees );
+                    array_push ( $seances, $seance );
+                }
+                
             } catch ( \PDOException $e ) {
                 throw $e;
             }
@@ -140,11 +183,31 @@ class SeanceDAO
     	$connection = $this->getDao()->getConnexion();
     	 
     	if (!is_null($connection)) {
-    		$query = 'SELECT *'.
-    		' FROM tseance '.
-    		'WHERE pk_timestamp_seance '.
-    		'BETWEEN date_trunc(\'week\', (NOW() + INTERVAL \''.$offsetWeek.' week\')) + INTERVAL \'2 day\' '.
-    		'AND date_trunc(\'week\', (NOW() + INTERVAL \''.($offsetWeek +1).' week\')) + INTERVAL \'2 day\'';
+    		$query = "SELECT *".
+    		" FROM tseance ".
+    		" WHERE pk_timestamp_seance ".
+    		" BETWEEN date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'".
+    		" AND date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'";
     		$intervalStartWeek = $offsetWeek;
     		$intervalEndWeek = $offsetWeek +1;
     		$seances = array();

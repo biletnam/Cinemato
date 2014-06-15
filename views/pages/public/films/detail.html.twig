@@ -1,0 +1,34 @@
+{% extends 'pages/public/detail.html.twig' %}
+
+{% block entity_title %}{{ entity.titre }}{% endblock %}
+
+{% block entity_table %}
+    <tr>
+        <th>Id</th>
+        <td>{{ entity.id }}</td>
+    </tr>
+    <tr>
+        <th>Date de sortie</th>
+        <td>{{ entity.dateDeSortie | date ('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <th>Age minimum</th>
+        <td>{{ entity.ageMinimum }}</td>
+    </tr>
+    <tr>
+        <th>Genre</th>
+        <td>{{ entity.genre }}</td>
+    </tr>
+    <tr>
+        <th>Distributeur</th>
+        <td>{{ entity.distributeur }}</td>
+    </tr>
+{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('public-films-list') }}'{% endblock %}
+
+{% block entity_seances_path %}href='{{ app.url_generator.generate('public-films-seances', { 'id': entity.id }) }}'{% endblock %}
+
+
+{% block entity_states_link %}{% endblock %}
+
