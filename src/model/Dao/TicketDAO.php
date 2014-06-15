@@ -78,6 +78,11 @@ class TicketDAO
     			}
 
     			$statement = null;
+
+                echo '<pre>';
+                exit(var_dump($ticket));
+
+
     			if (! is_null($connection)) {
                     $statement = $connection->prepare($query);
         			$statement->execute ( array (

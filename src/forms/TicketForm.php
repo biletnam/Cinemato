@@ -28,7 +28,7 @@ class TicketForm extends AbstractType
 
         $abonnes = array();
         foreach ($this->abonnes as $abonne) {
-            $abonnes[$abonnne->getId()] = $abonne->toString();
+            $abonnes[$abonne->getId()] = $abonne->toString();
         }
 
         $tarifs = array();
@@ -51,13 +51,6 @@ class TicketForm extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array();
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'model\Entite\Ticket'
-        ));
     }
 
     public function getExtendedType()

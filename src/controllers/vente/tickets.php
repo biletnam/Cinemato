@@ -31,7 +31,7 @@ $ticketsControllers->get('/new', function () use ($app) {
     $ticket = new Ticket();
     $ticket->setVendeur($vendeur);
 
-    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), $ticket);
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
     return $app['twig']->render('pages/vente/tickets/new.html.twig', array(
         'form' => $form->createView()
@@ -52,12 +52,19 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
     $ticket = new Ticket();
     $ticket->setVendeur($vendeur);
 
-    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), $ticket);
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
     if ($request->getMethod() === 'POST') {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $data = $form->getData();
+
+            echo '<pre>';
+            exit(var_dump($data));
+
+            $seance = $seanceDao->find($data['seance']);
+
             $ticketDao = Dao::getInstance()->getTicketDAO();
 
             if ($ticketDao->create($ticket)) {
