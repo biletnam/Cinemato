@@ -78,13 +78,13 @@ class FilmDAO
         return $film;
     }
 
-    public function find($titre){
+    public function findByTitre($titre){
         $films = array();
 
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'SELECT * FROM tfilm WHERE LOWER(titre) LIKE LOWER(:titre)';
+            $query = 'SELECT * FROM tfilm WHERE LOWER(titre) LIKE "%LOWER(:titre)%"';
 
             try {
                 $statement = $connection->prepare($query);
