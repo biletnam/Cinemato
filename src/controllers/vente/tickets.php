@@ -18,12 +18,12 @@ $ticketsControllers->get('/', function () use ($app) {
 })->bind('vente-tickets-list');
 
 $ticketsControllers->get('/new', function () use ($app) {
-    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $personnesDao = Dao::getInstance()->getPersonneDAO();
     $tarifsDao = Dao::getInstance()->getTarifDAO();
-    $seanceDao = Dao::getInstance()->getSeanceDAO();
+    $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seanceDao->findAll();
-    $abonnes = $personneDao->findAllAbonnes();
+    $seances = $seancesDao->findAll();
+    $abonnes = $personnesDao->findAllAbonnes();
     $tarifs = $tarifsDao->findAll();
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
@@ -121,15 +121,19 @@ $ticketsControllers->get('/{id}/edit', function ($id) use ($app) {
         $app->abort(404, 'Ce ticket n\'existe pas...');
     }
 
-    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $personnesDao = Dao::getInstance()->getPersonneDAO();
     $tarifsDao = Dao::getInstance()->getTarifDAO();
-    $seanceDao = Dao::getInstance()->getSeanceDAO();
+    $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seanceDao->findAll();
-    $abonnes = $personneDao->findAllAbonnes();
+    $seances = $seancesDao->findAll();
+    $abonnes = $personnesDao->findAllAbonnes();
     $tarifs = $tarifsDao->findAll();
 
-    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), array(
+        'seance' => $ticket->getSeance()->getId(),
+        'abonne' => $ticket->getAbonne()->getId(),
+        'tarif' => $ticket->getTarif()->getNom(),
+    ));
 
     $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
         ->add('id', 'hidden')
@@ -150,20 +154,26 @@ $ticketsControllers->post('/{id}/update', function (Request $request, $id) use (
         $app->abort(404, 'Ce ticket n\'existe pas...');
     }
 
-    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $personnesDao = Dao::getInstance()->getPersonneDAO();
     $tarifsDao = Dao::getInstance()->getTarifDAO();
-    $seanceDao = Dao::getInstance()->getSeanceDAO();
+    $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seanceDao->findAll();
-    $abonnes = $personneDao->findAllAbonnes();
+    $seances = $seancesDao->findAll();
+    $abonnes = $personnesDao->findAllAbonnes();
     $tarifs = $tarifsDao->findAll();
 
-    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), array(
+        'seance' => $ticket->getSeance()->getId(),
+        'abonne' => $ticket->getAbonne()->getId(),
+        'tarif' => $ticket->getTarif()->getNom(),
+    ));
 
     if ($request->getMethod() === 'POST') {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $data = $form->getData();
+
             $seance = $seancesDao->find($data['seance']);
             $abonne = $personnesDao->findAbonne($data['abonne']);
             $tarif = $tarifsDao->find($data['tarif']);

@@ -8,12 +8,28 @@
         <td>{{ entity.id }}</td>
     </tr>
     <tr>
-        <th>Prénom</th>
-        <td>{{ entity.prenom }}</td>
+        <th>Date de vente</th>
+        <td>{{ entity.dateDeVente|date('d-m-Y H:i') }}</td>
     </tr>
     <tr>
-        <th>Nom</th>
-        <td>{{ entity.nom }}</td>
+        <th>Note</th>
+        <td>{{ entity.note }}</td>
+    </tr>
+    <tr>
+        <th>Séance</th>
+        <td>{{ entity.seance }}</td>
+    </tr>
+    <tr>
+        <th>Compte abonné</th>
+        <td>{{ entity.abonne }}</td>
+    </tr>
+    <tr>
+        <th>Vendeur</th>
+        <td>{{ entity.vendeur }}</td>
+    </tr>
+    <tr>
+        <th>Tarif</th>
+        <td>{{ entity.tarif }}</td>
     </tr>
 {% endblock %}
 

@@ -118,6 +118,8 @@ class TicketDAO
     			throw $e;
     		}
     	}
+
+        return $success;
     }
     public function delete($ticket) {
         $success = false;
