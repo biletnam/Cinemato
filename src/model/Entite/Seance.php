@@ -9,6 +9,7 @@ use \DateTime;
  */
 class Seance
 {
+    private $id;
 
     private $dateSeance;
 
@@ -21,6 +22,18 @@ class Seance
     public function toString()
     {
         return $this->getFilm()->getTitre() . ' le ' . $this->getDateSeance()->format('d-m-Y H:i');
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function setDateSeance($dateSeance) {

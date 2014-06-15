@@ -42,6 +42,7 @@ DROP SEQUENCE IF EXISTS sequence_ticket;
 DROP SEQUENCE IF EXISTS sequence_personne;
 DROP SEQUENCE IF EXISTS sequence_rechargement;
 DROP SEQUENCE IF EXISTS sequence_vente;
+DROP SEQUENCE IF EXISTS sequence_seance;
 
 CREATE SEQUENCE sequence_film;
 CREATE SEQUENCE sequence_distributeur;
@@ -49,6 +50,7 @@ CREATE SEQUENCE sequence_ticket;
 CREATE SEQUENCE sequence_personne;
 CREATE SEQUENCE sequence_rechargement;
 CREATE SEQUENCE sequence_vente;
+CREATE SEQUENCE sequence_seance;
 
 CREATE TABLE tfilm(
 	pk_id_film					integer,
@@ -69,8 +71,9 @@ CREATE TABLE tdistributeur(
 	tel							varchar(20)
 	);
 CREATE TABLE tseance(
-	pk_timestamp_seance			timestamp,
-	pkfk_nom_salle				varchar(255),
+	pk_id_seance				integer,
+	timestamp_seance			timestamp,
+	fk_nom_salle				varchar(255),
 	fk_id_film					integer NOT NULL,
 	doublage					varchar(255)
 	);
@@ -105,8 +108,7 @@ CREATE TABLE tticket(
 	pk_id_ticket				integer,
 	timestamp_vente				timestamp NOT NULL,
 	note						float CHECK (note >= 0 and note <= 20),
-	fk_timestamp_seance			timestamp NOT NULL,
-	fk_nom_salle_seance			varchar(255) NOT NULL,
+	fk_id_seance				integer,
 	fk_id_personne_abonne		integer,
 	fk_id_personne_vendeur		integer NOT NULL,
 	fk_nom_tarif				varchar(255) NOT NULL
@@ -160,7 +162,7 @@ ALTER TABLE tdistributeur
 ADD CONSTRAINT pk_tdistributeur PRIMARY KEY (pk_id_distributeur);
 
 ALTER TABLE tseance
-ADD CONSTRAINT pk_tseance PRIMARY KEY (pk_timestamp_seance, pkfk_nom_salle);
+ADD CONSTRAINT pk_tseance PRIMARY KEY (pk_id_seance);
 
 ALTER TABLE tsalle
 ADD CONSTRAINT pk_tsalle PRIMARY KEY (pk_nom_salle);
@@ -210,8 +212,8 @@ ADD CONSTRAINT fk_tfilm_tgenre FOREIGN KEY(fk_nom_genre) REFERENCES tgenre(pk_no
 ADD CONSTRAINT fk_tfilm_distributeur FOREIGN KEY(fk_id_distributeur) REFERENCES tdistributeur(pk_id_distributeur);
 
 ALTER TABLE tseance
-ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (pkfk_nom_salle) REFERENCES tsalle(pk_nom_salle),
-ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film);
+ADD CONSTRAINT fk_tseance_tsalle FOREIGN KEY (fk_nom_salle) REFERENCES tsalle(pk_nom_salle) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tseance_tfilm FOREIGN KEY (fk_id_film) REFERENCES tfilm(pk_id_film) ON DELETE CASCADE;
 
 ALTER TABLE tabonne
 ADD CONSTRAINT fk_tabonne_tpersonne FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
@@ -228,10 +230,10 @@ ADD CONSTRAINT fk_trealisateurs_film_tfilm FOREIGN KEY  (pkfk_id_film) REFERENCE
 ADD CONSTRAINT fk_trealisateurs_film_trealisateur FOREIGN KEY (pkfk_id_personne) REFERENCES tpersonne(pk_id_personne);
 
 ALTER TABLE tticket
-ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_timestamp_seance, fk_nom_salle_seance) REFERENCES tseance(pk_timestamp_seance, pkfk_nom_salle),
-ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne),
-ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne),
-ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif);
+ADD CONSTRAINT fk_tticket_tseance FOREIGN KEY (fk_id_seance) REFERENCES tseance(pk_id_seance) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_tabonne FOREIGN KEY (fk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tticket_ttarif FOREIGN KEY (fk_nom_tarif) REFERENCES ttarif(pk_nom_tarif) ON DELETE CASCADE;
 
 ALTER TABLE trechargement
 ADD CONSTRAINT fk_trechargement FOREIGN KEY (pkfk_id_personne_abonne) REFERENCES tabonne(pkfk_id_personne);
@@ -362,30 +364,30 @@ VALUES('Salle Lino Ventura', 240);
 INSERT INTO tsalle(pk_nom_salle, nb_place)
 VALUES('Salle Guynemer', 190);
 
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-24 14:00:00', 'Salle Zinédine Zidane', 3, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-22 10:30:00', 'Salle Lino Ventura', 1, 'Français');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer', 4, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
-INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
-VALUES(TIMESTAMP '2014-06-15 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(1, TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(2, TIMESTAMP '2014-06-24 14:00:00', 'Salle Zinédine Zidane', 3, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(3, TIMESTAMP '2014-06-22 10:30:00', 'Salle Lino Ventura', 1, 'Français');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(4, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(5, TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(6, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(7, TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(8, TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(9, TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(10, TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(11, TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(12, TIMESTAMP '2014-06-15 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
@@ -405,24 +407,24 @@ VALUES( 3, 8);
 INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 4, 11);
 
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-26 17:05:00', 12.0, TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane' , 1, 2, 'Normal');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-24 17:41:00', 19.88, TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane' , 1, 4, 'Etudiant');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-24 14:40:00', 4.2, TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura' , NULL, 2, 'Etudiant');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-24 20:59:00', 15, TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura' , NULL, 2, 'Normal');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-24 18:00:00', 20, TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura' , NULL, 2, 'Retraité');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-26 18:00:00', 8.3, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura' ,3, 4, 'Retraité');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-26 20:00:00', 7.58, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura' , NULL, 4, 'Normal');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-26 21:02:00', 18.99, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura' , 3, 2, 'Normal');
-INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), '2014-06-24 13:45:00', 12.6, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer' , NULL, 4, 'Retraité');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 17:05:00', 12.0, 1, 1, 2, 'Normal');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 17:41:00', 19.88, 2, 1, 4, 'Etudiant');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 14:40:00', 4.2, 3, NULL, 2, 'Etudiant');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 20:59:00', 15, 1, NULL, 2, 'Normal');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 18:00:00', 20, 5, NULL, 2, 'Retraité');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 18:00:00', 8.3, 6, 3, 4, 'Retraité');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 20:00:00', 7.58, 7, NULL, 4, 'Normal');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 21:02:00', 18.99, 11, 3, 2, 'Normal');
+INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 13:45:00', 12.6, 3, NULL, 4, 'Retraité');
 
 
 INSERT INTO trechargement( pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises)

@@ -3,7 +3,6 @@
 namespace model\Dao;
 
 use \DateTime;
-
 use \PDO;
 
 use model\Entite\Seance;
@@ -20,17 +19,16 @@ class SeanceDAO
         return $this->dao;
     }
 
-    public function find($dateSeance, $salle) {
-        $seance = null;
+    public function find($id) {
+    	$seance = null;
 
-        $query = "SELECT * FROM tseance WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle";
-        $connection = $this->getDao()->getConnexion();
+    	if (!is_null($connection)) {
+            $query = 'SELECT * FROM tseance WHERE pk_id_seance = :id';
+            $connection = $this->getDao()->getConnexion();
 
-        if (!is_null($connection)) {
             $statement = $connection->prepare($query);
             $statement->execute(array(
-                'dateSeance' => $dateSeance->format('Y-m-d H:i:s'),
-                'nomSalle' => $salle->getNom()
+                'id' => $id
             ));
 
             if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -38,12 +36,12 @@ class SeanceDAO
             }
         }
 
-        return $seance;
+    	return $seance;
     }
 
     public function findAll() {
     	$seances = array ();
-    	$query = 'SELECT * FROM tseance ORDER BY pk_timestamp_seance';
+    	$query = 'SELECT * FROM tseance ORDER BY timestamp_seance';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
@@ -63,7 +61,7 @@ class SeanceDAO
 
     public function findByFilm($film) {
         $seances = array ();
-        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY pk_timestamp_seance';
+        $query = 'SELECT * FROM tseance WHERE fk_id_film = :film ORDER BY timestamp_seance';
         $connection = $this->getDao ()->getConnexion ();
 
         if (! is_null ( $connection )) {
@@ -83,29 +81,29 @@ class SeanceDAO
 
     public function findByFilmAndWeek($film, $offsetWeek) {
         $seances = array ();
-        $query = "SELECT * FROM tseance WHERE fk_id_film = :film and pk_timestamp_seance ".
+        $query = "SELECT * FROM tseance WHERE fk_id_film = :film and timestamp_seance ".
             " BETWEEN date_trunc('week',".
-                " (NOW() + ".
-                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
-                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
-                " END".
-                " )) + INTERVAL '2 day'".
-                " AND date_trunc('week',".
-                " (NOW() + ".
-                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
-                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
-                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
-                " END".
-                " )) + INTERVAL '2 day'";
+            " (NOW() + ".
+            " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
+            " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+            " END".
+            " )) + INTERVAL '2 day'".
+            " AND date_trunc('week',".
+            " (NOW() + ".
+            " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
+            " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+            " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+            " END".
+            " )) + INTERVAL '2 day'";
         $connection = $this->getDao ()->getConnexion ();
 
         if (! is_null ( $connection )) {
@@ -126,7 +124,7 @@ class SeanceDAO
     }
 
     public function create($seance) {
-    	$query = 'INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage) VALUES(:dateSeance, :nomSalle, :nomFilm, :doublage)';
+    	$query = 'INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage) VALUES(nextval(\'sequance_seance\'), :dateSeance, :nomSalle, :idFilm, :doublage)';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
@@ -135,7 +133,7 @@ class SeanceDAO
     			$statement->execute ( array (
 					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
 					'nomSalle' => $seance->getSalle()->getNom(),
-					'nomFilm' => $seance->getFilm()->getId(),
+					'idFilm' => $seance->getFilm()->getId(),
 					'doublage' => $seance->getDoublage()
     			) );
     		} catch ( \PDOException $e ) {
@@ -145,17 +143,16 @@ class SeanceDAO
     }
 
     public function update($seance){
-    	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :nomFilm WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle ';
+    	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :idFilm WHERE id_seance = :id';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
-					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
-					'nomSalle' => $seance->getSalle()->getNom(),
-					'nomFilm' => $seance->getFilm()->getId(),
-					'doublage' => $seance->getDoublage()
+                    'id' => $seance->getId(),
+                    'idFilm' => $seance->getFilm()->getId(),
+                    'doublage' => $seance->getDoublage()
     			) );
     		} catch ( \PDOException $e ) {
     			throw $e;
@@ -163,7 +160,7 @@ class SeanceDAO
     	}
     }
     public function delete($seance){
-    	$query = 'DELETE FROM tseance WHERE pk_timestamp_seance = :dateSeance AND pkfk_nom_salle = :nomSalle';
+    	$query = 'DELETE FROM tseance WHERE timestamp_seance = :dateSeance AND fk_nom_salle = :nomSalle';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
@@ -184,9 +181,9 @@ class SeanceDAO
 
     	if (!is_null($connection)) {
     		$query = "SELECT *".
-    		" FROM tseance ".
-    		" WHERE pk_timestamp_seance ".
-    		" BETWEEN date_trunc('week',".
+        		" FROM tseance ".
+        		" WHERE timestamp_seance ".
+        		" BETWEEN date_trunc('week',".
                 " (NOW() + ".
                 " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
                 " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
@@ -217,9 +214,9 @@ class SeanceDAO
     			$statement->execute();
 
 	    		while ( $donnees = $statement->fetch ( PDO::FETCH_ASSOC ) ) {
-	     				$seance = $this->bind($donnees);
-	    				array_push ($seances, $seance);
-	    			}
+     				$seance = $this->bind($donnees);
+    				array_push ($seances, $seance);
+    			}
     		}
     		catch (PDOException $e) {
     			throw $e;
@@ -230,8 +227,9 @@ class SeanceDAO
 
     public function bind($donnees){
     	$seance = new Seance();
-    	$seance->setDateSeance(new \DateTime($donnees['pk_timestamp_seance']));
-    	$seance->setSalle($this->getDao()->getSalleDAO()->find($donnees['pkfk_nom_salle']));
+        $seance->setId($donnes['pk_id_seance']);
+    	$seance->setDateSeance(new DateTime($donnees['timestamp_seance']));
+    	$seance->setSalle($this->getDao()->getSalleDAO()->find($donnees['fk_nom_salle']));
     	$seance->setFilm($this->getDao()->getFilmDAO()->find($donnees['fk_id_film']));
     	$seance->setDoublage($donnees['doublage']);
 
