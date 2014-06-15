@@ -33,7 +33,7 @@ class FilmFormRecherche extends AbstractType
 
     public function getName()
     {
-        return 'film_form';
+        return 'film_form_recherche';
     }
 
     public function getDefaultOptions(array $options)
