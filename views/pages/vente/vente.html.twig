@@ -19,5 +19,14 @@
                 <li><a href='{{ app.url_generator.generate('vente-tickets-new') }}'><i class='icon icon-plus'></i> Vendre un ticket</a></li>
             </ul>
         </li>
+        <li>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-ticket'> Produits <b class='caret'></b></i></a>
+            <ul class='dropdown-menu'>
+                <li class='dropdown-header'>Boissons</li>
+                <li><a href='{{ app.url_generator.generate('vente-produit-boissons-list') }}'><i class='icon icon-list'></i> Liste</a></li>
+                <li><a href='{{ app.url_generator.generate('vente-produit-boissons-new') }}'><i class='icon icon-plus'></i> Ajouter une boisson</a></li>
+                <li class='divider'></li>
+            </ul>
+        </li>
     </ul>
 {% endblock %}

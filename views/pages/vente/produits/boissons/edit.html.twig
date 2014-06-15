@@ -1,0 +1,11 @@
+{% extends 'pages/vente/edit.html.twig' %}
+
+{% block entity_title %}Boisson {% endblock %}
+
+{% block entity_update_path %}action='{{ app.url_generator.generate('vente-produit-boissons-update', { 'id': entity.codeBarre }) }}'{% endblock %}
+
+{% block entity_show_path %}href='{{ app.url_generator.generate('vente-produit-boissons-detail', { 'id': entity.codeBarre }) }}'{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('vente-produit-boissons-list') }}'{% endblock %}
+
+{% block entity_delete_path %}action='{{ app.url_generator.generate('vente-produit-boissons-delete', { 'id': entity.codeBarre }) }}'{% endblock %}

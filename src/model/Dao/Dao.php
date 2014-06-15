@@ -75,27 +75,35 @@ class Dao
 	public function getProduitDAO(){
 		return new ProduitDAO(self::getInstance());
 	}
+
 	public function getPersonneDAO(){
 		return new PersonneDAO(self::getInstance());
 	}
+
 	public function getRechargementDAO(){
 		return new RechargementDAO(self::getInstance());
 	}
+
 	public function getSeanceDAO(){
 		return new SeanceDAO(self::getInstance());
 	}
+
 	public function getSalleDAO(){
 		return new SalleDAO(self::getInstance());
 	}
+
 	public function getTicketDAO(){
 		return new TicketDAO(self::getInstance());
 	}
+
 	public function getTarifDAO(){
 		return new TarifDAO(self::getInstance());
 	}
+
 	public function getProduitVendeurDao(){
 	    return new ProduitVendeurDAO(self::getInstance());
 	}
+
 	public function getStatistiquesDao(){
 	    return new StatistiquesDAO(self::getInstance());
 	}
