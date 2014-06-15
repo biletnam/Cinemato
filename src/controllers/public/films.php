@@ -13,11 +13,11 @@ $filmsPublicControllers->get('/', function () use ($app) {
     $films = $filmDao->findAll();
 
     return $app['twig']->render('pages/public/films/list.html.twig', array(
-        'films' => $films
+        'entities' => $films
     ));
 })->bind('public-films-list');
 
-$filmsPublicControllers->get('/{id}', function ($id) use ($app) {
+$filmsPublicControllers->get('detail/{id}', function ($id) use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $film = $filmDao->find($id);
 
@@ -26,8 +26,22 @@ $filmsPublicControllers->get('/{id}', function ($id) use ($app) {
     }
 
     return $app['twig']->render('pages/public/films/detail.html.twig', array(
-        'film' => $film
+        'entity' => $film
     ));
 })->bind('public-films-detail');
+
+$filmsPublicControllers->get('seance/{id}', function ($id) use ($app) {
+	$filmDao = Dao::getInstance()->getFilmDAO();
+	$film = $filmDao->find($id);
+
+	$seanceDao = Dao::getInstance()->getSeanceDao();
+	$seances = $seanceDao->findByFilm($film);
+	
+	return $app['twig']->render('pages/public/films/seances.html.twig', array(
+			'entities' => $seances, 'film'=>$film
+	));
+	
+})->bind('public-films-seances');
+
 
 $app->mount('/films', $filmsPublicControllers);
