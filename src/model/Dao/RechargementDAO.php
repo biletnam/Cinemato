@@ -75,7 +75,7 @@ class RechargementDAO
                 $statement = $connection->prepare($query);
                 $statement->execute(array(
                     'id' => $rechargement->getId(),
-                    'nbPl' => $rechargement->getNombrePlace(),
+                    'nbPl' => ($rechargement->getNombrePlace()==null)?0:$rechargement->getNombrePlace(),
                     'prix' => $rechargement->getPrixUnitaire(),
                     'plcUtil' =>$recharge->getPlacesUtilise()
                 ));
@@ -145,7 +145,7 @@ class RechargementDAO
                     'id' => $personne->getId(),
                     'nbPl' => $recharge->getNombrePlace(),
                     'prix' => $recharge->getPrixUnitaire(),
-                    'plcUtil' =>$recharge->getPlacesUtilise()
+                    'plcUtil' =>($rechargement->getNombrePlace()==null)?0:$rechargement->getNombrePlace(),
                 ));
             } catch (\PDOException $e) {
                 throw $e;

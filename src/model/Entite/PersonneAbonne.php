@@ -11,7 +11,6 @@ class PersonneAbonne extends Personne
 
     public function __construct()
     {
-        parent::__construct();
         $this->recharges = array();
     }
 

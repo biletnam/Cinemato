@@ -1,0 +1,11 @@
+{% extends 'pages/public/notation.html.twig' %}
+
+{% block entity_title %}Votre note du film{% endblock %}
+
+{% block entity_create_path %}action='{{ app.url_generator.generate('public-notation-save') }}'{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('intranet-distributeurs-list') }}'{% endblock %}
+
+
+
+

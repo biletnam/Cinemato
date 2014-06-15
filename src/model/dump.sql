@@ -41,109 +41,113 @@ DROP SEQUENCE IF EXISTS sequence_distributeur;
 DROP SEQUENCE IF EXISTS sequence_ticket;
 DROP SEQUENCE IF EXISTS sequence_personne;
 DROP SEQUENCE IF EXISTS sequence_rechargement;
+DROP SEQUENCE IF EXISTS sequence_vente;
 
 CREATE SEQUENCE sequence_film;
 CREATE SEQUENCE sequence_distributeur;
 CREATE SEQUENCE sequence_ticket;
 CREATE SEQUENCE sequence_personne;
 CREATE SEQUENCE sequence_rechargement;
+CREATE SEQUENCE sequence_vente;
 
 CREATE TABLE tfilm(
-    pk_id_film              integer,
-    titre                   varchar(255),
-    date_sortie             date,
-    age_min                 integer,
-    fk_nom_genre            varchar(255) NOT NULL,
-    fk_id_distributeur      integer NOT NULL
-    );
+	pk_id_film					integer,
+	titre						varchar(255),
+	date_sortie					date,
+	age_min 					integer,
+	fk_nom_genre				varchar(255) NOT NULL,
+	fk_id_distributeur			integer NOT NULL
+	);
 CREATE TABLE tgenre(
-    pk_nom_genre            varchar(255)
-    );
+	pk_nom_genre				varchar(255)
+	);
 CREATE TABLE tdistributeur(
-    pk_id_distributeur      integer,
-    nom                     varchar(255),
-    prenom                  varchar(255),
-    adresse                 varchar(255),
-    tel                     varchar(20)
-    );
+	pk_id_distributeur 			integer,
+	nom							varchar(255) NOT NULL,
+	prenom						varchar(255),
+	adresse						varchar(255),
+	tel							varchar(20)
+	);
 CREATE TABLE tseance(
-    pk_timestamp_seance     timestamp,
-    pkfk_nom_salle          varchar(255),
-    fk_id_film              integer NOT NULL,
-    doublage                varchar(255)
-    );
+	pk_timestamp_seance			timestamp,
+	pkfk_nom_salle				varchar(255),
+	fk_id_film					integer NOT NULL,
+	doublage					varchar(255)
+	);
 CREATE TABLE tsalle(
-    pk_nom_salle            varchar(255),
-    nb_place                integer NOT NULL
-    );
+	pk_nom_salle				varchar(255),
+	nb_place					integer NOT NULL
+	);
 CREATE TABLE tpersonne(
-    pk_id_personne          integer,
-    nom                     varchar(255),
-    prenom                  varchar(255)
-    );
+	pk_id_personne				integer,
+	nom							varchar(255) NOT NULL,
+	prenom						varchar(255)
+	);
 CREATE TABLE tabonne(
-    pkfk_id_personne        integer
+	pkfk_id_personne			integer
 );
 
 CREATE TABLE tvendeur(
-    pkfk_id_personne        integer
+	pkfk_id_personne			integer
 );
 
 CREATE TABLE tproducteurs_film(
-    pkfk_id_film            integer,
-    pkfk_id_personne        integer
+	pkfk_id_film				integer,
+	pkfk_id_personne			integer
 );
 
 CREATE TABLE trealisateurs_film(
-    pkfk_id_film            integer,
-    pkfk_id_personne        integer
+	pkfk_id_film				integer,
+	pkfk_id_personne			integer
 );
 
 CREATE TABLE tticket(
-    pk_id_ticket            integer,
-    timestamp_vente         timestamp,
-    note                    float,
-    fk_timestamp_seance     timestamp,
-    fk_nom_salle_seance     varchar(255),
-    fk_id_personne_abonne   integer,
-    fk_id_personne_vendeur  integer,
-    fk_nom_tarif            varchar(255)
+	pk_id_ticket				integer,
+	timestamp_vente				timestamp NOT NULL,
+	note						float CHECK (note >= 0 and note <= 20),
+	fk_timestamp_seance			timestamp NOT NULL,
+	fk_nom_salle_seance			varchar(255) NOT NULL,
+	fk_id_personne_abonne		integer,
+	fk_id_personne_vendeur		integer NOT NULL,
+	fk_nom_tarif				varchar(255) NOT NULL
 );
 
 CREATE TABLE trechargement(
-    pk_id_rechargement      integer,
-    pkfk_id_personne_abonne integer,
-    nombre_place            integer,
-    prix_unitaire           float,
-    places_utilises         integer
+	pk_id_rechargement			integer,
+	pkfk_id_personne_abonne		integer,
+	nombre_place				integer NOT NULL CHECK (nombre_place>0),
+	prix_unitaire				float NOT NULL CHECK (prix_unitaire>0),
+	places_utilises				integer NOT NULL
 );
 
 CREATE TABLE ttarif(
-    pk_nom_tarif            varchar(255),
-    tarif                   float NOT NULL
+	pk_nom_tarif				varchar(255),
+	tarif						float NOT NULL
 );
 
 CREATE TABLE tproduit(
-    pk_code_barre_produit   integer,
-    nom_produit             varchar(255),
-    prix                    float
+	pk_code_barre_produit		integer,
+	nom_produit					varchar(255) NOT NULL,
+	prix						float NOT NULL CHECK (prix>0)
 );
 
 CREATE TABLE tproduit_boisson(
-    pkfk_code_barre_produit integer
+	pkfk_code_barre_produit		integer
 );
 
 CREATE TABLE tproduit_alimentaire(
-    pkfk_code_barre_produit integer
+	pkfk_code_barre_produit		integer
 );
 
 CREATE TABLE tproduit_autre(
-    pkfk_code_barre_produit integer
+	pkfk_code_barre_produit		integer
 );
 
 CREATE TABLE tvente_produit(
-    pkfk_code_barre         integer,
-    pkfk_id_personne_vendeur    integer
+	pk_id						integer,
+	fk_code_barre				integer NOT NULL,
+	fk_id_personne_vendeur		integer NOT NULL,
+	date_vente					timestamp NOT NULL
 );
 
 ALTER TABLE tfilm
@@ -198,7 +202,7 @@ ALTER TABLE tproduit_autre
 ADD CONSTRAINT pk_tproduit_autre PRIMARY KEY (pkfk_code_barre_produit);
 
 ALTER TABLE tvente_produit
-ADD CONSTRAINT pk_tvente_produit PRIMARY KEY (pkfk_code_barre, pkfk_id_personne_vendeur);
+ADD CONSTRAINT pk_tvente_produit PRIMARY KEY (pk_id);
 
 
 ALTER TABLE tfilm
@@ -245,8 +249,8 @@ ADD CONSTRAINT fk_tproduit_autre_tproduit FOREIGN KEY (pkfk_code_barre_produit) 
 
 
 ALTER TABLE tvente_produit
-ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (pkfk_code_barre) REFERENCES tproduit(pk_code_barre_produit),
-ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (pkfk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne);
+ADD CONSTRAINT fk_tvente_produit_tproduit FOREIGN KEY (fk_code_barre) REFERENCES tproduit(pk_code_barre_produit) ON DELETE CASCADE,
+ADD CONSTRAINT fk_tvente_produit_tvendeur FOREIGN KEY (fk_id_personne_vendeur) REFERENCES tvendeur(pkfk_id_personne) ON DELETE CASCADE;
 
 
 
@@ -372,6 +376,10 @@ INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'Aucun');
 INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
 VALUES(TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+INSERT INTO tseance(pk_timestamp_seance, pkfk_nom_salle, fk_id_film, doublage)
+VALUES(TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
@@ -443,17 +451,17 @@ VALUES(254);
 INSERT INTO tproduit_autre(pkfk_code_barre_produit)
 VALUES(663);
 
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 633, 2);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 785, 2);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 663, 4);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 785, 4);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 451, 4);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 451, 2);
-INSERT INTO tvente_produit(pkfk_code_barre, pkfk_id_personne_vendeur)
-VALUES( 663, 2);
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 633, 2, TIMESTAMP '2014-06-18 14:00:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 785, 2, TIMESTAMP '2014-06-18 14:05:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 663, 4, TIMESTAMP '2014-06-18 14:02:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 785, 4, TIMESTAMP '2014-06-18 14:20:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 451, 4, TIMESTAMP '2014-06-18 14:03:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 451, 2, TIMESTAMP '2014-06-18 14:01:00');
+INSERT INTO tvente_produit(pk_id, fk_code_barre, fk_id_personne_vendeur, date_vente)
+VALUES(nextval('sequence_vente'), 663, 2, TIMESTAMP '2014-06-18 14:10:00');

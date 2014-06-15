@@ -87,12 +87,16 @@ class Dao
 	public function getSalleDAO(){
 		return new SalleDAO(self::getInstance());
 	}
-
 	public function getTicketDAO(){
 		return new TicketDAO(self::getInstance());
 	}
-
 	public function getTarifDAO(){
 		return new TarifDAO(self::getInstance());
+	}
+	public function getProduitVendeurDao(){
+	    return new ProduitVendeurDAO(self::getInstance());
+	}
+	public function getStatistiquesDao(){
+	    return new StatistiquesDAO(self::getInstance());
 	}
 }

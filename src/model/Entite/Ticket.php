@@ -42,8 +42,9 @@ class Ticket
     }
 
     public function setId($id) {
-    	$this->id = $id;
-    	return $this;
+
+        $this->id = $id;
+        return $this;
     }
 
     public function setDateDeVente($dateDeVente) {

@@ -11,6 +11,7 @@ class Tarif
 
 	private $tarif;
 
+<<<<<<< HEAD
     public function __construct($nomTarif = '', $tarif = null) {
         $this->nom = $nomTarif;
         $this->tarif = $tarif;
@@ -18,6 +19,8 @@ class Tarif
         return $this;
     }
 
+=======
+>>>>>>> b813f82f392d7a89c9058cc641ea85856d4e16a0
     public function setNom($nomTarif) {
         $this->nom = $nomTarif;
 
