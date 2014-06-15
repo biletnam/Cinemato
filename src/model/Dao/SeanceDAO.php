@@ -143,7 +143,7 @@ class SeanceDAO
     }
 
     public function update($seance){
-    	$query = 'UPDATE tseance SET doublage = :doublage, fk_id_film = :idFilm WHERE id_seance = :id';
+    	$query = 'UPDATE tseance SET timestamp_seance = :dateSeance, fk_nom_salle = :nomSalle, fk_id_film = :idFilm, doublage = :doublage WHERE id = :id';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
@@ -151,6 +151,8 @@ class SeanceDAO
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
                     'id' => $seance->getId(),
+                    'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
+                    'nomSalle' => $seance->getSalle()->getNom(),
                     'idFilm' => $seance->getFilm()->getId(),
                     'doublage' => $seance->getDoublage()
     			) );
@@ -160,15 +162,14 @@ class SeanceDAO
     	}
     }
     public function delete($seance){
-    	$query = 'DELETE FROM tseance WHERE timestamp_seance = :dateSeance AND fk_nom_salle = :nomSalle';
+    	$query = 'DELETE FROM tseance WHERE pk_id_seance = :id';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
     			$statement->execute ( array (
-					'dateSeance' => $seance->getDateSeance()->format('Y-m-d H:i:s'),
-					'nomSalle' => $seance->getSalle()->getNom()
+					'id' => $seance->getId()
     			) );
     		} catch ( \PDOException $e ) {
     			throw $e;

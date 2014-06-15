@@ -1,0 +1,30 @@
+{% extends 'pages/intranet/detail.html.twig' %}
+
+{% block entity_title %}Séance{% endblock %}
+
+{% block entity_table %}
+    <tr>
+        <th>Nom Film</th>
+        <td>{{ entity.fk_id_film }}</td>
+    </tr>
+    <tr>
+        <th>Horaire</th>
+        <td>{{ entity.pk_timestamp_seance }}</td>
+    </tr>
+    <tr>
+        <th>Salle</th>
+        <td>{{ entity.pkfk_nom_salle }}</td>
+    </tr>
+    <tr>
+        <th>Doublage</th>
+        <td>{{ entity.doublage }}</td>
+    </tr>
+{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('intranet-seances-list') }}'{% endblock %}
+
+{% block entity_edit_path %}href='{{ app.url_generator.generate('intranet-seances-edit', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'{% endblock %}
+
+{% block entity_states_link %}{% endblock %}
+
+{% block entity_delete_path %}action='{{ app.url_generator.generate('intranet-seances-delete', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'{% endblock %}
