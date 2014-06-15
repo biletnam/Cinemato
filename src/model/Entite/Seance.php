@@ -18,10 +18,20 @@ class Seance
 
     private $doublage;
 
+    public function toString()
+    {
+        return $this->getFilm()->getTitre() . ' le ' . $this->getDateSeance()->format('d-m-Y H:i');
+    }
+
     public function setDateSeance($dateSeance) {
         $this->dateSeance = $dateSeance;
 
         return $this;
+    }
+
+    public function getTimestamp()
+    {
+        return $this->getDateSeance()->getTimestamp();
     }
 
     public function getDateSeance() {

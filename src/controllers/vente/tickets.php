@@ -24,11 +24,14 @@ $ticketsControllers->get('/new', function () use ($app) {
 
     $vendeur = $personneDao->findFirstVendeur();
 
-    echo '<pre>';
-    exit(var_dump($vendeur));
+    $tarifs = $tarifsDao->findAll();
+    $seances = $seanceDao->findAll();
+    $abonnes = $personneDao->findAllAbonnes();
 
     $ticket = new Ticket();
-    $form = $app['form.factory']->create(new TicketForm(), $ticket);
+    $ticket->setVendeur($vendeur);
+
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), $ticket);
 
     return $app['twig']->render('pages/vente/tickets/new.html.twig', array(
         'form' => $form->createView()
@@ -36,8 +39,20 @@ $ticketsControllers->get('/new', function () use ($app) {
 })->bind('vente-tickets-new');
 
 $ticketsControllers->post('/create', function (Request $request) use ($app) {
+    $personneDao = Dao::getInstance()->getPersonneDAO();
+    $tarifsDao = Dao::getInstance()->getTarifDAO();
+    $seanceDao = Dao::getInstance()->getSeanceDAO();
+
+    $vendeur = $personneDao->findFirstVendeur();
+
+    $tarifs = $tarifsDao->findAll();
+    $seances = $seanceDao->findAll();
+    $abonnes = $personneDao->findAllAbonnes();
+
     $ticket = new Ticket();
-    $form = $app['form.factory']->create(new TicketForm(), $ticket);
+    $ticket->setVendeur($vendeur);
+
+    $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), $ticket);
 
     if ($request->getMethod() === 'POST') {
         $form->handleRequest($request);

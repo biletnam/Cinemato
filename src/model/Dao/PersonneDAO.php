@@ -53,8 +53,7 @@ class PersonneDAO
                     if (! is_null($connection)) {
                         $statement = $connection->prepare($query3);
                         $success = $statement->execute(array(
-                            'id' => $personne->getId(),
-                            'nbPlace' => $personne->getPlaceRestante()
+                            'id' => $personne->getId()
                         ));
                         foreach ($personne->getRecharges() as $recharge) {
                             if ($recharge->getId() == null) {
@@ -124,7 +123,13 @@ class PersonneDAO
     {
         $personne = null;
 
-        $query = 'SELECT p.pk_id_personne as idP,' . 'p.nom as nom,' . ' p.prenom as prenom,' . 'v.pkfk_id_personne as idV' . ' FROM tpersonne p' . ' LEFT JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne ORDER BY p.pk_id_personne ASC LIMIT 1';
+        $query = 'SELECT p.pk_id_personne as idP,' .
+            ' p.nom as nom,' .
+            ' p.prenom as prenom,' .
+            ' v.pkfk_id_personne as idV' .
+            ' FROM tpersonne p' .
+            ' JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne' .
+            ' ORDER BY v.pkfk_id_personne ASC LIMIT 1';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -173,7 +178,7 @@ class PersonneDAO
         return $personnes;
     }
 
-    public function findAllVendeur()
+    public function findAllVendeurs()
     {
         $personnes = array();
         $query = 'SELECT p.pk_id_personne as idp,' . ' p.nom as nom,' . ' p.prenom as prenom,' . ' v.pkfk_id_personne as idv' . ' FROM tpersonne p' . ' JOIN tvendeur v ON v.pkfk_id_personne = p.pk_id_personne';
@@ -193,10 +198,15 @@ class PersonneDAO
         return $personnes;
     }
 
-    public function findAllAbonne()
+    public function findAllAbonnes()
     {
         $personnes = array();
-        $query = 'SELECT p.pk_id_personne as idp,' . 'p.nom as nom,' . ' p.prenom as prenom,' . ' a.pkfk_id_personne as ida' . ' FROM tpersonne p' . ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
+        $query = 'SELECT p.pk_id_personne as idp,' .
+            ' p.nom as nom,' .
+            ' p.prenom as prenom,' .
+            ' a.pkfk_id_personne as ida' .
+            ' FROM tpersonne p' .
+            ' JOIN tabonne a ON a.pkfk_id_personne = p.pk_id_personne';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -211,6 +221,7 @@ class PersonneDAO
                 throw $e;
             }
         }
+
         return $personnes;
     }
 
@@ -299,29 +310,29 @@ class PersonneDAO
         }
     }
 
-    public function bind($donnes)
+    public function bind($donnees)
     {
         $personne = null;
 
-        if (array_key_exists('idv', $donnes) && $donnes['idv'] != null) {
+        if (array_key_exists('idv', $donnees) && $donnees['idv'] != null) {
             $personne = new PersonneVendeur();
-            $personne->setId($donnes['idp']);
+            $personne->setId($donnees['idp']);
         } else {
-            if (array_key_exists('ida', $donnes) && $donnes['ida'] != null) {
+            if (array_key_exists('ida', $donnees) && $donnees['ida'] != null) {
                 $personne = new PersonneAbonne();
-                $personne->setId($donnes['idp']);
+                $personne->setId($donnees['idp']);
                 $personne->setRecharges($this->getDao()
                     ->getRechargementDAO()
                     ->findAllByAbonne($personne));
             } else {
                 $personne = new Personne();
-                $personne->setId($donnes['idp']);
+                $personne->setId($donnees['idp']);
             }
         }
 
         if ($personne) {
-            $personne->setNom($donnes['nom']);
-            $personne->setPrenom($donnes['prenom']);
+            $personne->setNom($donnees['nom']);
+            $personne->setPrenom($donnees['prenom']);
         }
 
         return $personne;

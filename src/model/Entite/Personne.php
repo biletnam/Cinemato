@@ -15,6 +15,16 @@ class Personne {
 		return $this;
 	}
 
+	public function __toString()
+	{
+		return $this->nom . ' ' . $this->prenom;
+	}
+
+	public function toString()
+	{
+		return $this->nom . ' ' . $this->prenom;
+	}
+
 	public function getId() {
 		return $this->id;
 	}

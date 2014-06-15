@@ -10,7 +10,7 @@ $abonnesControllers = $app['controllers_factory'];
 
 $abonnesControllers->get('/', function () use ($app) {
     $personneDao = Dao::getInstance()->getPersonneDAO();
-    $abonnes = $personneDao->findAllAbonne();
+    $abonnes = $personneDao->findAllAbonnes();
 
     return $app['twig']->render('pages/vente/abonnes/list.html.twig', array(
         'entities' => $abonnes

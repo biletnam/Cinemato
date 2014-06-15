@@ -1,3 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body_class %}class='vente'{% endblock %}
+
+{% block nav_content %}
+    <ul class='nav navbar-nav'>
+        <li><a href='{{ app.url_generator.generate('vente') }}'><i class='icon icon-shopping-cart'></i> Vente</a></li>
+        <li>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-group'> Abonnés <b class='caret'></b></i></a>
+            <ul class='dropdown-menu'>
+                <li><a href='{{ app.url_generator.generate('vente-abonnes-list') }}'><i class='icon icon-list'></i> Liste</a></li>
+                <li><a href='{{ app.url_generator.generate('vente-abonnes-new') }}'><i class='icon icon-plus'></i> Créer un compte</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-ticket'> Tickets <b class='caret'></b></i></a>
+            <ul class='dropdown-menu'>
+                <li><a href='{{ app.url_generator.generate('vente-tickets-list') }}'><i class='icon icon-list'></i> Liste</a></li>
+                <li><a href='{{ app.url_generator.generate('vente-tickets-new') }}'><i class='icon icon-plus'></i> Vendre un ticket</a></li>
+            </ul>
+        </li>
+    </ul>
+{% endblock %}

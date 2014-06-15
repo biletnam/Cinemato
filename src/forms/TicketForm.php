@@ -8,6 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TicketForm extends AbstractType
 {
+    protected $seances;
+    protected $abonnes;
+    protected $tarifs;
+
     public function __construct($seances, $abonnes, $tarifs)
     {
         $this->seances = $seances;
@@ -19,21 +23,20 @@ class TicketForm extends AbstractType
     {
         $seances = array();
         foreach ($this->seances as $seance) {
-            $seances[$seance->getId()] = $seance->toString();
+            $seances[$seance->getTimestamp()] = $seance->toString();
         }
 
-        $seances = array();
-        foreach ($this->abonnes as $abonnne) {
-            $seances[$abonnne->getId()] = $abonnne->toString();
+        $abonnes = array();
+        foreach ($this->abonnes as $abonne) {
+            $abonnes[$abonnne->getId()] = $abonne->toString();
         }
 
         $tarifs = array();
-        foreach ($this->tarifs as $tarifs) {
-            $seances[$tarif->getId()] = $tarif->toString();
+        foreach ($this->tarifs as $tarif) {
+            $tarifs[$tarif->getNom()] = $tarif->toString();
         }
 
         $builder
-            ->add('note', 'text', array('label' => 'Prénom', 'required' => true))
             ->add('seance', 'choice', array('label' => 'Séance', 'required' => true, 'choices' => $seances))
             ->add('abonne', 'choice', array('label' => 'Abonné', 'required' => true, 'choices' => $abonnes))
             ->add('tarif', 'choice', array('label' => 'Tarif', 'required' => true, 'choices' => $tarifs))

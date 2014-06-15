@@ -13,7 +13,6 @@ class PersonneAbonneForm extends AbstractType
         $builder
             ->add('nom', 'text', array('label' => 'Nom', 'required' => true))
             ->add('prenom', 'text', array('label' => 'Prénom', 'required' => true))
-            ->add('placeRestante', 'integer', array('label' => 'Places restantes', 'required' => true))
         ;
     }
 
