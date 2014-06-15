@@ -2,28 +2,27 @@
 
 {% block app_container %}
     <div class='page-header'>
-        <h1>Les séances de la semaine :</h1>
+        <h1>Les films :</h1>
     </div>
+
+    {% block extra_before_list %}{% endblock %}
+
     <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
         <thead>
             <tr>
                 <th>Titre</th>
-    			<th>Horaire</th>
-    			<th>Salle</th>
-    			<th>Doublage</th>
+    <th>Date de sortie</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <th><a href="{{ app.url_generator.generate('public-films-detail', {id: entity.film.id}) }}">{{ entity.film.titre }}</a></th>
-    			<th>{{ entity.dateSeance | date("d/m/Y H:i") }}</th>
-    			<th>{{ entity.salle.nom }}</th>
-    			<th>{{ entity.doublage }}</th>
+                <th><a href='{{ app.url_generator.generate('public-films-seances', { 'id': entity.id }) }}'>{{ entity.titre }}</a></th>
+    <th>{{ entity.dateDeSortie | date("d/m/Y") }}</th>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    {% block extra_after_list %}{% endblock %}
 {% endblock %}
-
-

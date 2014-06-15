@@ -38,7 +38,7 @@ class FilmDAO
                     $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
                     $filmData['distributeur'] = $this->getDao()->getDistributeurDAO()->find($filmData['fk_id_distributeur']);
 
-                    $films[] = self::map($filmData);
+                    $films[] = $this->map($filmData);
                 }
             }
             catch (PDOException $e) {
@@ -67,7 +67,7 @@ class FilmDAO
                     $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
                     $filmData['distributeur'] = $this->getDao()->getDistributeurDAO()->find($filmData['fk_id_distributeur']);
 
-                    $film = self::map($filmData);
+                    $film = $this->map($filmData);
                 }
             }
             catch (PDOException $e) {
@@ -78,18 +78,20 @@ class FilmDAO
         return $film;
     }
 
-    public function findByTitre($titre){
+    public function findAllByTitle($titre) {
         $films = array();
 
         $connection = $this->getDao()->getConnexion();
 
         if (!is_null($connection)) {
-            $query = 'SELECT * FROM tfilm WHERE LOWER(titre) LIKE "%LOWER(:titre)%"';
+            $query = 'SELECT * FROM tfilm'
+                . ' WHERE titre'
+                . ' LIKE :titre';
 
             try {
                 $statement = $connection->prepare($query);
                 $statement->execute(array(
-                    'titre' =>$titre
+                    'titre' => strtolower('%' . $titre . '%')
                 ));
 
                 $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -98,7 +100,7 @@ class FilmDAO
                     $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
                     $filmData['distributeur'] = $this->getDao()->getDistributeurDAO()->find($filmData['fk_id_distributeur']);
 
-                    $films[] = self::map($filmData);
+                    $films[] = $this->map($filmData);
                 }
             }
             catch (PDOException $e) {
@@ -187,43 +189,64 @@ class FilmDAO
     }
 
     public function map($donnees) {
-        $film = new Film($donnees['titre'], $donnees['date_sortie'], $donnees['age_min'], $donnees['genre'], $donnees['distributeur']);
+        $film = new Film($donnees['titre'], new \DateTime(($donnees['date_sortie'].' 00:00:00')), $donnees['age_min'], $donnees['genre'], $donnees['distributeur']);
         $film->setId($donnees['pk_id_film']);
 
         return $film;
     }
-    public function findFilmSemaine($offset) {
+
+    public function findFilmSemaine($offsetWeek) {
         $films = array();
-    
+
         $connection = $this->getDao()->getConnexion();
-    
+
         if (!is_null($connection)) {
             $query = "SELECT *".
                 " FROM tfilm f".
                 " WHERE f.pk_id_film IN (SELECT s.fk_id_film FROM tseance s WHERE s.pk_timestamp_seance".
-                " BETWEEN date_trunc('week', (NOW() + INTERVAL '$offset weeks')) + INTERVAL '2 day'".
-                " AND date_trunc('week', (NOW() + INTERVAL '(".($offset+1)." weeks')) + INTERVAL '2 day')";
-    
+                " BETWEEN date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
+                " END".
+                " )) + INTERVAL '2 day'".
+                " AND date_trunc('week',".
+                " (NOW() + ".
+                " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
+                " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 2 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 3 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 4 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
+                " END".
+                " )) + INTERVAL '2 day')";
+
             try {
                 $statement = $connection->prepare($query);
+                //exit(var_dump($statement));
                 $statement->execute();
-    
                 $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
-    
+
                 foreach ($filmRows as &$filmData) {
                     $filmData['genre'] = $this->getDao()->getGenreDAO()->find($filmData['fk_nom_genre']);
                     $filmData['distributeur'] = $this->getDao()->getDistributeurDAO()->find($filmData['fk_id_distributeur']);
-    
-                    $films[] = self::map($filmData);
+
+                    $films[] = $this->map($filmData);
                 }
             }
             catch (PDOException $e) {
                 throw $e;
             }
         }
-    
+
         return $films;
     }
-    
+
 }
 

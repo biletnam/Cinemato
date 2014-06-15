@@ -29,7 +29,7 @@ $app->get('/DAO/test', function () use ($app) {
     //$seance = $seanceDao->find(new \DateTime('2014-06-25 14:00:00'),$salle);
     //$seance->setDateSeance(new \DateTime('2014-06-25 14:00:00'));
     //$seance->setDoublage('LOLESQUE');
-    //$seanceDao->findSeancesOfTheWeek(0);
+    $seance = $seanceDao->findSeancesOfTheWeek(1);
     //$seanceDao->create($seance);
     /*$ticketDao = Dao::getInstance()->getTicketDao();
     $ticket = $ticketDao->find(9);
@@ -50,8 +50,8 @@ $app->get('/DAO/test', function () use ($app) {
     //$produitVendeurDao->delete($produitVendeur);
     
     //$produitVente = $produitVendeurDao->findAll();
-    $filmDao = Dao::getInstance()->getFilmDAO();
-    $films = $filmDao->findFilmSemaine(1);
+    //$filmDao = Dao::getInstance()->getFilmDAO();
+    //$films = $filmDao->findFilmSemaine(1);
     echo '<pre>';
-    return new Response(var_dump($films));
+    return new Response(var_dump($seance));
 });
