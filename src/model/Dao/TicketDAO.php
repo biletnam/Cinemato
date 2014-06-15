@@ -64,7 +64,7 @@ class TicketDAO
     }
 
     public function create(&$ticket) {
-        $queryId = 'select nextval('sequence_ticket') as val';
+        $queryId = 'select nextval(\'sequence_ticket\') as val';
     	$query = 'INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_timestamp_seance, fk_nom_salle_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif) VALUES(:id, :dateVente, :note, :dateSeance, :salle, :abonne, :vendeur, :tarif)';
     	$connection = $this->getDao ()->getConnexion ();
 

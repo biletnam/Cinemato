@@ -183,13 +183,6 @@ class SeanceDAO
     	$connection = $this->getDao()->getConnexion();
 
     	if (!is_null($connection)) {
-<<<<<<< HEAD
-    		$query = 'SELECT *'.
-        		' FROM tseance '.
-        		'WHERE pk_timestamp_seance '.
-        		'BETWEEN date_trunc(\'week\', (NOW() + INTERVAL \''.$offsetWeek.' week\')) + INTERVAL \'2 day\' '.
-        		'AND date_trunc(\'week\', (NOW() + INTERVAL \''.($offsetWeek +1).' week\')) + INTERVAL \'2 day\'';
-=======
     		$query = "SELECT *".
     		" FROM tseance ".
     		" WHERE pk_timestamp_seance ".
@@ -204,7 +197,7 @@ class SeanceDAO
                 " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0)." week' ".
                 " END".
                 " )) + INTERVAL '2 day'".
-    		" AND date_trunc('week',".
+                " AND date_trunc('week',".
                 " (NOW() + ".
                 " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0 + 1)." week'".
                 " WHEN EXTRACT(DOW FROM NOW()) = 1 THEN INTERVAL '".($offsetWeek - 1 + 1)." week' ".
@@ -215,7 +208,6 @@ class SeanceDAO
                 " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
                 " END".
                 " )) + INTERVAL '2 day'";
->>>>>>> e717df91994fae5ad0d2707d8ef12d79a5ad68d5
     		$intervalStartWeek = $offsetWeek;
     		$intervalEndWeek = $offsetWeek +1;
     		$seances = array();
