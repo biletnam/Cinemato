@@ -21,8 +21,8 @@
     <td>{{ entity.dateDeVente|date('d-m-Y') }}</td>
     <td>{{ entity.seance }}</td>
     <td>{{ entity.abonne }}</td>
-    <td>{{ entity.vendeur }}</td>
     <td>{{ entity.tarif }}</td>
+    <td>{{ entity.vendeur }}</td>
     <td>
         <div>
             <a href='{{ app.url_generator.generate('vente-tickets-detail', { 'id': entity.id }) }}'>Facture</a>
