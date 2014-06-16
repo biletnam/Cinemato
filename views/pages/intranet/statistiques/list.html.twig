@@ -7,7 +7,7 @@
     Nombre d'abonné au cinéma : <strong>{{nbAbonne}}</strong><br/>
     Nombre de film cette semaine : <strong>{{nbFilm}}</strong><br/>
     Nombre de séance cette semaine : <strong>{{nbSeance}}</strong><br/>
-    
+
     <div class='page-header'>
         <h2>Statistiques des films projeté la semaine du {{dateDebutSemaine | date('d/m/Y')}} au {{dateFinSemaine | date('d/m/Y')}}</h2>
     </div>
@@ -26,7 +26,7 @@
 		</li>
 		<li>Entrés générées par le film (depuis le début) : <strong>{{item['entre']}}</strong></li>
 		<li>Revenus générés par le film (depuis le début) : <strong>{%if item['revenue'] is null %}0{%else%}{{item['revenue']}}{%endif%} &euro;</strong></li>
-	</ul>	
+	</ul>
     {% endfor %}
     {% endif %}
     <!--<table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
@@ -44,12 +44,12 @@
         </tbody>
     </table>-->
     <div class='page-header'>
-        
+
     </div>
-    <a href="{{ app.url_generator.generate('intranet-statistiques-list-offset', {offset: offset+1}) }}" >Semaine Précédente</a><br/>
-    
+    <a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset+1 }) }}" >Semaine Précédente</a><br/>
+
     {#{% if offset < 0 %}#}
-     <a href="{{ app.url_generator.generate('intranet-statistiques-list-offset', {offset: offset-1}) }}" >Semaine Suivante</a>
+     <a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset-1 }) }}" >Semaine Suivante</a>
     {#{%endif%}#}
     {% block extra_after_list %}{% endblock %}
 {% endblock %}

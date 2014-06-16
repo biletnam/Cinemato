@@ -1,21 +1,13 @@
 <?php
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 use model\Dao\Dao;
 use model\Entite\Distributeur;
 use forms\DistributeurForm;
 
-$distributeursControllers = $app['controllers_factory'];
+$statistiquesControllers = $app['controllers_factory'];
 
-$distributeursControllers->get('/', function () use ($app) {
-    $offset = 0;
-    $subRequest = Request::create('/intranet/statistiques/0', 'GET');
-
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-})->bind('intranet-statistiques-list');
-
-$distributeursControllers->get('/{offset}', function (Request $request, $offset) use ($app) {
+$statistiquesControllers->match('/{offset}', function (Request $request, $offset) use ($app) {
     $nbAbonne = Dao::getInstance()->getStatistiquesDao()->getNbAbonne();
     $nbFilm = Dao::getInstance()->getStatistiquesDao()->getNbFilmSemaine(-$offset);
     $nbSeance = Dao::getInstance()->getStatistiquesDao()->getNbSeanceSemaine(-$offset);
@@ -74,6 +66,6 @@ $distributeursControllers->get('/{offset}', function (Request $request, $offset)
         'offset' => $offset,
         'tabFilmSeance' => $tabFilmEtSeance
     ));
-})->bind('intranet-statistiques-list-offset');
+})->value('offset', 0)->bind('intranet-statistiques-list');
 
-$app->mount('/intranet/statistiques', $distributeursControllers);
+$app->mount('/intranet/statistiques', $statistiquesControllers);
