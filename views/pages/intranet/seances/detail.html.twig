@@ -5,15 +5,15 @@
 {% block entity_table %}
     <tr>
         <th>Nom Film</th>
-        <td>{{ entity.fk_id_film }}</td>
+        <td>{{ entity.film }}</td>
     </tr>
     <tr>
         <th>Horaire</th>
-        <td>{{ entity.pk_timestamp_seance }}</td>
+        <td>{{ entity.dateSeance|date('d-m-Y H:i') }}</td>
     </tr>
     <tr>
         <th>Salle</th>
-        <td>{{ entity.pkfk_nom_salle }}</td>
+        <td>{{ entity.salle }}</td>
     </tr>
     <tr>
         <th>Doublage</th>
@@ -23,8 +23,8 @@
 
 {% block entity_list_path %}href='{{ app.url_generator.generate('intranet-seances-list') }}'{% endblock %}
 
-{% block entity_edit_path %}href='{{ app.url_generator.generate('intranet-seances-edit', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'{% endblock %}
+{% block entity_edit_path %}href='{{ app.url_generator.generate('intranet-seances-edit', { 'id': entity.id }) }}'{% endblock %}
 
 {% block entity_states_link %}{% endblock %}
 
-{% block entity_delete_path %}action='{{ app.url_generator.generate('intranet-seances-delete', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'{% endblock %}
+{% block entity_delete_path %}action='{{ app.url_generator.generate('intranet-seances-delete', { 'id': entity.id }) }}'{% endblock %}

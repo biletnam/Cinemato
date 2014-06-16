@@ -19,7 +19,7 @@ $distributeursControllers->get('/{offset}', function (Request $request, $offset)
     $nbAbonne = Dao::getInstance()->getStatistiquesDao()->getNbAbonne();
     $nbFilm = Dao::getInstance()->getStatistiquesDao()->getNbFilmSemaine(-$offset);
     $nbSeance = Dao::getInstance()->getStatistiquesDao()->getNbSeanceSemaine(-$offset);
-    
+
     $dateDebut = new DateTime('2014-06-12 14:00:00');
     if(date('N',$dateDebut->getTimestamp()) >= 3){
         $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*$offset;
@@ -27,12 +27,12 @@ $distributeursControllers->get('/{offset}', function (Request $request, $offset)
     else{
         $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*$offset + 7;
     }
-    
+
     if($offsetPourMercredi > 0){
         $dateInterval = new DateInterval('P'.$offsetPourMercredi.'D');
         $dateDebut->sub($dateInterval);
     }
-        
+
     else{
         $dateInterval = new DateInterval('P'.-$offsetPourMercredi.'D');
         $dateDebut->add($dateInterval);
@@ -64,7 +64,7 @@ $distributeursControllers->get('/{offset}', function (Request $request, $offset)
             );
     }
     //exit(var_dump($tabFilmEtSeance));
-    
+
     return $app['twig']->render('pages/intranet/statistiques/list.html.twig', array(
         'nbAbonne' => $nbAbonne,
         'nbFilm' => $nbFilm,

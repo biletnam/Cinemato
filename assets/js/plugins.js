@@ -28,12 +28,20 @@
         });
     };
 
-    $('.datetimepicker').datetimepicker();
-    $('.datepicker').datetimepicker({
-        pickTime: false
+    $('.datetimepicker', 'form').each(function (datetimepicker) {
+        $(this).datetimepicker();
     });
-    $('.timepicker').datetimepicker({
-        pickDate: false
+    $('.datepicker', 'form').each(function (datepicker) {
+        console.log(this, datepicker);
+        $(this).datetimepicker({
+            pickTime: false
+        });
+    });
+    $('.timepicker', 'form').each(function (timepicker) {
+        console.log(this, timepicker);
+        $(this).datetimepicker({
+            pickDate: false
+        });
     });
 
     $('.confirmation-modal-submit').on('click', function (e) {

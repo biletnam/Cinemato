@@ -11,11 +11,21 @@ class Salle
 
     private $nombreDePlaces;
 
-    public function __construct($nom=null, $nombreDePlaces=null) {
+    public function __construct($nom='', $nombreDePlaces=null) {
         $this->nom = $nom;
         $this->nombreDePlaces = $nombreDePlaces;
 
         return $this;
+    }
+
+    public function toString()
+    {
+        return $this->getNom();
+    }
+
+    public function __toString()
+    {
+        return $this->getNom();
     }
 
     public function setNom($nom) {

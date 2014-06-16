@@ -133,7 +133,7 @@ class SeanceDAO
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
-            $query = 'INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage) VALUES(nextval(\'sequance_seance\'), :dateSeance, :nomSalle, :idFilm, :doublage)';
+            $query = 'INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage) VALUES(nextval(\'sequence_seance\'), :dateSeance, :nomSalle, :idFilm, :doublage)';
 
     		try {
     			$statement = $connection->prepare ( $query );
@@ -156,7 +156,7 @@ class SeanceDAO
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
-            $query = 'UPDATE tseance SET timestamp_seance = :dateSeance, fk_nom_salle = :nomSalle, fk_id_film = :idFilm, doublage = :doublage WHERE id = :id';
+            $query = 'UPDATE tseance SET timestamp_seance = :dateSeance, fk_nom_salle = :nomSalle, fk_id_film = :idFilm, doublage = :doublage WHERE pk_id_seance = :id';
 
     		try {
     			$statement = $connection->prepare ( $query );

@@ -15,15 +15,16 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    <th>{{ entity.fk_id_film }}</th>
-    <th>{{ entity.pk_timestamp_seance|datetime('d-m-Y H:i') }}</th>
-    <th>{{ entity.pkfk_nom_salle }}</th>
+    <th>{{ entity.film }}</th>
+    <th>{{ entity.dateSeance|date('d-m-Y H:i') }}</th>
+    <th>{{ entity.salle }}</th>
+    <th>{{ entity.doublage }}</th>
     <th>
         <div>
-            <a href='{{ app.url_generator.generate('intranet-seances-detail', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'>Détail</a>
+            <a href='{{ app.url_generator.generate('intranet-seances-detail', { 'id': entity.id }) }}'>Détail</a>
         </div>
         <div>
-            <a href='{{ app.url_generator.generate('intranet-seances-edit', { 'salle': entity.pkfk_nom_salle, 'horaire': entity.pk_timestamp_seance }) }}'>Editer</a>
+            <a href='{{ app.url_generator.generate('intranet-seances-edit', { 'id': entity.id }) }}'>Editer</a>
         </div>
     </th>
 {% endblock %}

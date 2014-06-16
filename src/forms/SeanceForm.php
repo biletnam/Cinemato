@@ -17,7 +17,7 @@ class SeanceForm extends AbstractType
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $genres = array();
+        $salles = array();
         foreach ($this->salles as $salle) {
             $salles[$salle->getNom()] = $salle->getNom();
         }
@@ -27,10 +27,10 @@ class SeanceForm extends AbstractType
         }
 
         $builder
-        	->add('horaire', 'datetime', array('label' => 'Horaire', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'd-m-Y H:i', 'attr' => array('data-format' => 'd-m-Y H:i')))
-        	->add('film', 'choice', array('label' => 'Film', 'required' => true, 'choices' => $films))
-        	->add('salle', 'choice', array('label' => 'Salle', 'required' => true, 'choices' => $salles))
-        	->add('doublage', 'text', array('label' => 'Doublage', 'required' => true))
+            ->add('horaires', 'datetime', array('label' => 'Horaire', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'dd-MM-yyyy HH:mm', 'attr' => array('data-format' => 'DD-MM-YYYY HH:mm')))
+            ->add('film', 'choice', array('label' => 'Film', 'required' => true, 'choices' => $films))
+            ->add('salle', 'choice', array('label' => 'Salle', 'required' => true, 'choices' => $salles))
+            ->add('doublage', 'text', array('label' => 'Doublage', 'required' => true))
         ;
     }
 
