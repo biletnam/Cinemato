@@ -37,7 +37,7 @@ class TicketForm extends AbstractType
         }
 
         $builder
-            ->add('hasClientAccount', 'checkbox', array('label' => 'Possède un compte abonné', 'required' => false, 'data' => true))
+            ->add('hasClientAccount', 'checkbox', array('label' => 'Le client possède un compte abonné', 'required' => false, 'data' => true))
             ->add('seance', 'choice', array('label' => 'Séance', 'required' => true, 'choices' => $seances, 'empty_value' => 'Choisissez la séance'))
             ->add('abonne', 'choice', array('label' => 'Abonné', 'required' => false, 'choices' => $abonnes, 'empty_value' => 'Choisissez le compte abonné'))
             ->add('tarif', 'choice', array('label' => 'Tarif', 'required' => false, 'choices' => $tarifs, 'empty_value' => 'Choisissez le tarif'))
