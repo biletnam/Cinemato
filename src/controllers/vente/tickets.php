@@ -55,8 +55,6 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
             $ticket->setVendeur($vendeur);
 
             $seance = $seancesDao->find($data['seance']);
-            $abonne = $personnesDao->findAbonne($data['abonne']);
-            $tarif = $tarifsDao->find($data['tarif']);
 
             if ($seance) {
                 $ticket->setSeance($seance);
@@ -64,10 +62,19 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
                 $app['session']->getFlashBag()->add('error', 'Cette séance n\'existe pas.');
             }
 
-            if ($abonne) {
-                $ticket->setAbonne($abonne);
+            $hasClientAccount = $data['hasClientAccount'];
+
+            if ($hasClientAccount) {
+                $abonne = $personnesDao->findAbonne($data['abonne']);
+                $tarif = $tarifsDao->find('Abonné');
+
+                if ($abonne) {
+                    $ticket->setAbonne($abonne);
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+                }
             } else {
-                $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+                $tarif = $tarifsDao->find($data['tarif']);
             }
 
             if ($tarif) {
@@ -76,7 +83,7 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
                 $app['session']->getFlashBag()->add('error', 'Ce tarif n\'existe pas.');
             }
 
-            if ($seance && $abonne && $tarif) {
+            if ($seance) {
                 $ticketsDao = Dao::getInstance()->getTicketDAO();
 
                 if ($ticketsDao->create($ticket)) {
@@ -174,9 +181,8 @@ $ticketsControllers->post('/{id}/update', function (Request $request, $id) use (
         if ($form->isValid()) {
             $data = $form->getData();
 
+            $hasClientAccount = $data['hasClientAccount'];
             $seance = $seancesDao->find($data['seance']);
-            $abonne = $personnesDao->findAbonne($data['abonne']);
-            $tarif = $tarifsDao->find($data['tarif']);
 
             if ($seance) {
                 $ticket->setSeance($seance);
@@ -184,10 +190,17 @@ $ticketsControllers->post('/{id}/update', function (Request $request, $id) use (
                 $app['session']->getFlashBag()->add('error', 'Cette séance n\'existe pas.');
             }
 
-            if ($abonne) {
-                $ticket->setAbonne($abonne);
+            if ($hasClientAccount) {
+                $abonne = $personnesDao->findAbonne($data['abonne']);
+                $tarif = $tarifsDao->find('Abonné');
+
+                if ($abonne) {
+                    $ticket->setAbonne($abonne);
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+                }
             } else {
-                $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
+                $tarif = $tarifsDao->find($data['tarif']);
             }
 
             if ($tarif) {
@@ -196,7 +209,7 @@ $ticketsControllers->post('/{id}/update', function (Request $request, $id) use (
                 $app['session']->getFlashBag()->add('error', 'Ce tarif n\'existe pas.');
             }
 
-            if ($seance && $abonne && $tarif) {
+            if ($seance) {
                 if ($ticketsDao->update($ticket)) {
                     $app['session']->getFlashBag()->add('success', 'Le ticket est bien mis à jour !');
 

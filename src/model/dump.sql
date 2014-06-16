@@ -356,6 +356,8 @@ INSERT INTO ttarif(pk_nom_tarif, tarif)
 VALUES('Retraité', 5.50);
 INSERT INTO ttarif(pk_nom_tarif, tarif)
 VALUES('Moins de 10ans', 4.25);
+INSERT INTO ttarif(pk_nom_tarif, tarif)
+VALUES('Abonné', 5.00);
 
 INSERT INTO tsalle(pk_nom_salle, nb_place)
 VALUES('Salle Zinédine Zidane', 250);

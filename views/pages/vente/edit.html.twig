@@ -9,11 +9,15 @@
 
     {% block form_edit %}
         <form {% block entity_update_path %}{% endblock %} method='post' {{ form_enctype(form) }}>
-            {{ form_widget(form) }}
-            <div class='link-wrapper'>
-                <input class='btn btn-success' type='submit' name='submit' value='Editer' />
-                <input class='btn btn-warning' type='reset' name='reset' value='Annuler' />
-            </div>
+            {% block form_content %}
+                {% block form_fields %}
+                    {{ form_widget(form) }}
+                {% endblock %}
+                <div class='link-wrapper'>
+                    <input class='btn btn-success' type='submit' name='submit' value='Editer' />
+                    <input class='btn btn-warning' type='reset' name='reset' value='Annuler' />
+                </div>
+            {% endblock %}
         </form>
     {% endblock %}
 

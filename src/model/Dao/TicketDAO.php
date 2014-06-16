@@ -84,7 +84,7 @@ class TicketDAO
                     'dateVente' => $ticket->getDateDeVente()->format('Y-m-d H:i:s'),
                     'note' => $ticket->getNote(),
                     'seance' => $ticket->getSeance()->getId(),
-                    'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
+                    'abonne' => ($ticket->getAbonne() ? $ticket->getAbonne()->getId() : null),
                     'vendeur' => $ticket->getVendeur()->getId(),
                     'tarif' => $ticket->getTarif()->getNom()
                 ));
@@ -110,9 +110,9 @@ class TicketDAO
 					'dateVente' => $ticket->getDateDeVente()->format('Y-m-d H:i:s'),
 					'note' => $ticket->getNote(),
                     'seance' => $ticket->getSeance()->getId(),
-					'abonne' => ($ticket->getAbonne())?$ticket->getAbonne()->getId():null,
+                    'abonne' => ($ticket->getAbonne() ? $ticket->getAbonne()->getId() : null),
 					'vendeur' => $ticket->getVendeur()->getId(),
-					'tarif' => $ticket->getTarif()->getNom()
+                    'tarif' => $ticket->getTarif()->getNom()
     			) );
     		} catch (PDOException $e) {
     			throw $e;

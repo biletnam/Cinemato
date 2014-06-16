@@ -22,7 +22,20 @@ html {
         }
         form {
             margin: 0 0 10px 0;
+            .checkbox {
+                input[type="checkbox"],
+                input[type="radio"], {
+                    margin-left: 0;
+                }
+            }
             div {
+                visibility: visible;
+                @include opacity(1);
+                @include transition(opacity 0.4s linear);
+                &.hidden-field {
+                    display: none;
+                    @include opacity(0);
+                }
                 label {
                     margin-bottom: 0;
                 }

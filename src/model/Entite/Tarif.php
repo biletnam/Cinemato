@@ -13,12 +13,12 @@ class Tarif
 
     public function __toString()
     {
-        return $this->nom;
+        return $this->nom . ' : ' . $this->tarif . '€';
     }
 
     public function toString()
     {
-        return $this->nom;
+        return $this->nom . ' : ' . $this->tarif . '€';
     }
 
     public function __construct($nomTarif = '', $tarif = null) {
