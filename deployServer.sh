@@ -6,8 +6,7 @@ git stash;\
 git checkout master;\
 git pull origin master;\
 chmod -R 755 ./;\
-mkdir app;\
-mkdir app/log;\
+mkdir -p app/log;\
 chmod -f 777 app/log;\
 exit;";
 
