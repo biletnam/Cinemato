@@ -1,0 +1,7 @@
+{% extends 'pages/vente/new.html.twig' %}
+
+{% block entity_title %}Autre produit{% endblock %}
+
+{% block entity_create_path %}action='{{ app.url_generator.generate('vente-produit-autres-create') }}'{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('vente-produit-autres-list') }}'{% endblock %}

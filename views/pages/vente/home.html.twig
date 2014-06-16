@@ -7,9 +7,9 @@
         <ul class='nav nav-tabs nav-justified'>
             <li><a href='{{ app.url_generator.generate('vente-abonnes-list') }}' class='btn btn-primary'>Abonnes</a></li>
             <li><a href='{{ app.url_generator.generate('vente-tickets-list') }}' class='btn btn-primary'>Tickets</a></li>
-            {#
-            <li><a href='{{ app.url_generator.generate('vente-produits-list') }}' class='btn btn-primary'>Produits</a></li>
-            #}
+            <li><a href='{{ app.url_generator.generate('vente-produit-boissons-list') }}' class='btn btn-primary'>Boissons</a></li>
+            <li><a href='{{ app.url_generator.generate('vente-produit-alimentaires-list') }}' class='btn btn-primary'>Produits alimentaires</a></li>
+            <li><a href='{{ app.url_generator.generate('vente-produit-autres-list') }}' class='btn btn-primary'>Autres produits</a></li>
         </ul>
     </section>
 {% endblock %}
