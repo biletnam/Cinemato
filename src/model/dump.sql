@@ -307,7 +307,7 @@ VALUES (nextval('sequence_film'),'Love Actualy',TIMESTAMP '2003-12-03', 12, 'Rom
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Rough Fight',TIMESTAMP '2010-12-03', 25, 'Horreur', 3);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
-VALUES (nextval('sequence_film'),'Le dépeceur de l oise',TIMESTAMP '2008-08-03', 18, 'Horreur', 3);
+VALUES (nextval('sequence_film'),'Le dépeceur de l''oise',TIMESTAMP '2008-08-03', 18, 'Horreur', 3);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Karim à Compiègne',TIMESTAMP '2014-06-18', 21, 'Horreur', 2);
 
