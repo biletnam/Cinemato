@@ -203,7 +203,7 @@ class FilmDAO
         if (!is_null($connection)) {
             $query = "SELECT *".
                 " FROM tfilm f".
-                " WHERE f.pk_id_film IN (SELECT s.fk_id_film FROM tseance s WHERE s.pk_timestamp_seance".
+                " WHERE f.pk_id_film IN (SELECT s.fk_id_film FROM tseance s WHERE s.timestamp_seance".
                 " BETWEEN date_trunc('week',".
                 " (NOW() + ".
                 " CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN INTERVAL '".($offsetWeek + 0)." week'".

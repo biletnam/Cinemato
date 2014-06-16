@@ -4,7 +4,7 @@
 
 {% block nav_content %}
     <ul class='nav navbar-nav'>
-        <li><a href='{{ app.url_generator.generate('vente') }}'><i class='icon icon-shopping-cart'></i> Vente</a></li>
+        <li><a href='{{ app.url_generator.generate('vente') }}'><i class='icon icon-credit-card'></i> Vente</a></li>
         <li>
             <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-group'> Abonnés <b class='caret'></b></i></a>
             <ul class='dropdown-menu'>
@@ -20,7 +20,7 @@
             </ul>
         </li>
         <li>
-            <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-ticket'> Produits <b class='caret'></b></i></a>
+            <a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon icon-shopping-cart'> Produits <b class='caret'></b></i></a>
             <ul class='dropdown-menu'>
                 <li class='dropdown-header'>Boissons</li>
                 <li><a href='{{ app.url_generator.generate('vente-produit-boissons-list') }}'><i class='icon icon-list'></i> Liste</a></li>
