@@ -2080,6 +2080,10 @@ html body table td video {
 html body table.table {
   margin: 0 0 10px 0;
 }
+html body table ul.unstyled {
+  padding: 0;
+  list-style: none;
+}
 
 @media (min-width: 992px) {
   html body .modal .modal-dialog {

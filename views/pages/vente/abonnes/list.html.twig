@@ -24,5 +24,8 @@
         <div>
             <a href='{{ app.url_generator.generate('vente-abonnes-edit', { 'id': entity.id }) }}'>Editer</a>
         </div>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-abonnes-refill', { 'id': entity.id }) }}'>Recharger</a>
+        </div>
     </th>
 {% endblock %}

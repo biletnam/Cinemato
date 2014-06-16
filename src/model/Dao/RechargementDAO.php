@@ -2,6 +2,7 @@
 namespace model\Dao;
 
 use \PDO;
+use \PDOException;
 use model\Entite\Personne;
 use model\Entite\Rechargement;
 
@@ -36,7 +37,7 @@ class RechargementDAO
                 if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
                     $rechargement = self::bind($donnees);
                 }
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 throw $e;
             }
         }
@@ -58,17 +59,40 @@ class RechargementDAO
                     $rechargement = self::bind($donnees);
                     array_push($rechargements, $rechargement);
                 }
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 throw $e;
             }
         }
         return $rechargements;
     }
 
+    public function create(&$rechargement, $personne)
+    {
+        $success = false;
+        $query = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises) VALUES(nextval(\'sequence_rechargement\'), :idAbonne, :nbPl, :prix, :plcUtil )';
+        $connection = $this->getDao()->getConnexion();
+
+        if (! is_null($connection)) {
+            try {
+                $statement = $connection->prepare($query);
+                $success = $statement->execute(array(
+                    'idAbonne' => $personne->getId(),
+                    'nbPl' => (is_null($rechargement->getNombrePlace())) ? 0 : $rechargement->getNombrePlace(),
+                    'prix' => $rechargement->getPrixUnitaire(),
+                    'plcUtil' => (is_null($rechargement->getPlacesUtilise()) ? 0 : $rechargement->getPlacesUtilise()),
+                ));
+            } catch (PDOException $e) {
+                throw $e;
+            }
+        }
+
+        return $success;
+    }
+
     public function update($rechargement)
     {
         $success = false;
-        $query = 'UPDATE trechargement SET nombre_place = :nbPl, prix_unitaire = :prix, places_utilises = :plcUtil   WHERE pk_id_rechargement = :id';
+        $query = 'UPDATE trechargement SET nombre_place = :nbPl, prix_unitaire = :prix, places_utilises = :plcUtil WHERE pk_id_rechargement = :id';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
@@ -78,7 +102,7 @@ class RechargementDAO
                     'id' => $rechargement->getId(),
                     'nbPl' => (is_null($rechargement->getNombrePlace())) ? 0 : $rechargement->getNombrePlace(),
                     'prix' => $rechargement->getPrixUnitaire(),
-                    'plcUtil' => $rechargement->getPlacesUtilise()
+                    'plcUtil' => (is_null($rechargement->getPlacesUtilise()) ? 0 : $rechargement->getPlacesUtilise()),
                 ));
             } catch (\PDOException $e) {
                 throw $e;
@@ -100,7 +124,7 @@ class RechargementDAO
                 $success = $statement->execute(array(
                     'id' => $rechargement->getId()
                 ));
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 throw $e;
             }
         }
@@ -124,39 +148,11 @@ class RechargementDAO
                     $rechargement = self::bind($donnees);
                     array_push($rechargements, $rechargement);
                 }
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 throw $e;
             }
         }
         return $rechargements;
-    }
-
-    public function create(&$recharge, $personne)
-    {
-        $query = "SELECT nextval('sequence_rechargement') as id";
-        $query2 = 'INSERT INTO trechargement(pk_id_rechargement, pkfk_id_personne_abonne, nombre_place, prix_unitaire, places_utilises) VALUES(:idRe,:id, :nbPl, :prix, :plcUtil )';
-        $connection = $this->getDao()->getConnexion();
-
-        if (! is_null($connection)) {
-            try {
-                $statement = $connection->prepare($query);
-                $statement->execute();
-                if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
-                    $recharge->setId($donnees['id']);
-                }
-                $statement = null;
-                $statement = $connection->prepare($query2);
-                $statement->execute(array(
-                    'idRe' => $recharge->getId(),
-                    'id' => $personne->getId(),
-                    'nbPl' => $recharge->getNombrePlace(),
-                    'prix' => $recharge->getPrixUnitaire(),
-                    'plcUtil' =>($rechargement->getNombrePlace()==null)?0:$rechargement->getNombrePlace(),
-                ));
-            } catch (\PDOException $e) {
-                throw $e;
-            }
-        }
     }
 
     public function deleteRechargeOrphelineUser($personne)
@@ -184,7 +180,7 @@ class RechargementDAO
             try {
                 $statement = $connection->prepare($query);
                 $success = $statement->execute($paramQuery);
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 throw $e;
             }
         }
