@@ -189,7 +189,7 @@ $filmsControllers->post('/{id}/update', function (Request $request, $id) use ($a
             if ($filmDao->update($film)) {
                 $app['session']->getFlashBag()->add('success', 'Le film est bien mis à jour !');
 
-                return $app->redirect('/intranet/films');
+                return $app->redirect($app['url_generator']->generate('intranet-films-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être mis à jour.');
             }
@@ -221,7 +221,7 @@ $filmsControllers->post('/{id}/delete', function (Request $request, $id) use ($a
         $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être supprimé...');
     }
 
-    return $app->redirect('/intranet/films');
+    return $app->redirect($app['url_generator']->generate('intranet-films-list'));
 })->bind('intranet-films-delete');
 
 $app->mount('/intranet/films', $filmsControllers);

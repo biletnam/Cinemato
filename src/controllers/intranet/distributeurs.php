@@ -46,7 +46,7 @@ $distributeursControllers->post('/create', function (Request $request) use ($app
             if ($distributeurDao->create($distributeur)) {
                 $app['session']->getFlashBag()->add('success', 'Le distributeur est bien enregistré !');
 
-                return $app->redirect('/intranet/distributeurs');
+                return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être enregistré.');
             }
@@ -131,7 +131,7 @@ $distributeursControllers->post('/{id}/update', function (Request $request, $id)
             if ($distributeurDao->update($distributeur)) {
                 $app['session']->getFlashBag()->add('success', 'Le distributeur est bien mis à jour !');
 
-                return $app->redirect('/intranet/distributeurs');
+                return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être mis à jour.');
             }
@@ -163,7 +163,7 @@ $distributeursControllers->post('/{id}/delete', function (Request $request, $id)
         $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être supprimé...');
     }
 
-    return $app->redirect('/intranet/distributeurs');
+    return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
 })->bind('intranet-distributeurs-delete');
 
 $app->mount('/intranet/distributeurs', $distributeursControllers);

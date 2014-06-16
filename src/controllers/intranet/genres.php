@@ -42,7 +42,7 @@ $genresControllers->post('/create', function (Request $request) use ($app) {
             if ($genreDao->create($genre)) {
                 $app['session']->getFlashBag()->add('success', 'Le genre est bien enregistré !');
 
-                return $app->redirect('/intranet/genres');
+                return $app->redirect($app['url_generator']->generate('intranet-genres-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le genre n\'a pas pu être enregistré.');
             }
@@ -86,7 +86,7 @@ $genresControllers->post('/{id}/delete', function (Request $request, $id) use ($
         $app['session']->getFlashBag()->add('error', 'Le genre n\'a pas pu être supprimé...');
     }
 
-    return $app->redirect('/intranet/genres');
+    return $app->redirect($app['url_generator']->generate('intranet-genres-list'));
 })->bind('intranet-genres-delete');
 
 $app->mount('/intranet/genres', $genresControllers);
