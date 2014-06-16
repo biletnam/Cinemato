@@ -39,7 +39,7 @@ DECLARE
 BEGIN
 SELECT INTO nbFilm count(fk_id_film)
 FROM ( select distinct fk_id_film FROM tseance
-WHERE pk_timestamp_seance
+WHERE timestamp_seance
 BETWEEN
 date_trunc('week',
  (NOW() +
@@ -76,7 +76,7 @@ DECLARE
 BEGIN
     SELECT INTO nbFilm count(fk_id_film)
 FROM tseance
-WHERE pk_timestamp_seance
+WHERE timestamp_seance
 BETWEEN
 date_trunc('week',
  (NOW() +
