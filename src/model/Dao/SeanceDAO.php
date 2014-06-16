@@ -108,7 +108,7 @@ class SeanceDAO
             " WHEN EXTRACT(DOW FROM NOW()) = 5 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
             " WHEN EXTRACT(DOW FROM NOW()) = 6 THEN INTERVAL '".($offsetWeek + 0 + 1)." week' ".
             " END".
-            " )) + INTERVAL '2 day'";
+            " )) + INTERVAL '2 day' ORDER BY timestamp_seance";
         $connection = $this->getDao ()->getConnexion ();
 
         if (! is_null ( $connection )) {
