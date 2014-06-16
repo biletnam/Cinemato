@@ -1,0 +1,30 @@
+{% extends 'pages/intranet/list.html.twig' %}
+
+{% block entity_title %}Séances{% endblock %}
+
+{% block entity_add_path %}href='{{ app.url_generator.generate('intranet-seances-new') }}'{% endblock %}
+
+{% block entity_add_label %}Ajouter une séance{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Film</th>
+    <th>Horaire</th>
+    <th>Salle</th>
+    <th>Doublage</th>
+    <th>Actions</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <th>{{ entity.film }}</th>
+    <th>{{ entity.dateSeance|date('d-m-Y H:i') }}</th>
+    <th>{{ entity.salle }}</th>
+    <th>{{ entity.doublage }}</th>
+    <th>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-seances-detail', { 'id': entity.id }) }}'>Détail</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('intranet-seances-edit', { 'id': entity.id }) }}'>Editer</a>
+        </div>
+    </th>
+{% endblock %}

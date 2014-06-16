@@ -1997,78 +1997,92 @@
 html body {
   padding: 70px 0 0 0;
 }
-html body.intranet .alert {
+html body .alert {
   margin: 10px 0;
 }
-html body.intranet .alert.alert-error {
+html body .alert.alert-error {
   background-color: #ff4136;
   border-color: #ff1103;
   color: white;
 }
-html body.intranet .alert.alert-error hr {
+html body .alert.alert-error hr {
   border-top-color: #e90d00;
 }
-html body.intranet .alert.alert-error .alert-link {
+html body .alert.alert-error .alert-link {
   color: #e6e6e6;
 }
-html body.intranet .inline-block {
+html body .inline-block {
   display: inline-block;
 }
-html body.intranet .link-wrapper {
+html body .link-wrapper {
   margin: 0 0 10px 0;
 }
-html body.intranet form {
+html body form {
   margin: 0 0 10px 0;
 }
-html body.intranet form div label {
+html body form div label {
   margin-bottom: 0;
 }
-html body.intranet form div ul {
+html body form div ul {
   list-style: none;
   padding: 0;
 }
-html body.intranet form div ul li {
+html body form div ul li {
   color: #d91e18;
   font-size: 12px;
   font-style: italic;
   text-decoration: underline;
 }
-html body.intranet form div textarea,
-html body.intranet form div input[type="text"],
-html body.intranet form div input[type="password"],
-html body.intranet form div input[type="datetime"],
-html body.intranet form div input[type="datetime-local"],
-html body.intranet form div input[type="date"],
-html body.intranet form div input[type="month"],
-html body.intranet form div input[type="time"],
-html body.intranet form div input[type="week"],
-html body.intranet form div input[type="number"],
-html body.intranet form div input[type="email"],
-html body.intranet form div input[type="url"],
-html body.intranet form div input[type="search"],
-html body.intranet form div input[type="tel"],
-html body.intranet form div input[type="color"],
-html body.intranet form div .uneditable-input,
-html body.intranet form div select {
+html body form div textarea,
+html body form div input[type="text"],
+html body form div input[type="password"],
+html body form div input[type="datetime"],
+html body form div input[type="datetime-local"],
+html body form div input[type="date"],
+html body form div input[type="month"],
+html body form div input[type="time"],
+html body form div input[type="week"],
+html body form div input[type="number"],
+html body form div input[type="email"],
+html body form div input[type="url"],
+html body form div input[type="search"],
+html body form div input[type="tel"],
+html body form div input[type="color"],
+html body form div .uneditable-input,
+html body form div .input-group-addon,
+html body form div .input-group-btn input,
+html body form div .input-group-btn button,
+html body form div select {
   margin-top: 5px;
 }
+html body form div .input-group-addon:hover input,
+html body form div .input-group-addon:hover button,
+html body form div .input-group-btn:hover input,
+html body form div .input-group-btn:hover button {
+  margin-top: 5px;
+}
+html body form div.input-append {
   display: block;
 }
-html body.intranet form div.input-append .add-on {
+html body form div.input-append .add-on {
   margin: 5px 0 0 -1px;
 }
-html body.intranet form .datetimepicker .form-control,
-html body.intranet form .input-with-addon .form-control {
+html body form .datetimepicker .form-control,
+html body form .input-with-addon .form-control {
   margin: 0;
 }
-html body.intranet table td img,
-html body.intranet table td video {
+html body table td img,
+html body table td video {
   display: block;
   max-width: 300px;
   max-height: 250px;
 }
-html body.intranet table.table {
+html body table.table {
   margin: 0 0 10px 0;
+}
+html body table ul.unstyled {
+  padding: 0;
+  list-style: none;
 }
 
 @media (min-width: 992px) {

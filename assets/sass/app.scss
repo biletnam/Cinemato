@@ -8,79 +8,93 @@ $fa-css-prefix: "icon";
 html {
     body {
         padding: 70px 0 0 0;
-        &.intranet {
-            .alert {
-                margin: 10px 0;
-                &.alert-error {
-                    @include alert-variant($state-danger-bg, $state-danger-border, $state-danger-text);
+        .alert {
+            margin: 10px 0;
+            &.alert-error {
+                @include alert-variant($state-danger-bg, $state-danger-border, $state-danger-text);
+            }
+        }
+        .inline-block {
+            display: inline-block;
+        }
+        .link-wrapper {
+            margin: 0 0 10px 0;
+        }
+        form {
+            margin: 0 0 10px 0;
+            div {
+                label {
+                    margin-bottom: 0;
                 }
-            }
-            .inline-block {
-                display: inline-block;
-            }
-            .link-wrapper {
-                margin: 0 0 10px 0;
-            }
-            form {
-                margin: 0 0 10px 0;
-                div {
-                    label {
-                        margin-bottom: 0;
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    li {
+                        color: $thunderbird;
+                        font-size: 12px;
+                        font-style: italic;
+                        text-decoration: underline;
                     }
-                    ul {
-                        list-style: none;
-                        padding: 0;
-                        li {
-                            color: $thunderbird;
-                            font-size: 12px;
-                            font-style: italic;
-                            text-decoration: underline;
-                        }
-                    }
-                    textarea,
-                    input[type="text"],
-                    input[type="password"],
-                    input[type="datetime"],
-                    input[type="datetime-local"],
-                    input[type="date"],
-                    input[type="month"],
-                    input[type="time"],
-                    input[type="week"],
-                    input[type="number"],
-                    input[type="email"],
-                    input[type="url"],
-                    input[type="search"],
-                    input[type="tel"],
-                    input[type="color"],
-                    .uneditable-input,
-                    select {
+                }
+                textarea,
+                input[type="text"],
+                input[type="password"],
+                input[type="datetime"],
+                input[type="datetime-local"],
+                input[type="date"],
+                input[type="month"],
+                input[type="time"],
+                input[type="week"],
+                input[type="number"],
+                input[type="email"],
+                input[type="url"],
+                input[type="search"],
+                input[type="tel"],
+                input[type="color"],
+                .uneditable-input,
+                .input-group-addon,
+                .input-group-btn input,
+                .input-group-btn button,
+                select {
+                    margin-top: 5px;
+                }
+                .input-group-addon:hover,
+                .input-group-btn:hover {
+                    input,
+                    button {
                         margin-top: 5px;
                     }
-                    &.input-append {
-                        display: block;
-                        .add-on {
-                            margin: 5px 0 0 -1px;
-                        }
-                    }
                 }
-                .datetimepicker,
-                .input-with-addon {
-                    .form-control {
-                        margin: 0;
+                &.input-append {
+                    display: block;
+                    .add-on {
+                        margin: 5px 0 0 -1px;
                     }
                 }
             }
-            table {
-                td {
-                    img,
-                    video {
-                        display: block;
-                        max-width: 300px;
-                        max-height: 250px;
-                    }
+            .datetimepicker,
+            .input-with-addon {
+                .form-control {
+                    margin: 0;
                 }
-                &.table {
-                    margin: 0 0 10px 0;
+            }
+        }
+        table {
+            td {
+                img,
+                video {
+                    display: block;
+                    max-width: 300px;
+                    max-height: 250px;
+                }
+            }
+            &.table {
+                margin: 0 0 10px 0;
+            }
+            ul {
+                &.unstyled {
+                    padding: 0;
+                    list-style: none;
                 }
             }
         }

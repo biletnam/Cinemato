@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use model\Dao\Dao;
 use model\Entite\Film;
 use forms\FilmForm;
+use forms\FilmRechercheForm;
 
 $filmsControllers = $app['controllers_factory'];
 
@@ -12,10 +13,32 @@ $filmsControllers->get('/', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
     $films = $filmDao->findAll();
 
+    $form = $app['form.factory']->create(new FilmRechercheForm());
+
     return $app['twig']->render('pages/intranet/films/list.html.twig', array(
-        'entities' => $films
+        'entities' => $films,
+        'form' => $form->createView()
     ));
 })->bind('intranet-films-list');
+
+$filmsControllers->post('/search', function (Request $request) use ($app) {
+    $films = array();
+    $form = $app['form.factory']->create(new FilmRechercheForm());
+
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+        $filmDao = Dao::getInstance()->getFilmDAO();
+        $data = $form->getData();
+
+        $films = $filmDao->findAllByTitle($data['titre']);
+    }
+
+    return $app['twig']->render('pages/intranet/films/list.html.twig', array(
+        'entities' => $films,
+        'form' => $form->createView()
+    ));
+})->bind('intranet-films-search');
 
 $filmsControllers->get('/new', function () use ($app) {
     $genreDao = Dao::getInstance()->getGenreDAO();
@@ -105,7 +128,7 @@ $filmsControllers->get('/{id}/edit', function ($id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDAO();
     $distributeurs = $distributeurDao->findAll();
 
-    $dateDeSortie = new DateTime($film->getDateDeSortie());
+    $dateDeSortie = $film->getDateDeSortie();
 
     $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
         'titre' => $film->getTitre(),
@@ -166,7 +189,7 @@ $filmsControllers->post('/{id}/update', function (Request $request, $id) use ($a
             if ($filmDao->update($film)) {
                 $app['session']->getFlashBag()->add('success', 'Le film est bien mis à jour !');
 
-                return $app->redirect('/intranet/films');
+                return $app->redirect($app['url_generator']->generate('intranet-films-list'));
             } else {
                 $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être mis à jour.');
             }
@@ -198,7 +221,7 @@ $filmsControllers->post('/{id}/delete', function (Request $request, $id) use ($a
         $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être supprimé...');
     }
 
-    return $app->redirect('/intranet/films');
+    return $app->redirect($app['url_generator']->generate('intranet-films-list'));
 })->bind('intranet-films-delete');
 
 $app->mount('/intranet/films', $filmsControllers);

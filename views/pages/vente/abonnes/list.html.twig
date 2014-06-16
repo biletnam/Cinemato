@@ -1,0 +1,31 @@
+{% extends 'pages/vente/list.html.twig' %}
+
+{% block entity_title %}Comptes abonnés{% endblock %}
+
+{% block entity_add_path %}href='{{ app.url_generator.generate('vente-abonnes-new') }}'{% endblock %}
+
+{% block entity_add_label %}Créer un compte{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Id</th>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Actions</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <th>{{ entity.id }}</th>
+    <th>{{ entity.prenom }}</th>
+    <th>{{ entity.nom }}</th>
+    <th>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-abonnes-detail', { 'id': entity.id }) }}'>Détail</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-abonnes-edit', { 'id': entity.id }) }}'>Editer</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-abonnes-refill', { 'id': entity.id }) }}'>Recharger</a>
+        </div>
+    </th>
+{% endblock %}

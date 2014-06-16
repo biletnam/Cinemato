@@ -1,20 +1,25 @@
-CREATE OR REPLACE FUNCTION tauxOccupationSeance(dateHeure tseance.pk_timestamp_seance%TYPE, salle tseance.pkfk_nom_salle%TYPE) RETURNS float AS $$
+CREATE OR REPLACE FUNCTION tauxOccupationSeance(idSeance tseance.pk_id_seance%TYPE) RETURNS float AS $$
 DECLARE
-    nbTiceketSeance float;
+    nbTicketSeance float;
     nbPlaceSalle float;
 BEGIN
-    SELECT INTO nbPlaceSalle nb_place FROM tsalle WHERE pk_nom_salle = salle;
-	IF NOT FOUND THEN
-    RAISE EXCEPTION 'salle % not found', salle;
-	END IF;
-	
-	SELECT INTO nbTiceketSeance count(pk_id_ticket) 
-	FROM tticket 
-	WHERE fk_nom_salle_seance = salle AND fk_timestamp_seance = dateHeure;
-	IF NOT FOUND THEN
-    RAISE EXCEPTION 'seance not found';
-	END IF;
-    return nbTiceketSeance*100/nbPlaceSalle;
+
+    SELECT INTO nbTicketSeance count(pk_id_ticket)
+    FROM tticket
+    WHERE fk_id_seance = idSeance;
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Seance not found';
+    END IF;
+
+    SELECT INTO nbPlaceSalle tsalle.nb_place
+    FROM tsalle
+    JOIN tseance ON tseance.fk_nom_salle = tsalle.pk_nom_salle
+    WHERE tseance.pk_id_seance = idSeance;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'salle % not found', salle;
+    END IF;
+    return nbTicketSeance * 100 / nbPlaceSalle;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -23,7 +28,7 @@ DECLARE
     nbAbonne integer;
 BEGIN
     SELECT INTO nbAbonne count(pkfk_id_personne) FROM tabonne;
-	
+
     return nbAbonne;
 END;
 $$ LANGUAGE plpgsql;
@@ -34,10 +39,10 @@ DECLARE
 BEGIN
 SELECT INTO nbFilm count(fk_id_film)
 FROM ( select distinct fk_id_film FROM tseance
-WHERE pk_timestamp_seance
+WHERE timestamp_seance
 BETWEEN
 date_trunc('week',
- (NOW() + 
+ (NOW() +
  CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine || ' weeks')::INTERVAL
  WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
  WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
@@ -60,7 +65,7 @@ date_trunc('week',
  END
  )) + INTERVAL '2 day') as s
  ;
-	
+
     return nbFilm;
 END;
 $$ LANGUAGE plpgsql;
@@ -71,10 +76,10 @@ DECLARE
 BEGIN
     SELECT INTO nbFilm count(fk_id_film)
 FROM tseance
-WHERE pk_timestamp_seance
+WHERE timestamp_seance
 BETWEEN
 date_trunc('week',
- (NOW() + 
+ (NOW() +
  CASE WHEN EXTRACT(DOW FROM NOW()) = 0 THEN (offsetSemaine || ' weeks')::INTERVAL
  WHEN EXTRACT(DOW FROM NOW()) = 1 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
  WHEN EXTRACT(DOW FROM NOW()) = 2 THEN (offsetSemaine-1 || ' weeks')::INTERVAL
@@ -96,7 +101,7 @@ date_trunc('week',
  WHEN EXTRACT(DOW FROM NOW()) = 6 THEN (offsetSemaine +1|| ' weeks')::INTERVAL
  END
  )) + INTERVAL '2 day';
-	
+
     return nbFilm;
 END;
 $$ LANGUAGE plpgsql;
@@ -106,9 +111,10 @@ DECLARE
     entre integer;
 BEGIN
 	SELECT INTO entre count(*)
-	FROM tseance s JOIN tticket t ON t.fk_timestamp_seance = s.pk_timestamp_seance AND t.fk_nom_salle_seance = s.pkfk_nom_salle
-	WHERE fk_id_film = film; 
-	
+	FROM tseance s
+    JOIN tticket t ON t.fk_id_seance = s.pk_id_seance
+	WHERE fk_id_film = film;
+
     return entre;
 END;
 $$ LANGUAGE plpgsql;
@@ -118,11 +124,11 @@ DECLARE
     total float;
 BEGIN
 	SELECT INTO total sum(tar.tarif)
-	FROM tseance s 
-	JOIN tticket t ON t.fk_timestamp_seance = s.pk_timestamp_seance AND t.fk_nom_salle_seance = s.pkfk_nom_salle
+	FROM tseance s
+	JOIN tticket t ON t.fk_id_seance = s.pk_id_seance
 	JOIN ttarif tar ON t.fk_nom_tarif = tar.pk_nom_tarif
-WHERE fk_id_film = film; 
-	
+WHERE fk_id_film = film;
+
     return total;
 END;
 $$ LANGUAGE plpgsql;

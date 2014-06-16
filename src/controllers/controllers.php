@@ -9,12 +9,13 @@ use model\Entite\Tarif;
 use model\Entite\Salle;
 use model\Entite\ProduitAlimentaire;
 use model\Entite\ProduitAutre;
-use model\Entite\ProduitBoissons;
+use model\Entite\ProduitBoisson;
 use model\Dao\TicketDAO;
 use model\Entite\ProduitVendeur;
 
 // Load controllers
 require_once __DIR__.'/intranet/intranet.php';
+require_once __DIR__.'/vente/vente.php';
 require_once __DIR__.'/public/public.php';
 
 $app->get('/', function() use ($app) {
@@ -37,17 +38,17 @@ $app->get('/DAO/test', function () use ($app) {
     /*$produitVendeurDao = Dao::getInstance()->getProduitVendeurDao();
     $produitDao = Dao::getInstance()->getProduitDAO();
     $vendeurDao = Dao::getInstance()->getPersonneDAO();
-    
+
     $produit = $produitDao->find(663);
     $vendeur = $vendeurDao->find(4);
     $date = new \DateTime("now");
-    
+
     $produitVendeur = $produitVendeurDao->findAllByVendeur($vendeur);*/
     //$produitVendeur->setDate($date);
     //$produitVendeur->setVendeur($vendeur);
     //$produitVendeur->setProduit($produit);
     //$produitVendeurDao->delete($produitVendeur);
-    
+
     //$produitVente = $produitVendeurDao->findAll();
     //$filmDao = Dao::getInstance()->getFilmDAO();
     //$films = $filmDao->findFilmSemaine(1);

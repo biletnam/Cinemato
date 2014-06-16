@@ -11,6 +11,23 @@ class Tarif
 
 	private $tarif;
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
+    public function toString()
+    {
+        return $this->nom;
+    }
+
+    public function __construct($nomTarif = '', $tarif = null) {
+        $this->nom = $nomTarif;
+        $this->tarif = $tarif;
+
+        return $this;
+    }
+
     public function setNom($nomTarif) {
         $this->nom = $nomTarif;
 
@@ -33,5 +50,3 @@ class Tarif
     }
 
 }
-
-?>

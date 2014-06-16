@@ -1,0 +1,28 @@
+{% extends 'pages/vente/list.html.twig' %}
+
+{% block entity_title %}Produits alimentaires{% endblock %}
+
+{% block entity_add_path %}href='{{ app.url_generator.generate('vente-produit-alimentaires-new') }}'{% endblock %}
+
+{% block entity_add_label %}Ajouter un produit alimentaire{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Code barre</th>
+    <th>Nom</th>
+    <th>Prix</th>
+    <th>Actions</th>
+{% endblock %}
+
+{% block entity_table_content %}
+    <td>{{ entity.codeBarre }}</td>
+    <td>{{ entity.nomDeProduit }}</td>
+    <td>{{ entity.prix }}</td>
+    <td>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-produit-alimentaires-detail', { 'id': entity.codeBarre }) }}'>Détail</a>
+        </div>
+        <div>
+            <a href='{{ app.url_generator.generate('vente-produit-alimentaires-edit', { 'id': entity.codeBarre }) }}'>Editer</a>
+        </div>
+    </td>
+{% endblock %}

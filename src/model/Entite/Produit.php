@@ -13,16 +13,16 @@ abstract class Produit
 
     private $prix;
 
-    public function __construct($codeBarre='', $nomDeProduit='', $prix=0) {
-        $this->codeBarre = $codeBarre;
-        $this->nomDeProduit = $nomDeProduit;
-        $this->prix = $prix;
+    public function __construct($codeBarre='', $nomDeProduit='', $prix=0.0) {
+        $this->setCodeBarre($codeBarre);
+        $this->setNomDeProduit($nomDeProduit);
+        $this->setPrix($prix);
 
         return $this;
     }
 
     public function setCodeBarre($codeBarre) {
-        $this->codeBarre = $codeBarre;
+        $this->codeBarre = intval($codeBarre);
 
         return $this;
     }
@@ -31,18 +31,26 @@ abstract class Produit
         return $this->codeBarre;
     }
 
-    public function setNom($nomDeProduit) {
+    public function setNomDeProduit($nomDeProduit) {
         $this->nomDeProduit = $nomDeProduit;
 
         return $this;
     }
 
-    public function getNom() {
+    public function getNomDeProduit() {
         return $this->nomDeProduit;
     }
 
+    public function setNom($nomDeProduit) {
+        return $this->setNomDeProduit($nomDeProduit);
+    }
+
+    public function getNom() {
+        return $this->getNomDeProduit();
+    }
+
     public function setPrix($prix) {
-        $this->prix = $prix;
+        $this->prix = floatval($prix);
 
         return $this;
     }

@@ -9,7 +9,7 @@ class Rechargement
     private $nombrePlace;
 
     private $prixUnitaire;
-    
+
     private $placesUtilise;
 
     public function getId()

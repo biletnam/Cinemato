@@ -1,0 +1,44 @@
+{% extends 'pages/vente/detail.html.twig' %}
+
+{% block entity_title %}Compte abonné{% endblock %}
+
+{% block entity_table %}
+    <tr>
+        <th>Id</th>
+        <td>{{ entity.id }}</td>
+    </tr>
+    <tr>
+        <th>Prénom</th>
+        <td>{{ entity.prenom }}</td>
+    </tr>
+    <tr>
+        <th>Nom</th>
+        <td>{{ entity.nom }}</td>
+    </tr>
+    <tr>
+        <th>Places restantes</th>
+        <td>{{ entity.placeRestante }}</td>
+    </tr>
+    <tr>
+        <th>Recharges</th>
+        <td>
+            <ul class='unstyled'>
+                {% for recharge in entity.recharges %}
+                    <li>{{ recharge.nombrePlace }} places à {{ recharge.prixUnitaire }}€ pour {{ recharge.placesUtilise }} places utilisées <span class='pull-right'><a href='{{ app.url_generator.generate('vente-abonnes-refill-edit', { 'id': entity.id, 'refillId': recharge.id }) }}'><i class='icon icon-edit'></i></a></span></li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('vente-abonnes-list') }}'{% endblock %}
+
+{% block entity_edit_path %}href='{{ app.url_generator.generate('vente-abonnes-edit', { 'id': entity.id }) }}'{% endblock %}
+
+{% block entity_states_link %}{% endblock %}
+
+{% block additional_links %}
+    <a class='btn btn-info' href='{{ app.url_generator.generate('vente-abonnes-refill', { 'id': entity.id }) }}'>Recharger</a>
+{% endblock %}
+
+{% block entity_delete_path %}action='{{ app.url_generator.generate('vente-abonnes-delete', { 'id': entity.id }) }}'{% endblock %}

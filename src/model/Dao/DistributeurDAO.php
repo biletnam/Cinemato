@@ -80,7 +80,7 @@ class DistributeurDAO
             $query2 = 'INSERT INTO tdistributeur (pk_id_distributeur, nom, prenom, adresse, tel) VALUES(nextval(\'sequence_distributeur\'), :nom, :prenom, :adresse, :tel)';
 
             try {
- 
+
                 $statement = $connection->prepare($query1);
                 $statement->execute();
                 if ($donnees = $statement->fetch(PDO::FETCH_ASSOC)) {
