@@ -5,12 +5,21 @@
         <h1>Les films :</h1>
     </div>
 
+<<<<<<< HEAD
+{% block entity_add_path %}href='{{ app.url_generator.generate('public') }}'{% endblock %}
+
+{% block entity_add_label %}Retour à l'accueil{% endblock %}
+
+{% block entity_table_headers %}
+    <th>Titre</th>
+=======
     {% block extra_before_list %}{% endblock %}
 
     <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
         <thead>
             <tr>
                 <th>Titre</th>
+>>>>>>> a4a0e294a7a02b01b67118bed39e4a3e1251f48c
     <th>Date de sortie</th>
             </tr>
         </thead>
