@@ -8,7 +8,7 @@ git pull origin master;\
 chmod -R 755 ./;\
 mkdir app;\
 mkdir app/log;\
-chmod 777 app/log;\
+chmod -f 777 app/log;\
 exit;";
 
 echo "Cinemato has been deployed !";
