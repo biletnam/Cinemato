@@ -24,7 +24,7 @@ class StatistiquesDAO
     {
         $occ = null;
         
-        $query = 'SELECT tauxOccupationSeance(:date, :salle) as occ';
+        $query = 'SELECT tauxOccupationSeance(:id) as occ';
         $connection = $this->getDao()->getConnexion();
         
         if (is_null($connection)) {
@@ -32,11 +32,9 @@ class StatistiquesDAO
         }
         
         $statement = $connection->prepare($query);
+        
         $statement->execute(array(
-            'date' => $seance->getDateSeance()
-                ->format('Y-m-d H:i:s'),
-            'salle' => $seance->getSalle()
-                ->getNom()
+            'id' => $seance->getId()
         ));
         
         if ($donne = $statement->fetch(PDO::FETCH_ASSOC)) {
