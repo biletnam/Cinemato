@@ -35,7 +35,10 @@ $filmsPublicControllers->get('seance/{id}', function ($id) use ($app) {
 	$film = $filmDao->find($id);
 
 	$seanceDao = Dao::getInstance()->getSeanceDao();
-	$seances = $seanceDao->findByFilm($film);
+	$seances = $seanceDao->findByFilmAndWeek($film,1);
+	$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,2));
+	$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,3));
+	$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,4));
 	
 	return $app['twig']->render('pages/public/films/seances.html.twig', array(
 			'entities' => $seances, 'film'=>$film

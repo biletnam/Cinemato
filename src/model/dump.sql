@@ -290,6 +290,12 @@ INSERT INTO tgenre(pk_nom_genre)
 VALUES('Romance');
 INSERT INTO tgenre(pk_nom_genre)
 VALUES('Action');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Policier');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Drame');
+INSERT INTO tgenre(pk_nom_genre)
+VALUES('Biopic');
 
 INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
 VALUES (nextval('sequence_distributeur'), 'Mars Distribution', '', '14, rue de Colonel Moutarde 75014 PARIS', '0145875522');
@@ -299,6 +305,8 @@ INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
 VALUES (nextval('sequence_distributeur'), 'Studios Compiègne', '', 'COMPIEGNE', '0345885545');
 INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
 VALUES (nextval('sequence_distributeur'), 'Lucas Distributions', '', 'Hollywood - Los-Angeles', '147785566');
+INSERT INTO tdistributeur(pk_id_distributeur, nom, prenom, adresse, tel)
+VALUES (nextval('sequence_distributeur'), 'SND - Groupe M6', '', '89, avenue Charles de Gaulle, Neuilly sur Seine', '+33 1.41.92.66.66');
 
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Johnny English',TIMESTAMP '2003-07-23', 3, 'Comédie', 1);
@@ -310,6 +318,17 @@ INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_dis
 VALUES (nextval('sequence_film'),'Le dépeceur de l''oise',TIMESTAMP '2008-08-03', 18, 'Horreur', 3);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Karim à Compiègne',TIMESTAMP '2014-06-18', 21, 'Horreur', 2);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'La Ritournelle',TIMESTAMP '2014-06-11', 3, 'Comédie', 5);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Les Voies du Destin',TIMESTAMP '2014-06-11', 3, 'Biopic', 2);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Five Thirteen',TIMESTAMP '2014-06-11', 3, 'Policier', 1);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Black Coal',TIMESTAMP '2014-06-11', 12, 'Policier', 5);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Palo Alto',TIMESTAMP '2014-06-11', 14, 'Drame', 5);
+
 
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
 VALUES(nextval('sequence_personne'),'Lamouri','Karim');
@@ -367,29 +386,61 @@ INSERT INTO tsalle(pk_nom_salle, nb_place)
 VALUES('Salle Guynemer', 190);
 
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(1, TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane', 2, 'VF');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(2, TIMESTAMP '2014-06-24 14:00:00', 'Salle Zinédine Zidane', 3, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 14:00:00', 'Salle Zinédine Zidane', 3, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(3, TIMESTAMP '2014-06-22 10:30:00', 'Salle Lino Ventura', 1, 'Français');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-22 10:30:00', 'Salle Lino Ventura', 1, 'VF');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(4, TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer', 4, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(5, TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura', 4, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(6, TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 3, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(7, TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 4, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(8, TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 2, 'VF');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(9, TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-23 21:00:00', 'Salle Lino Ventura', 4, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(10, TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 4, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(11, TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 2, 'Français');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 2, 'VF');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
-VALUES(12, TIMESTAMP '2014-06-15 21:00:00', 'Salle Lino Ventura', 4, 'Aucun');
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-15 21:00:00', 'Salle Lino Ventura', 4, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-09 21:00:00', 'Salle Lino Ventura', 4, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-29 21:00:00', 'Salle Lino Ventura', 4, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 18:00:00', 'Salle Zinédine Zidane', 4, 'VF');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 14:00:00', 'Salle Zinédine Zidane', 5, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-22 10:30:00', 'Salle Lino Ventura', 6, 'VF');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 14:00:00', 'Salle Guynemer', 4, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-24 21:00:00', 'Salle Lino Ventura', 5, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 21:00:00', 'Salle Lino Ventura', 6, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-26 18:00:00', 'Salle Lino Ventura', 7, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-23 18:00:00', 'Salle Zinédine Zidane', 8, 'VF');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-23 21:00:00', 'Salle Guynemer', 9, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-11 18:00:00', 'Salle Lino Ventura', 10, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-12 18:00:00', 'Salle Zinédine Zidane', 7, 'VF');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-15 21:00:00', 'Salle Guynemer', 10, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-09 21:00:00', 'Salle Lino Ventura', 9, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-29 21:00:00', 'Salle Lino Ventura', 8, 'VO');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
@@ -399,6 +450,18 @@ INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 3, 5);
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 4, 7);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 5, 7);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 6, 5);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 7, 5);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 8, 7);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 9, 7);
+INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 10, 5);
 
 INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 8);
@@ -408,6 +471,18 @@ INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 3, 8);
 INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 4, 11);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 5, 8);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 6, 11);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 7, 8);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 8, 11);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 9, 8);
+INSERT INTO trealisateurs_film(pkfk_id_film, pkfk_id_personne)
+VALUES( 10, 11);
 
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 17:05:00', 12.0, 1, 1, 2, 'Normal');
