@@ -67,13 +67,14 @@ class RechargementDAO
 
     public function update($rechargement)
     {
+        $success = false;
         $query = 'UPDATE trechargement SET nombre_place = :nbPl, prix_unitaire = :prix, places_utilises = :plcUtil   WHERE pk_id_rechargement = :id';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
             try {
                 $statement = $connection->prepare($query);
-                $statement->execute(array(
+                $success = $statement->execute(array(
                     'id' => $rechargement->getId(),
                     'nbPl' => (is_null($rechargement->getNombrePlace())) ? 0 : $rechargement->getNombrePlace(),
                     'prix' => $rechargement->getPrixUnitaire(),
@@ -83,23 +84,28 @@ class RechargementDAO
                 throw $e;
             }
         }
+
+        return $success;
     }
 
     public function delete($rechargement)
     {
+        $success = false;
         $query = 'DELETE FROM trechargement WHERE pk_id_rechargement = :id';
         $connection = $this->getDao()->getConnexion();
 
         if (! is_null($connection)) {
             try {
                 $statement = $connection->prepare($query);
-                $statement->execute(array(
+                $success = $statement->execute(array(
                     'id' => $rechargement->getId()
                 ));
             } catch (\PDOException $e) {
                 throw $e;
             }
         }
+
+        return $success;
     }
 
     public function findAllByAbonne($abonne)
@@ -155,6 +161,7 @@ class RechargementDAO
 
     public function deleteRechargeOrphelineUser($personne)
     {
+        $success = false;
         $rechargesIdHolder = '';
         $query = 'DELETE FROM trechargement'
             . ' WHERE pkfk_id_personne_abonne = :id';
@@ -176,11 +183,13 @@ class RechargementDAO
         if (! is_null($connection)) {
             try {
                 $statement = $connection->prepare($query);
-                $statement->execute($paramQuery);
+                $success = $statement->execute($paramQuery);
             } catch (\PDOException $e) {
                 throw $e;
             }
         }
+
+        return $success;
     }
 
     public static function bind($donnees)
@@ -190,6 +199,7 @@ class RechargementDAO
         $rechargement->setPlacesUtilise($donnees['places_utilises']);
         $rechargement->setNombrePlace($donnees['nombre_place']);
         $rechargement->setPrixUnitaire($donnees['prix_unitaire']);
+
         return $rechargement;
     }
 }

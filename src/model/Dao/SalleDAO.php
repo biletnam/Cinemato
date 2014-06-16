@@ -15,14 +15,15 @@ class SalleDAO {
 	}
 
 	public function create($salle) {
+		$success = false;
 		$query = 'INSERT INTO tsalle(pk_nom_salle, nb_place) VALUES(:nom, :nbplace)';
-	
+
 		$connection = $this->getDao ()->getConnexion ();
-		
+
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
-				$statement->execute ( array (
+				$success = $statement->execute ( array (
 						'nom' => $salle->getNom(),
 						'nbplace' => $salle->getNbPlaces()
 				) );
@@ -30,6 +31,8 @@ class SalleDAO {
 				throw $e;
 			}
 		}
+
+		return $success;
 	}
 
 	public function find($nom) {
@@ -41,9 +44,9 @@ class SalleDAO {
 			try {
 				$statement = $connection->prepare ( $query );
 				$statement->execute ( array (
-						'nom' => $nom 
+						'nom' => $nom
 				) );
-				
+
 				if ($donnees = $statement->fetch ( PDO::FETCH_ASSOC )) {
 					$salle = self::bind ( $donnees );
 				}
@@ -57,7 +60,7 @@ class SalleDAO {
 		$salles = array ();
 		$query = 'SELECT *' . ' FROM tsalle s';
 		$connection = $this->getDao ()->getConnexion ();
-		
+
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
@@ -73,15 +76,16 @@ class SalleDAO {
 		return $salles;
 	}
 
-	
+
 
 	public function update($salle) {
+		$success = false;
 		$query = "UPDATE tsalle SET  nb_place = :nbplace WHERE pk_nom_salle = :nom";
 		$connection = $this->getDao ()->getConnexion ();
 		if (! is_null ( $connection )) {
 			try {
 				$statement = $connection->prepare ( $query );
-				$statement->execute ( array (
+				$success = $statement->execute ( array (
 						'nom' => $salle->getNom (),
 						'nbplace' => $salle->getNbPlaces()
 				) );
@@ -89,22 +93,27 @@ class SalleDAO {
 				throw $e;
 			}
 		}
+
+		return $success;
 	}
 
 	public function delete($salle) {
+		$success = false;
 		$query = "DELETE FROM tsalle WHERE pk_nom_salle like :nom";
-		
+
 		try {
 			$connection = $this->getDao ()->getConnexion ();
 			if (! is_null ( $connection )) {
 				$statement = $connection->prepare ( $query );
-				$statement->execute ( array (
-						'nom' => $salle->getNom () 
+				$success = $statement->execute ( array (
+						'nom' => $salle->getNom ()
 				) );
 			}
 		} catch ( \PDOException $e ) {
 			throw $e;
 		}
+
+		return $success;
 	}
 
 	public static function bind($donnees) {

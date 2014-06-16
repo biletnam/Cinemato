@@ -59,13 +59,14 @@ class TarifDAO
     }
 
     public function create($tarif) {
+        $success = false;
     	$query = 'INSERT INTO ttarif(pk_nom_tarif, tarif) VALUES(:nomTarif, :tarif)';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
     					'nomTarif' => $tarif->getNom(),
     					'tarif' => $tarif->getTarif()
     			) );
@@ -73,16 +74,19 @@ class TarifDAO
     			throw $e;
     		}
     	}
+
+        return $success;
     }
 
-    public function update($tarif){
+    public function update($tarif) {
+        $success = false;
     	$query = 'UPDATE ttarif SET tarif = :tarif WHERE pk_nom_tarif = :nomTarif';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
     					'nomTarif' => $tarif->getNom(),
     					'tarif' => $tarif->getTarif()
     			) );
@@ -90,21 +94,26 @@ class TarifDAO
     			throw $e;
     		}
     	}
+
+        return $success;
     }
-    public function delete($tarif){
+    public function delete($tarif) {
+        $success = false;
     	$query = 'DELETE FROM ttarif WHERE pk_nom_tarif = :nomTarif';
     	$connection = $this->getDao ()->getConnexion ();
 
     	if (! is_null ( $connection )) {
     		try {
     			$statement = $connection->prepare ( $query );
-    			$statement->execute ( array (
+    			$success = $statement->execute ( array (
     					'nomTarif' => $tarif->getNom()
     			) );
     		} catch ( \PDOException $e ) {
     			throw $e;
     		}
     	}
+
+        return $success;
     }
 
     protected function bind($donnees) {
