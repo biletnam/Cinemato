@@ -146,7 +146,7 @@ class ProduitDAO {
                 ' p.prix as prix,'.
                 ' pal.pkfk_code_barre_produit as palcod'.
                 ' FROM tproduit p' .
-                ' JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.pkfk_code_barre_produit';
+                ' JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit = pal.pkfk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion();
 
 		if (! is_null ( $connection )) {
@@ -169,9 +169,9 @@ class ProduitDAO {
 		$query = 'SELECT p.pk_code_barre_produit AS codebarre,'.
                 ' p.nom_produit AS nomproduit,'.
                 ' p.prix as prix,'.
-                ' pb.pkfk_code_barre_produit as pbcod'.
+                ' pal.pkfk_code_barre_produit as palcod'.
                 ' FROM tproduit p' .
-                ' JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit=pal.pkfk_code_barre_produit' .
+                ' JOIN tproduit_alimentaire pal ON p.pk_code_barre_produit = pal.pkfk_code_barre_produit' .
                 ' WHERE p.pk_code_barre_produit = :codeBarre';
 		$connection = $this->getDao ()->getConnexion ();
 
@@ -198,7 +198,7 @@ class ProduitDAO {
                 ' p.prix as prix,'.
                 ' pb.pkfk_code_barre_produit as pbcod'.
                 ' FROM tproduit p' .
-                ' JOIN tproduit_boisson pb ON p.pk_code_barre_produit=pb.pkfk_code_barre_produit';
+                ' JOIN tproduit_boisson pb ON p.pk_code_barre_produit = pb.pkfk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 
 		if (! is_null ( $connection )) {
@@ -251,7 +251,7 @@ class ProduitDAO {
                 ' p.prix as prix,'.
                 ' pau.pkfk_code_barre_produit as paucod'.
                 ' FROM tproduit p' .
-                ' JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.pkfk_code_barre_produit';
+                ' JOIN tproduit_autre pau ON p.pk_code_barre_produit = pau.pkfk_code_barre_produit';
 		$connection = $this->getDao ()->getConnexion ();
 
 		if (! is_null ( $connection )) {
@@ -274,9 +274,9 @@ class ProduitDAO {
 		$query = 'SELECT p.pk_code_barre_produit AS codebarre,'.
                 ' p.nom_produit AS nomproduit,'.
                 ' p.prix as prix,'.
-                ' pb.pkfk_code_barre_produit as pbcod'.
+                ' pau.pkfk_code_barre_produit as paucod'.
                 ' FROM tproduit p' .
-                ' JOIN tproduit_autre pau ON p.pk_code_barre_produit=pau.pkfk_code_barre_produit' .
+                ' JOIN tproduit_autre pau ON p.pk_code_barre_produit = pau.pkfk_code_barre_produit' .
                 ' WHERE p.pk_code_barre_produit = :codeBarre';
 		$connection = $this->getDao ()->getConnexion ();
 

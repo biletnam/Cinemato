@@ -4,12 +4,22 @@
     <section class='jumbotron'>
         <h1>Vente</h1>
         <p class='lead'>Interface de vente</p>
+        <h6>Places</h6>
         <ul class='nav nav-tabs nav-justified'>
             <li><a href='{{ app.url_generator.generate('vente-abonnes-list') }}' class='btn btn-primary'>Abonnes</a></li>
             <li><a href='{{ app.url_generator.generate('vente-tickets-list') }}' class='btn btn-primary'>Tickets</a></li>
+        </ul>
+        <h6>Produits</h6>
+        <ul class='nav nav-tabs nav-justified'>
             <li><a href='{{ app.url_generator.generate('vente-produit-boissons-list') }}' class='btn btn-primary'>Boissons</a></li>
             <li><a href='{{ app.url_generator.generate('vente-produit-alimentaires-list') }}' class='btn btn-primary'>Produits alimentaires</a></li>
             <li><a href='{{ app.url_generator.generate('vente-produit-autres-list') }}' class='btn btn-primary'>Autres produits</a></li>
+        </ul>
+        <h6>Ventes</h6>
+        <ul class='nav nav-tabs nav-justified'>
+            <li><a href='{{ app.url_generator.generate('vente-produit-boissons-ventes-list') }}' class='btn btn-primary'>Ventes de boissons</a></li>
+            <li><a href='{{ app.url_generator.generate('vente-produit-alimentaires-ventes-list') }}' class='btn btn-primary'>Ventes de produits alimentaires</a></li>
+            <li><a href='{{ app.url_generator.generate('vente-produit-autres-ventes-list') }}' class='btn btn-primary'>Ventes d'autres produits</a></li>
         </ul>
     </section>
 {% endblock %}

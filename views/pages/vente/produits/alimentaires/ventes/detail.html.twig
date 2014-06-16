@@ -1,0 +1,30 @@
+{% extends 'pages/vente/detail.html.twig' %}
+
+{% block entity_title %}Vente de produit alimentaire{% endblock %}
+
+{% block entity_table %}
+    <tr>
+        <th>Id</th>
+        <td>{{ entity.id }}</td>
+    </tr>
+    <tr>
+        <th>Date de vente</th>
+        <td>{{ entity.date|date('d-m-Y H:i') }}</td>
+    </tr>
+    <tr>
+        <th>Produit</th>
+        <td>{{ entity.produit }}</td>
+    </tr>
+    <tr>
+        <th>Vendeur</th>
+        <td>{{ entity.vendeur }}</td>
+    </tr>
+{% endblock %}
+
+{% block entity_list_path %}href='{{ app.url_generator.generate('vente-produit-alimentaires-ventes-list') }}'{% endblock %}
+
+{% block entity_edit_link %}{% endblock %}
+
+{% block entity_states_link %}{% endblock %}
+
+{% block entity_delete_link %}{% endblock %}

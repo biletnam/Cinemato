@@ -21,6 +21,16 @@ abstract class Produit
         return $this;
     }
 
+    public function toString()
+    {
+        return $this->getNomDeProduit();
+    }
+
+    public function __toString()
+    {
+        return $this->getNomDeProduit();
+    }
+
     public function setCodeBarre($codeBarre) {
         $this->codeBarre = intval($codeBarre);
 

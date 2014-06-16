@@ -2,11 +2,31 @@
 
 namespace model\Entite;
 
+use \DateTime;
+
 class ProduitVendeur {
     private $id;
 	private $vendeur;
 	private $produit;
 	private $date;
+
+	public function __construct()
+	{
+		$this->date = new DateTime();
+
+		return $this;
+	}
+
+	public function __toString()
+	{
+		return 'Vente du produit : ' . $this->produit->toString() . ' le ' . $this->date->format('d-m-Y');
+	}
+
+	public function toString()
+	{
+		return 'Vente du produit : ' . $this->produit->toString() . ' le ' . $this->date->format('d-m-Y');
+	}
+
 	public function getVendeur() {
 		return $this->vendeur;
 	}
