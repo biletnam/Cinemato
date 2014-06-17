@@ -12,8 +12,13 @@ $abonnesControllers = $app['controllers_factory'];
 
 $abonnesControllers->get('/', function () use ($app) {
     $personneDao = Dao::getInstance()->getPersonneDAO();
-    $abonnes = $personneDao->findAllAbonnes();
-
+    try{
+        $abonnes = $personneDao->findAllAbonnes();
+    }
+    catch(Exception $e){
+        $app->abort(404, 'Impossible de recupérer les données demandées.');
+    }
+    
     return $app['twig']->render('pages/vente/abonnes/list.html.twig', array(
         'entities' => $abonnes
     ));

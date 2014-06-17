@@ -10,7 +10,11 @@ $ticketsControllers = $app['controllers_factory'];
 
 $ticketsControllers->get('/', function () use ($app) {
     $ticketDao = Dao::getInstance()->getTicketDAO();
-    $tickets = $ticketDao->findAll();
+    try {
+        $tickets = $ticketDao->findAll();
+    } catch (Exception $e) {
+        $app->abort(404, 'Impossible de trouver les tickets demandés.');
+    }
 
     return $app['twig']->render('pages/vente/tickets/list.html.twig', array(
         'entities' => $tickets
@@ -22,9 +26,13 @@ $ticketsControllers->get('/new', function () use ($app) {
     $tarifsDao = Dao::getInstance()->getTarifDAO();
     $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seancesDao->findAll();
-    $abonnes = $personnesDao->findAllAbonnes();
-    $tarifs = $tarifsDao->findAll();
+    try {
+        $seances = $seancesDao->findAll();
+        $abonnes = $personnesDao->findAllAbonnes();
+        $tarifs = $tarifsDao->findAll();
+    } catch (Exception $e) {
+        $app->abort(404, 'Impossible de trouver les informations demandées.');
+    }
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
@@ -38,9 +46,14 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
     $tarifsDao = Dao::getInstance()->getTarifDAO();
     $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $tarifs = $tarifsDao->findAll();
-    $seances = $seancesDao->findAll();
-    $abonnes = $personnesDao->findAllAbonnes();
+    try {
+        $tarifs = $tarifsDao->findAll();
+        $seances = $seancesDao->findAll();
+        $abonnes = $personnesDao->findAllAbonnes();
+    } catch (Exception $e) {
+        $app->abort(404, 'Impossible de trouver les informations demandées.');
+    }
+    
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
@@ -50,14 +63,26 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
         $data = $form->getData();
         $ticket = new Ticket();
 
-        $vendeur = $personnesDao->findFirstVendeur();
+        try {
+            $vendeur = $personnesDao->findFirstVendeur();
+        } catch (Exception $e) {
+            $app->abort(404, 'Impossible de trouver le vendeur demandé.');
+        }
         $ticket->setVendeur($vendeur);
 
         $hasClientAccount = $data['hasClientAccount'];
 
         if ($hasClientAccount) {
-            $abonne = $personnesDao->findAbonne($data['abonne']);
-            $tarif = $tarifsDao->find('Abonné');
+            try {
+                $abonne = $personnesDao->findAbonne($data['abonne']);
+            } catch (Exception $e) {
+                $app->abort(404, 'Impossible de trouver l\'abonné demandé.');
+            }
+            try {
+                $tarif = $tarifsDao->find('Abonné');
+            } catch (Exception $e) {
+                $app->abort(404, 'Impossible de trouver le tarif demandé.');
+            }
 
             if ($abonne) {
                 if ($abonne->getPlacesRestantes() > 0) {
@@ -66,7 +91,7 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
 
                     $rechargementDao = Dao::getInstance()->getRechargementDAO();
 
-                    $rechargementUpdate = $rechargementDao->update($rechargement);
+                        $rechargementUpdate = $rechargementDao->update($rechargement);
 
                     if ($rechargementUpdate) {
                         $ticket->setAbonne($abonne);
@@ -80,7 +105,11 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
                 $app['session']->getFlashBag()->add('error', 'Ce compte abonné n\'existe pas.');
             }
         } else {
-            $tarif = $tarifsDao->find($data['tarif']);
+            try {
+                $tarif = $tarifsDao->find($data['tarif']);
+            } catch (Exception $e) {
+                $app['session']->getFlashBag()->add('error', 'Impossible de récupérer le tarif.');
+            }
         }
 
         if ($tarif) {
@@ -89,7 +118,12 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
             $app['session']->getFlashBag()->add('error', 'Ce tarif n\'existe pas.');
         }
 
-        $seance = $seancesDao->find($data['seance']);
+        try {
+                $seance = $seancesDao->find($data['seance']);
+        } catch (Exception $e) {
+            $app['session']->getFlashBag()->add('error', 'Impossible de récupérer la séance.');
+        }
+        
 
         if ($seance && $tarif && ((!$hasClientAccount) || ($hasClientAccount && $rechargementUpdate))) {
             $ticket->setSeance($seance);
@@ -140,9 +174,14 @@ $ticketsControllers->get('/{id}/edit', function ($id) use ($app) {
     $tarifsDao = Dao::getInstance()->getTarifDAO();
     $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seancesDao->findAll();
-    $abonnes = $personnesDao->findAllAbonnes();
-    $tarifs = $tarifsDao->findAll();
+    try{
+        $seances = $seancesDao->findAll();
+        $abonnes = $personnesDao->findAllAbonnes();
+        $tarifs = $tarifsDao->findAll();
+    }
+    catch(Exception $e){
+        $app->abort(404, 'Impossible de recupérer les données demandées.');
+    }
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), array(
         'seance' => $ticket->getSeance()->getId(),
@@ -173,9 +212,14 @@ $ticketsControllers->post('/{id}/update', function (Request $request, $id) use (
     $tarifsDao = Dao::getInstance()->getTarifDAO();
     $seancesDao = Dao::getInstance()->getSeanceDAO();
 
-    $seances = $seancesDao->findAll();
-    $abonnes = $personnesDao->findAllAbonnes();
-    $tarifs = $tarifsDao->findAll();
+    try{
+        $seances = $seancesDao->findAll();
+        $abonnes = $personnesDao->findAllAbonnes();
+        $tarifs = $tarifsDao->findAll();
+    }
+    catch(Exception $e){
+        $app->abort(404, 'Impossible de recupérer les données demandées.');
+    }
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs), array(
         'seance' => $ticket->getSeance()->getId(),
