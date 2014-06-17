@@ -13,8 +13,7 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    
-    <th>{{ entity.dateSeance | date("d/m/Y H:i") }}</th>
-    <th>{{ entity.salle.nom }}</th>
-    <th>{{ entity.doublage }}</th>
+    <td>{{ entity.dateSeance | date("d/m/Y H:i") }}</td>
+    <td>{{ entity.salle.nom }}</td>
+    <td>{{ entity.doublage }}</td>
 {% endblock %}

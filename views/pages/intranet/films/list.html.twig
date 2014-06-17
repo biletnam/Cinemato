@@ -23,16 +23,16 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    <th>{{ entity.id }}</th>
-    <th>{{ entity.titre }}</th>
-    <th>{{ entity.dateDeSortie|date('d-m-Y') }}</th>
-    <th>{{ entity.ageMinimum }}</th>
-    <th>
+    <td>{{ entity.id }}</td>
+    <td>{{ entity.titre }}</td>
+    <td>{{ entity.dateDeSortie|date('d-m-Y') }}</td>
+    <td>{{ entity.ageMinimum }}</td>
+    <td>
         <div>
             <a href='{{ app.url_generator.generate('intranet-films-detail', { 'id': entity.id }) }}'>Détail</a>
         </div>
         <div>
             <a href='{{ app.url_generator.generate('intranet-films-edit', { 'id': entity.id }) }}'>Editer</a>
         </div>
-    </th>
+    </td>
 {% endblock %}

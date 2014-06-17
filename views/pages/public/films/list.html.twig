@@ -1,28 +1,15 @@
-{% extends 'pages/public/public.html.twig' %}
+{% extends 'pages/public/list.html.twig' %}
 
-{% block app_container %}
-    <div class='page-header'>
-        <h1>Les films :</h1>
-    </div>
+{% block entity_title %}Les films :{% endblock %}
 
-    {% block extra_before_list %}{% endblock %}
+{% block entity_add_link %}{% endblock %}
 
-    <table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
-        <thead>
-            <tr>
-                <th>Titre</th>
-    			<th>Date de sortie</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <th><a href='{{ app.url_generator.generate('public-films-detail', { 'id': entity.id }) }}'>{{ entity.titre }}</a></th>
-    <th>{{ entity.dateDeSortie | date("d/m/Y") }}</th>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block entity_table_headers %}
+    <th>Titre</th>
+    <th>Date de sortie</th>
+{% endblock %}
 
-    {% block extra_after_list %}{% endblock %}
+{% block entity_table_content %}
+    <td><a href='{{ app.url_generator.generate('public-films-detail', { 'id': entity.id }) }}'>{{ entity.titre }}</a></td>
+    <td>{{ entity.dateDeSortie | date("d/m/Y") }}</td>
 {% endblock %}

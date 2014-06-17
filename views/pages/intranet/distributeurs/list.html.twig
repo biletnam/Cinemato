@@ -14,15 +14,15 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    <th>{{ entity.id }}</th>
-    <th>{{ entity.prenom }}</th>
-    <th>{{ entity.nom }}</th>
-    <th>
+    <td>{{ entity.id }}</td>
+    <td>{{ entity.prenom }}</td>
+    <td>{{ entity.nom }}</td>
+    <td>
         <div>
             <a href='{{ app.url_generator.generate('intranet-distributeurs-detail', { 'id': entity.id }) }}'>Détail</a>
         </div>
         <div>
             <a href='{{ app.url_generator.generate('intranet-distributeurs-edit', { 'id': entity.id }) }}'>Editer</a>
         </div>
-    </th>
+    </td>
 {% endblock %}

@@ -111,6 +111,14 @@ html {
                 }
             }
         }
+        .list-group {
+            .list-group-item {
+                .badge,
+                .label {
+                    float: right;
+                }
+            }
+        }
     }
 }
 

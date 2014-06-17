@@ -4,52 +4,46 @@
     <div class='page-header'>
         <h1>Statistiques</h1>
     </div>
-    Nombre d'abonné au cinéma : <strong>{{nbAbonne}}</strong><br/>
-    Nombre de film cette semaine : <strong>{{nbFilm}}</strong><br/>
-    Nombre de séance cette semaine : <strong>{{nbSeance}}</strong><br/>
 
-    <div class='page-header'>
-        <h2>Statistiques des films projeté la semaine du {{dateDebutSemaine | date('d/m/Y')}} au {{dateFinSemaine | date('d/m/Y')}}</h2>
-    </div>
-    {% if tabFilmSeance is empty %}
-    Il n'y a aucun film projeté cette semaine !
-	{%else%}
-    {% for item in tabFilmSeance %}
-            <strong><a href="{{ app.url_generator.generate('intranet-films-detail', {id: item['film'].id}) }}">{{ item['film'].titre }}</a></strong> :<br/>
-            <ul>
-		<li>Taux d'occupation des séances :<br/>
-			<ul>
-			{% for seance in item['seance'] %}
-				<li>Séance du <strong>{{seance['seance'].dateSeance | date('d/m/Y H:i')}}</strong> : <strong>{{seance['occupation']|number_format(2, '.', ',')}} %</strong> d'occupation de la salle</li>
-			{% endfor %}
-			</ul>
-		</li>
-		<li>Entrés générées par le film (depuis le début) : <strong>{{item['entre']}}</strong></li>
-		<li>Revenus générés par le film (depuis le début) : <strong>{%if item['revenue'] is null %}0{%else%}{{item['revenue']}}{%endif%} &euro;</strong></li>
-	</ul>
-    {% endfor %}
-    {% endif %}
-    <!--<table class='table table-bordered table-condensed table-stripped table-hover table-sorted'>
-        <thead>
-            <tr>
-                {% block entity_table_headers %}{% endblock %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                {% block entity_table_content %}{% endblock %}
-            </tr>
+    <ul class='list-group'>
+        <li class='list-group-item'>Total actuel d'abonnés au cinéma : <span class='badge'>{{ nbAbonne }}</span></li>
+        <li class='list-group-item'>Nombre de films cette semaine : <span class='badge'>{{ nbFilm }}</span></li>
+        <li class='list-group-item'>Nombre de séances cette semaine : <span class='badge'>{{ nbSeance }}</span></li>
+    </ul>
+
+    <h2>Statistiques des films projetés la semaine du {{ dateDebutSemaine|date('d/m/Y') }} au {{ dateFinSemaine|date('d/m/Y') }}</h2>
+    <hr />
+
+    <div class='row'>
+        {% for item in tabFilmSeance %}
+            <div class='col-lg-6 col-md-6 col-sm-6 col-xs-12'>
+                <article class='panel panel-primary'>
+                    <header class='panel-heading'>
+                        <h3 class='panel-title'>
+                            <a href="{{ app.url_generator.generate('intranet-films-detail', { 'id': item.film.id }) }}">{{ item.film.titre }}</a>
+                        </h3>
+                    </header>
+                    <div class='panel-body'>
+                        <ul class='list-group'>
+                            <li class='list-group-item'>
+                                <h5>Taux d'occupation de la salle par séance :</h5>
+                                {% for seance in item.seance %}
+                                    <p>Séance du <strong>{{ seance.seance.dateSeance | date('d/m/Y H:i') }}</strong> : <span class='label label-{% if seance.occupation > 0.7 %}success{% else %}{% if seance.occupation < 0.3 %}warning{% else %}info{% endif %}{% endif %}'>{{ seance.occupation|number_format(2, '.', ',') }}%</span></p>
+                                {% endfor %}
+                            </li>
+                            <li class='list-group-item'>Entrées générées par le film (depuis le début) : <span class='badge'>{{ item.entre }}</span></li>
+                            <li class='list-group-item'>Revenus générés par le film (depuis le début) : <span class='badge'>{% if item.revenue is null %}0{% else %}{{ item.revenue }}{% endif %}€</span></li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        {% else %}
+            <p class='text-warning'>Il n'y a aucun film projeté cette semaine !</p>
         {% endfor %}
-        </tbody>
-    </table>-->
-    <div class='page-header'>
-
     </div>
-    <a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset+1 }) }}" >Semaine Précédente</a><br/>
 
-    {#{% if offset < 0 %}#}
-     <a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset-1 }) }}" >Semaine Suivante</a>
-    {#{%endif%}#}
-    {% block extra_after_list %}{% endblock %}
+    <ul class='pager'>
+        <li class='previous'><a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset+1 }) }}" >Semaine Précédente</a></li>
+        <li class='next'><a href="{{ app.url_generator.generate('intranet-statistiques-list', { offset: offset-1 }) }}" >Semaine Suivante</a></li>
+    </ul>
 {% endblock %}

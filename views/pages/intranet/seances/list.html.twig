@@ -15,16 +15,16 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    <th>{{ entity.film }}</th>
-    <th>{{ entity.dateSeance|date('d-m-Y H:i') }}</th>
-    <th>{{ entity.salle }}</th>
-    <th>{{ entity.doublage }}</th>
-    <th>
+    <td>{{ entity.film }}</td>
+    <td>{{ entity.dateSeance|date('d-m-Y H:i') }}</td>
+    <td>{{ entity.salle }}</td>
+    <td>{{ entity.doublage }}</td>
+    <td>
         <div>
             <a href='{{ app.url_generator.generate('intranet-seances-detail', { 'id': entity.id }) }}'>Détail</a>
         </div>
         <div>
             <a href='{{ app.url_generator.generate('intranet-seances-edit', { 'id': entity.id }) }}'>Editer</a>
         </div>
-    </th>
+    </td>
 {% endblock %}

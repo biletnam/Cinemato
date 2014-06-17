@@ -2099,6 +2099,10 @@ html body table ul.unstyled {
   padding: 0;
   list-style: none;
 }
+html body .list-group .list-group-item .badge,
+html body .list-group .list-group-item .label {
+  float: right;
+}
 
 @media (min-width: 992px) {
   html body .modal .modal-dialog {

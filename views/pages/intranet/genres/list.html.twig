@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block entity_table_content %}
-    <th>{{ entity.nom }}</th>
-    <th>
+    <td>{{ entity.nom }}</td>
+    <td>
         <div>
             <a href='{{ app.url_generator.generate('intranet-genres-detail', { 'id': entity.nom }) }}'>Détail</a>
         </div>
-    </th>
+    </td>
 {% endblock %}
