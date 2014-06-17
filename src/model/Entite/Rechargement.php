@@ -12,6 +12,11 @@ class Rechargement
 
     private $placesUtilise;
 
+    public function __construct()
+    {
+        $this->placesUtilise = 0;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -20,6 +25,7 @@ class Rechargement
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -31,6 +37,7 @@ class Rechargement
     public function setNombrePlace($nombrePlace)
     {
         $this->nombrePlace = $nombrePlace;
+
         return $this;
     }
 
@@ -42,13 +49,23 @@ class Rechargement
     public function setPrixUnitaire($prixUnitaire)
     {
         $this->prixUnitaire = $prixUnitaire;
+
         return $this;
     }
-    public function getPlacesUtilise(){
+
+    public function getPlacesUtilise() {
         return  $this->placesUtilise;
     }
-    public function setPlacesUtilise($placesUtilise){
+
+    public function setPlacesUtilise($placesUtilise) {
         $this->placesUtilise = $placesUtilise;
+
+        return $this;
+    }
+
+    public function increasePlacesUtilisees() {
+        $this->placesUtilise++;
+
         return $this;
     }
 }

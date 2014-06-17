@@ -4,9 +4,6 @@ namespace model\Entite;
 
 class PersonneAbonne extends Personne
 {
-
-    private $placeRestante;
-
     private $recharges;
 
     public function __construct()
@@ -14,25 +11,28 @@ class PersonneAbonne extends Personne
         $this->recharges = array();
     }
 
-    public function getPlaceRestante()
+    public function getPlacesRestantes()
     {
-        if ($this->placeRestante == null) {
-            $this->placeRestante = 0;
+        $places = 0;
+        foreach ($this->getRecharges() as $recharge) {
+            $places += ($recharge->getNombrePlace() - $recharge->getPlacesUtilise());
         }
 
-        return $this->placeRestante;
+        return $places;
     }
 
-    public function setPlaceRestante($placeRestante)
+    public function getRechargeNotEmpty()
     {
-        $this->placeRestante = $placeRestante;
+        $rechargeNotEmpty = null;
 
-        $cmp = 0;
-        foreach ($this->getRecharges() as $recharge){
-            $cmp = $cmp + ($recharge->getNombrePlace()-$recharge->getPlacesUtilise());
+        foreach ($this->getRecharges() as $recharge) {
+            if (($recharge->getNombrePlace() - $recharge->getPlacesUtilise()) > 0) {
+                $rechargeNotEmpty = $recharge;
+                break;
+            }
         }
 
-        return $cmp;
+        return $rechargeNotEmpty;
     }
 
     public function getRecharges()
@@ -58,7 +58,6 @@ class PersonneAbonne extends Personne
 
     public function deleteRecharge($indice)
     {
-        // Why not unset($this->recharges[$indice]); ??
         $recharges = $this->getRecharges();
         unset($recharges[$indice]);
         $this->setRecharges($recharges);

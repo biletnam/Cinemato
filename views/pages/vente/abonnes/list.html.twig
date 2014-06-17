@@ -10,6 +10,7 @@
     <th>Id</th>
     <th>Prénom</th>
     <th>Nom</th>
+    <th>Places restantes</th>
     <th>Actions</th>
 {% endblock %}
 
@@ -17,6 +18,7 @@
     <th>{{ entity.id }}</th>
     <th>{{ entity.prenom }}</th>
     <th>{{ entity.nom }}</th>
+    <th>{{ entity.placesRestantes }}</th>
     <th>
         <div>
             <a href='{{ app.url_generator.generate('vente-abonnes-detail', { 'id': entity.id }) }}'>Détail</a>

@@ -13,7 +13,7 @@ class RechargementForm extends AbstractType
         $builder
             ->add('nombrePlace', 'integer', array('label' => 'Nombre de places', 'required' => true))
             ->add('prixUnitaire', 'money', array('label' => 'Prix unitaire', 'precision' => 2, 'required' => true))
-            ->add('placesUtilise', 'integer', array('label' => 'Places utilisées', 'required' => true))
+            // ->add('placesUtilise', 'integer', array('label' => 'Places utilisées', 'required' => true))
         ;
     }
 

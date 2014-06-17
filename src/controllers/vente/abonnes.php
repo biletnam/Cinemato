@@ -243,6 +243,7 @@ $abonnesControllers->post('/{id}/refill/{refillId}/update', function (Request $r
             }
         }
     }
+
     $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
         ->add('id', 'hidden')
         ->getForm();
