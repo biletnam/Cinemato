@@ -16,7 +16,7 @@
 
     <div class='row'>
         {% for item in tabFilmSeance %}
-            <div class='col-lg-6 col-md-6 col-sm-6 col-xs-12'>
+            <div class='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
                 <article class='panel panel-primary'>
                     <header class='panel-heading'>
                         <h3 class='panel-title'>
@@ -28,7 +28,7 @@
                             <li class='list-group-item'>
                                 <h5>Taux d'occupation de la salle par séance :</h5>
                                 {% for seance in item.seance %}
-                                    <p>Séance du <strong>{{ seance.seance.dateSeance | date('d/m/Y H:i') }}</strong> : <span class='label label-{% if seance.occupation > 0.7 %}success{% else %}{% if seance.occupation < 0.3 %}warning{% else %}info{% endif %}{% endif %}'>{{ seance.occupation|number_format(2, '.', ',') }}%</span></p>
+                                    <p>Séance du <strong>{{ seance.seance.dateSeance | date('d/m/Y H:i') }} </strong><small>[{{ seance.seance.salle }}]</small> : <span class='label label-{% if seance.occupation > 0.7 %}success{% else %}{% if seance.occupation < 0.3 %}warning{% else %}info{% endif %}{% endif %}'>{{ seance.occupation|number_format(2, '.', ',') }}%</span></p>
                                 {% endfor %}
                             </li>
                             <li class='list-group-item'>Entrées générées par le film (depuis le début) : <span class='badge'>{{ item.entre }}</span></li>
@@ -37,6 +37,10 @@
                     </div>
                 </article>
             </div>
+            {% if loop.index % 2 == 0 %}
+                <div class='clearfix visible-lg'></div>
+                <div class='clearfix visible-md'></div>
+            {% endif %}
         {% else %}
             <p class='text-warning'>Il n'y a aucun film projeté cette semaine !</p>
         {% endfor %}
