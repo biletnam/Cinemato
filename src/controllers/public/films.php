@@ -39,6 +39,7 @@ $filmsPublicControllers->get('detail/{id}', function ($id) use ($app) {
 $filmsPublicControllers->get('seance/{id}', function ($id) use ($app) {
 	$filmDao = Dao::getInstance()->getFilmDAO();
 	$seanceDao = Dao::getInstance()->getSeanceDao();
+
 	try{
 		$film = $filmDao->find($id);
 		$seances = $seanceDao->findByFilmAndWeek($film,1);
