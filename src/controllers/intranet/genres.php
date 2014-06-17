@@ -10,7 +10,12 @@ $genresControllers = $app['controllers_factory'];
 
 $genresControllers->get('/', function () use ($app) {
     $genreDao = Dao::getInstance()->getGenreDAO();
-    $genres = $genreDao->findAll();
+    try {
+        $genres = $genreDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     return $app['twig']->render('pages/intranet/genres/list.html.twig', array(
         'entities' => $genres
@@ -38,12 +43,15 @@ $genresControllers->post('/create', function (Request $request) use ($app) {
             $genre->setNom($data['nom']);
 
             $genreDao = Dao::getInstance()->getGenreDao();
-
+            try {
             if ($genreDao->create($genre)) {
                 $app['session']->getFlashBag()->add('success', 'Le genre est bien enregistré !');
 
                 return $app->redirect($app['url_generator']->generate('intranet-genres-list'));
             } else {
+                $app['session']->getFlashBag()->add('error', 'Le genre n\'a pas pu être enregistré.');
+            }
+            } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('error', 'Le genre n\'a pas pu être enregistré.');
             }
         }
@@ -56,7 +64,12 @@ $genresControllers->post('/create', function (Request $request) use ($app) {
 
 $genresControllers->get('/{id}', function ($id) use ($app) {
     $genreDao = Dao::getInstance()->getGenreDAO();
-    $genre = $genreDao->find($id);
+    
+    try {
+        $genre = $genreDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce genre n\'existe pas...');
+    }
 
     if (!$genre) {
         $app->abort(404, 'Ce genre n\'existe pas...');
@@ -74,7 +87,11 @@ $genresControllers->get('/{id}', function ($id) use ($app) {
 
 $genresControllers->post('/{id}/delete', function (Request $request, $id) use ($app) {
     $genreDao = Dao::getInstance()->getGenreDao();
-    $genre = $genreDao->find($id);
+    try {
+        $genre = $genreDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce genre n\'existe pas...');
+    }
 
     if (!$genre) {
         $app->abort(404, 'Ce genre n\'existe pas...');
