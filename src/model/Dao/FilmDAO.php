@@ -91,7 +91,7 @@ class FilmDAO
             try {
                 $statement = $connection->prepare($query);
                 $statement->execute(array(
-                    'titre' => strtolower('%' . $titre . '%')
+                    'titre' => '%' . $titre . '%'
                 ));
 
                 $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
