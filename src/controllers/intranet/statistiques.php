@@ -9,15 +9,15 @@ $statistiquesControllers = $app['controllers_factory'];
 
 $statistiquesControllers->match('/{offset}', function (Request $request, $offset) use ($app) {
     $nbAbonne = Dao::getInstance()->getStatistiquesDao()->getNbAbonne();
-    $nbFilm = Dao::getInstance()->getStatistiquesDao()->getNbFilmSemaine(-$offset);
-    $nbSeance = Dao::getInstance()->getStatistiquesDao()->getNbSeanceSemaine(-$offset);
+    $nbFilm = Dao::getInstance()->getStatistiquesDao()->getNbFilmSemaine($offset);
+    $nbSeance = Dao::getInstance()->getStatistiquesDao()->getNbSeanceSemaine($offset);
 
-    $dateDebut = new DateTime('2014-06-12 14:00:00');
+    $dateDebut = new DateTime('now'); // '2014-06-12 14:00:00'
     if(date('N',$dateDebut->getTimestamp()) >= 3){
-        $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*$offset;
+        $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*(-$offset);
     }
     else{
-        $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*$offset + 7;
+        $offsetPourMercredi = date('N',$dateDebut->getTimestamp()) -3 + 7*(-$offset) + 7;
     }
 
     if($offsetPourMercredi > 0){
@@ -34,9 +34,9 @@ $statistiquesControllers->match('/{offset}', function (Request $request, $offset
     $dateFin->add($dateInterval2);
     //exit(var_dump($dateDebut->format('Y-m-d H:i:s')));
     $tabFilmEtSeance = array();
-    $tabFilmsSemaine = Dao::getInstance()->getFilmDAO()->findFilmSemaine(-$offset);
+    $tabFilmsSemaine = Dao::getInstance()->getFilmDAO()->findFilmSemaine($offset);
     foreach ($tabFilmsSemaine as $i => $film){
-        $tabSeance = Dao::getInstance()->getSeanceDAO()->findByFilmAndWeek($film, -$offset);
+        $tabSeance = Dao::getInstance()->getSeanceDAO()->findByFilmAndWeek($film, $offset);
         //exit(var_dump($tabSeance));
         $entre = Dao::getInstance()->getStatistiquesDao()->getTotalEntreFilm($film);
         $revenue = Dao::getInstance()->getStatistiquesDao()->getTotalRevenueFilm($film);
@@ -53,7 +53,7 @@ $statistiquesControllers->match('/{offset}', function (Request $request, $offset
             'seance' =>$tabSeanceInfo,
             'entre' => $entre,
             'revenue'=>$revenue
-            );
+        );
     }
     //exit(var_dump($tabFilmEtSeance));
 
