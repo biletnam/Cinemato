@@ -44,8 +44,13 @@ $alimentairesVentesControllers->post('/create', function (Request $request) use 
         $produitVendeur->setVendeur($vendeur);
 
         $data = $form->getData();
-
-        $produit = $produitsDao->findAlimentaire($data['produit']);
+        try{
+        	$produit = $produitsDao->findAlimentaire($data['produit']);
+        }catch (exception $e)
+        {
+        	$app['session']->getFlashBag()->add('error', $e->getMessage());
+        	return $app['twig']->render('pages/home.html.twig');
+        }
 
         if ($produit) {
             $produitVendeur->setProduit($produit);
@@ -70,8 +75,15 @@ $alimentairesVentesControllers->post('/create', function (Request $request) use 
 
 $alimentairesVentesControllers->get('/{id}', function ($id) use ($app) {
     $produitsVendeurDao = Dao::getInstance()->getProduitVendeurDao();
-    $produitVendeur = $produitsVendeurDao->find($id);
 
+    try{
+    	$produitVendeur = $produitsVendeurDao->find($id);
+    }catch (exception $e)
+    {
+    	$app['session']->getFlashBag()->add('error', $e->getMessage());
+    	return $app['twig']->render('pages/home.html.twig');
+    }
+    
     if (!$produitVendeur) {
         $app->abort(404, 'Cette vente de produit alimentaire n\'existe pas...');
     }
