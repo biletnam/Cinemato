@@ -49,7 +49,7 @@ $notationControllers->post('/save', function (Request $request) use ($app) {
 				}
 				else
 				{
-					$app['session']->getFlashBag()->add('Validé', 'Ce ticket n\'existe pas !');
+					$app['session']->getFlashBag()->add('error', 'Ce ticket n\'existe pas !');
 				}
 			}
 		}

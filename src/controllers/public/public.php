@@ -13,7 +13,7 @@ $app->get('/public', function () use ($app) {
 	$seanceDao = Dao::getInstance()->getSeanceDAO();
 
 	try{
-		$seances = $seanceDao->findSeancesOfTheWeek(1);
+		$seances = $seanceDao->findSeancesOfTheWeek(0);
 	}catch (exception $e)
 	{
 		$app['session']->getFlashBag()->add('error', $e->getMessage());
