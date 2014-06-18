@@ -443,6 +443,10 @@ INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, do
 VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-09 21:00:00', 'Salle Lino Ventura', 9, 'VO');
 INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
 VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-29 21:00:00', 'Salle Lino Ventura', 8, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-18 21:00:00', 'Salle Lino Ventura', 9, 'VO');
+INSERT INTO tseance(pk_id_seance, timestamp_seance, fk_nom_salle, fk_id_film, doublage)
+VALUES(nextval('sequence_seance'), TIMESTAMP '2014-06-19 20:00:00', 'Salle Guynemer', 9, 'VF');
 
 INSERT INTO tproducteurs_film(pkfk_id_film, pkfk_id_personne)
 VALUES( 1, 7);
