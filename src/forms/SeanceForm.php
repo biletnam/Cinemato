@@ -27,7 +27,7 @@ class SeanceForm extends AbstractType
         }
 
         $builder
-            ->add('horaires', 'datetime', array('label' => 'Horaire', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'dd-MM-yyyy HH:mm', 'attr' => array('data-format' => 'DD-MM-YYYY HH:mm')))
+            ->add('dateSeance', 'datetime', array('label' => 'Horaires', 'required' => true, 'input' => 'datetime', 'widget' => 'single_text', 'format' => 'dd-MM-yyyy HH:mm:ss', 'attr' => array('data-format' => 'DD-MM-YYYY HH:mm:ss')))
             ->add('film', 'choice', array('label' => 'Film', 'required' => true, 'choices' => $films))
             ->add('salle', 'choice', array('label' => 'Salle', 'required' => true, 'choices' => $salles))
             ->add('doublage', 'text', array('label' => 'Doublage', 'required' => true))
