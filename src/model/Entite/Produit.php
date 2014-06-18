@@ -23,12 +23,12 @@ abstract class Produit
 
     public function toString()
     {
-        return $this->getNomDeProduit();
+        return $this->getNomDeProduit() . ' : ' . $this->getPrix() . '€';
     }
 
     public function __toString()
     {
-        return $this->getNomDeProduit();
+        return $this->getNomDeProduit() . ' : ' . $this->getPrix() . '€';
     }
 
     public function setCodeBarre($codeBarre) {
