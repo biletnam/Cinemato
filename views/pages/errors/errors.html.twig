@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block app_container %}
+    <section class='jumbotron'>
+        <h1>{% block statusCode %}{{ error.statusCode }}{% endblock %} <small>{% block statusMessage %}Une erreur est survenue !{% endblock %}</small><h1>
+        <div class='alert alert-warning'>
+            <p>{{ error.exception.message }}</p>
+        </div>
+    </section>
+{% endblock %}

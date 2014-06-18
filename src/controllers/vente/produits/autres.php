@@ -51,7 +51,7 @@ $autresControllers->post('/create', function (Request $request) use ($app) {
 
 $autresControllers->get('/{id}', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $autre = $produitsDao->findBoisson($id);
+    $autre = $produitsDao->findAutre($id);
 
     if (!$autre) {
         $app->abort(404, 'Cette autre n\'existe pas...');
@@ -69,7 +69,7 @@ $autresControllers->get('/{id}', function ($id) use ($app) {
 
 $autresControllers->get('/{id}/edit', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $autre = $produitsDao->findBoisson($id);
+    $autre = $produitsDao->findAutre($id);
 
     if (!$autre) {
         $app->abort(404, 'Cette autre n\'existe pas...');
@@ -90,7 +90,7 @@ $autresControllers->get('/{id}/edit', function ($id) use ($app) {
 
 $autresControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $autre = $produitsDao->findBoisson($id);
+    $autre = $produitsDao->findAutre($id);
 
     if (!$autre) {
         $app->abort(404, 'Cette autre n\'existe pas...');
@@ -123,7 +123,7 @@ $autresControllers->post('/{id}/update', function (Request $request, $id) use ($
 
 $autresControllers->post('/{id}/delete', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $autre = $produitsDao->findBoisson($id);
+    $autre = $produitsDao->findAutre($id);
 
     if (!$autre) {
         $app->abort(404, 'Cette autre n\'existe pas...');

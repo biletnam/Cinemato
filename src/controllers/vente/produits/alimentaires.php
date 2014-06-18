@@ -51,10 +51,10 @@ $alimentairesControllers->post('/create', function (Request $request) use ($app)
 
 $alimentairesControllers->get('/{id}', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $alimentaire = $produitsDao->findBoisson($id);
+    $alimentaire = $produitsDao->findAlimentaire($id);
 
     if (!$alimentaire) {
-        $app->abort(404, 'Cette alimentaire n\'existe pas...');
+        $app->abort(404, 'Ce produit alimentaire n\'existe pas...');
     }
 
     $deleteForm = $app['form.factory']->createBuilder('form', array('id' => $id))
@@ -69,7 +69,7 @@ $alimentairesControllers->get('/{id}', function ($id) use ($app) {
 
 $alimentairesControllers->get('/{id}/edit', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $alimentaire = $produitsDao->findBoisson($id);
+    $alimentaire = $produitsDao->findAlimentaire($id);
 
     if (!$alimentaire) {
         $app->abort(404, 'Cette alimentaire n\'existe pas...');
@@ -90,10 +90,10 @@ $alimentairesControllers->get('/{id}/edit', function ($id) use ($app) {
 
 $alimentairesControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $alimentaire = $produitsDao->findBoisson($id);
+    $alimentaire = $produitsDao->findAlimentaire($id);
 
     if (!$alimentaire) {
-        $app->abort(404, 'Cette alimentaire n\'existe pas...');
+        $app->abort(404, 'Ce produit alimentaire n\'existe pas...');
     }
 
     $form = $app['form.factory']->create(new ProduitAlimentaireForm(true), $alimentaire);
@@ -123,10 +123,10 @@ $alimentairesControllers->post('/{id}/update', function (Request $request, $id) 
 
 $alimentairesControllers->post('/{id}/delete', function ($id) use ($app) {
     $produitsDao = Dao::getInstance()->getProduitDao();
-    $alimentaire = $produitsDao->findBoisson($id);
+    $alimentaire = $produitsDao->findAlimentaire($id);
 
     if (!$alimentaire) {
-        $app->abort(404, 'Cette alimentaire n\'existe pas...');
+        $app->abort(404, 'Ce produit alimentaire n\'existe pas...');
     }
 
     if ($produitsDao->delete($alimentaire)) {

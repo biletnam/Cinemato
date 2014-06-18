@@ -78,12 +78,13 @@ $alimentairesVentesControllers->get('/{id}', function ($id) use ($app) {
 
     try{
     	$produitVendeur = $produitsVendeurDao->find($id);
-    }catch (exception $e)
+    }
+    catch (exception $e)
     {
     	$app['session']->getFlashBag()->add('error', $e->getMessage());
     	return $app['twig']->render('pages/home.html.twig');
     }
-    
+
     if (!$produitVendeur) {
         $app->abort(404, 'Cette vente de produit alimentaire n\'existe pas...');
     }

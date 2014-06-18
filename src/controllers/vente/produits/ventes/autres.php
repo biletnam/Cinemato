@@ -70,7 +70,7 @@ $autresVentesControllers->post('/create', function (Request $request) use ($app)
 
 $autresVentesControllers->get('/{id}', function ($id) use ($app) {
     $produitsVendeurDao = Dao::getInstance()->getProduitVendeurDao();
-    
+
     try{
     	$produitVendeur = $produitsVendeurDao->find($id);
     }catch (exception $e)
