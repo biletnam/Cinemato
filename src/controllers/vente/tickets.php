@@ -53,7 +53,7 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
     } catch (Exception $e) {
         $app->abort(404, 'Impossible de trouver les informations demandées.');
     }
-    
+
 
     $form = $app['form.factory']->create(new TicketForm($seances, $abonnes, $tarifs));
 
@@ -123,7 +123,7 @@ $ticketsControllers->post('/create', function (Request $request) use ($app) {
         } catch (Exception $e) {
             $app['session']->getFlashBag()->add('error', 'Impossible de récupérer la séance.');
         }
-        
+
 
         if ($seance && $tarif && ((!$hasClientAccount) || ($hasClientAccount && $rechargementUpdate))) {
             $ticket->setSeance($seance);

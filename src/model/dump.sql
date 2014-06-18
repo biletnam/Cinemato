@@ -503,7 +503,7 @@ VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-24 18:00:00', 20, 5, NULL
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 18:00:00', 8.3, 6, 3, 4, 'Retraité');
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
-VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 20:00:00', 7.58, 7, NULL, 4, 'Normal');
+VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 20:00:00', NULL, 7, NULL, 4, 'Normal');
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
 VALUES( nextval('sequence_ticket'), TIMESTAMP '2014-06-26 21:02:00', 18.99, 11, 3, 2, 'Normal');
 INSERT INTO tticket(pk_id_ticket, timestamp_vente, note, fk_id_seance, fk_id_personne_abonne, fk_id_personne_vendeur, fk_nom_tarif)
