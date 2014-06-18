@@ -57,11 +57,11 @@ $alimentairesVentesControllers->post('/create', function (Request $request) use 
             $produitsVendeurDao = Dao::getInstance()->getProduitVendeurDao();
 
             if ($produitsVendeurDao->create($produitVendeur)) {
-                $app['session']->getFlashBag()->add('success', 'Votre vente de boisson a bien été enregistrée');
+                $app['session']->getFlashBag()->add('success', 'Votre vente de produit alimentaire a bien été enregistrée');
 
                 return $app->redirect($app['url_generator']->generate('vente-produit-alimentaires-ventes-list'));
             } else {
-                $app['session']->getFlashBag()->add('error', 'Votre vente de boisson n\'a pas pu être enregistrée');
+                $app['session']->getFlashBag()->add('error', 'Votre vente de produit alimentaire n\'a pas pu être enregistrée');
             }
         } else {
             $app['session']->getFlashBag()->add('error', 'Ce produit n\'existe pas...');

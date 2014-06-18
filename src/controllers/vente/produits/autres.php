@@ -102,11 +102,11 @@ $autresControllers->post('/{id}/update', function (Request $request, $id) use ($
 
     if ($form->isValid()) {
         if ($produitsDao->update($autre)) {
-            $app['session']->getFlashBag()->add('success', 'Votre produit autre est bien mise à jour');
+            $app['session']->getFlashBag()->add('success', 'Votre autre produit est bien mise à jour');
 
             return $app->redirect($app['url_generator']->generate('vente-produit-autres-list'));
         } else {
-            $app['session']->getFlashBag()->add('error', 'Votre produit autre n\'a pas pu être mise à jour');
+            $app['session']->getFlashBag()->add('error', 'Votre autre produit n\'a pas pu être mise à jour');
         }
     }
 

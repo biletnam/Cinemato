@@ -52,11 +52,11 @@ $autresVentesControllers->post('/create', function (Request $request) use ($app)
             $produitsVendeurDao = Dao::getInstance()->getProduitVendeurDao();
 
             if ($produitsVendeurDao->create($produitVendeur)) {
-                $app['session']->getFlashBag()->add('success', 'Votre vente de boisson a bien été enregistrée');
+                $app['session']->getFlashBag()->add('success', 'Votre vente d\'autre produit a bien été enregistrée');
 
                 return $app->redirect($app['url_generator']->generate('vente-produit-autres-ventes-list'));
             } else {
-                $app['session']->getFlashBag()->add('error', 'Votre vente de boisson n\'a pas pu être enregistrée');
+                $app['session']->getFlashBag()->add('error', 'Votre vente d\'autre produit n\'a pas pu être enregistrée');
             }
         } else {
             $app['session']->getFlashBag()->add('error', 'Ce produit n\'existe pas...');
