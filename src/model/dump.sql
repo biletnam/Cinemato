@@ -328,6 +328,8 @@ INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_dis
 VALUES (nextval('sequence_film'),'Black Coal',TIMESTAMP '2014-06-11', 12, 'Policier', 5);
 INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
 VALUES (nextval('sequence_film'),'Palo Alto',TIMESTAMP '2014-06-11', 14, 'Drame', 5);
+INSERT INTO tfilm(pk_id_film, titre, date_sortie, age_min,fk_nom_genre,fk_id_distributeur)
+VALUES (nextval('sequence_film'),'Dikkenek',TIMESTAMP '2006-07-21', 16, 'Comédie', 3);
 
 
 INSERT INTO tpersonne(pk_id_personne,nom,prenom)
