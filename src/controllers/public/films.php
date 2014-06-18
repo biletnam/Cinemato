@@ -42,10 +42,10 @@ $filmsPublicControllers->get('seance/{id}', function ($id) use ($app) {
 
 	try{
 		$film = $filmDao->find($id);
-		$seances = $seanceDao->findByFilmAndWeek($film,1);
+		$seances = $seanceDao->findByFilmAndWeek($film,0);
+		$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,1));
 		$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,2));
 		$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,3));
-		$seances = array_merge($seances, $seanceDao->findByFilmAndWeek($film,4));
 	}catch (exception $e)
 	{
 		$app['session']->getFlashBag()->add('error', $e->getMessage());
