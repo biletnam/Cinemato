@@ -85,14 +85,16 @@ class FilmDAO
 
         if (!is_null($connection)) {
             $query = 'SELECT * FROM tfilm'
-                . ' WHERE titre'
-                . ' LIKE :titre';
+                . ' WHERE LOWER(titre)'
+                . ' LIKE LOWER(:titre)';
 
             try {
                 $statement = $connection->prepare($query);
+                $titre = '%' . $titre . '%';
                 $statement->execute(array(
-                    'titre' => '%' . $titre . '%'
+                    'titre' => $titre
                 ));
+                
 
                 $filmRows = $statement->fetchAll(PDO::FETCH_ASSOC);
 

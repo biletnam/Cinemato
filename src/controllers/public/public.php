@@ -11,8 +11,15 @@ $app->get('/public', function () use ($app) {
 
 	
 	$seanceDao = Dao::getInstance()->getSeanceDAO();
-	$seances = $seanceDao->findSeancesOfTheWeek(1);
 
+	try{
+		$seances = $seanceDao->findSeancesOfTheWeek(1);
+	}catch (exception $e)
+	{
+		$app['session']->getFlashBag()->add('error', $e->getMessage());
+		return $app['twig']->render('pages/home.html.twig');
+	}
+	
     return $app['twig']->render('pages/public/seances/home.html.twig', array(
             'entities' => $seances
     ));

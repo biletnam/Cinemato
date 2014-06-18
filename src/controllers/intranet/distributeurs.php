@@ -10,8 +10,11 @@ $distributeursControllers = $app['controllers_factory'];
 
 $distributeursControllers->get('/', function () use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeurs = $distributeurDao->findAll();
-
+    try {
+        $distributeurs = $distributeurDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
     return $app['twig']->render('pages/intranet/distributeurs/list.html.twig', array(
         'entities' => $distributeurs
     ));
@@ -42,13 +45,11 @@ $distributeursControllers->post('/create', function (Request $request) use ($app
 
 
             $distributeurDao = Dao::getInstance()->getDistributeurDao();
-
-            if ($distributeurDao->create($distributeur)) {
+            try {
+                $distributeurDao->create($distributeur);
                 $app['session']->getFlashBag()->add('success', 'Le distributeur est bien enregistré !');
-
-                return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
-            } else {
-                $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être enregistré.');
+            } catch (Exception $e) {
+                $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être enregistré.'); 
             }
         }
     }
@@ -60,7 +61,12 @@ $distributeursControllers->post('/create', function (Request $request) use ($app
 
 $distributeursControllers->get('/{id}', function ($id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeur = $distributeurDao->find($id);
+    try {
+        $distributeur = $distributeurDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce distributeur n\'existe pas...');
+    }
+    
 
     if (!$distributeur) {
         $app->abort(404, 'Ce distributeur n\'existe pas...');
@@ -78,7 +84,11 @@ $distributeursControllers->get('/{id}', function ($id) use ($app) {
 
 $distributeursControllers->get('/{id}/edit', function ($id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDao();
-    $distributeur = $distributeurDao->find($id);
+    try {
+            $distributeur = $distributeurDao->find($id);
+        } catch (Exception $e) {
+            $app->abort(404, 'Ce distributeur n\'existe pas...');
+        }
 
     if (!$distributeur) {
         $app->abort(404, 'Ce distributeur n\'existe pas...');
@@ -104,7 +114,11 @@ $distributeursControllers->get('/{id}/edit', function ($id) use ($app) {
 
 $distributeursControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDao();
-    $distributeur = $distributeurDao->find($id);
+    try {
+            $distributeur = $distributeurDao->find($id);
+        } catch (Exception $e) {
+            $app->abort(404, 'Ce distributeur n\'existe pas...');
+        }
 
     if (!$distributeur) {
         $app->abort(404, 'Ce distributeur n\'existe pas...');
@@ -127,14 +141,21 @@ $distributeursControllers->post('/{id}/update', function (Request $request, $id)
             $distributeur->setNom($data['nom']);
             $distributeur->setAdresse($data['adresse']);
             $distributeur->setTelephone($data['telephone']);
-
-            if ($distributeurDao->update($distributeur)) {
-                $app['session']->getFlashBag()->add('success', 'Le distributeur est bien mis à jour !');
-
-                return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
-            } else {
-                $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être mis à jour.');
+            try {
+                if ($distributeurDao->update($distributeur)) {
+                    $app['session']->getFlashBag()
+                        ->add('success', 'Le distributeur est bien mis à jour !');
+                    
+                    return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
+                } else {
+                    $app['session']->getFlashBag()
+                        ->add('error', 'Le distributeur n\'a pas pu être mis à jour.');
+                }
+            } catch (Exception $e) {
+                $app['session']->getFlashBag()
+                    ->add('error', 'Le distributeur n\'a pas pu être mis à jour.');
             }
+            
         }
     }
 
@@ -151,18 +172,24 @@ $distributeursControllers->post('/{id}/update', function (Request $request, $id)
 
 $distributeursControllers->post('/{id}/delete', function (Request $request, $id) use ($app) {
     $distributeurDao = Dao::getInstance()->getDistributeurDao();
-    $distributeur = $distributeurDao->find($id);
-
+    try {
+        $distributeur = $distributeurDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce distributeur n\'existe pas...');
+    }
     if (!$distributeur) {
         $app->abort(404, 'Ce distributeur n\'existe pas...');
     }
-
-    if ($distributeurDao->delete($distributeur)) {
-        $app['session']->getFlashBag()->add('success', 'Le distributeur a bien été supprimé !');
-    } else {
+    try {
+        if ($distributeurDao->delete($distributeur)) {
+            $app['session']->getFlashBag()->add('success', 'Le distributeur a bien été supprimé !');
+        } else {
+            $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être supprimé...');
+        }
+    } catch (Exception $e) {
         $app['session']->getFlashBag()->add('error', 'Le distributeur n\'a pas pu être supprimé...');
     }
-
+    
     return $app->redirect($app['url_generator']->generate('intranet-distributeurs-list'));
 })->bind('intranet-distributeurs-delete');
 

@@ -11,7 +11,12 @@ $filmsControllers = $app['controllers_factory'];
 
 $filmsControllers->get('/', function () use ($app) {
     $filmDao = Dao::getInstance()->getFilmDAO();
-    $films = $filmDao->findAll();
+    try {
+        $films = $filmDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     $form = $app['form.factory']->create(new FilmRechercheForm());
 
@@ -24,14 +29,18 @@ $filmsControllers->get('/', function () use ($app) {
 $filmsControllers->post('/search', function (Request $request) use ($app) {
     $films = array();
     $form = $app['form.factory']->create(new FilmRechercheForm());
-
+    
     $form->handleRequest($request);
-
+    
     if ($form->isValid()) {
-        $filmDao = Dao::getInstance()->getFilmDAO();
-        $data = $form->getData();
-
-        $films = $filmDao->findAllByTitle($data['titre']);
+        try {
+            $filmDao = Dao::getInstance()->getFilmDAO();
+            $data = $form->getData();
+            $films = $filmDao->findAllByTitle($data['titre']);
+        } catch (Exception $e) {
+            $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+        }
+        
     }
 
     return $app['twig']->render('pages/intranet/films/list.html.twig', array(
@@ -41,11 +50,16 @@ $filmsControllers->post('/search', function (Request $request) use ($app) {
 })->bind('intranet-films-search');
 
 $filmsControllers->get('/new', function () use ($app) {
-    $genreDao = Dao::getInstance()->getGenreDAO();
-    $genres = $genreDao->findAll();
+    try {
+        $genreDao = Dao::getInstance()->getGenreDAO();
+        $genres = $genreDao->findAll();
 
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeurs = $distributeurDao->findAll();
+        $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+        $distributeurs = $distributeurDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs));
 
@@ -56,10 +70,15 @@ $filmsControllers->get('/new', function () use ($app) {
 
 $filmsControllers->post('/create', function (Request $request) use ($app) {
     $genreDao = Dao::getInstance()->getGenreDAO();
-    $genres = $genreDao->findAll();
-
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeurs = $distributeurDao->findAll();
+    try {
+        $genres = $genreDao->findAll();
+        
+        $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+        $distributeurs = $distributeurDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs));
 
@@ -68,9 +87,13 @@ $filmsControllers->post('/create', function (Request $request) use ($app) {
 
         if ($form->isValid()) {
             $data = $form->getData();
-
-            $genre = $genreDao->find($data['genre']);
-            $distributeur = $distributeurDao->find((int) $data['distributeur']);
+            try {
+                $genre = $genreDao->find($data['genre']);
+                $distributeur = $distributeurDao->find((int) $data['distributeur']);
+            } catch (Exception $e) {
+                $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+            }
+            
 
             $film = new Film();
             $film->setTitre($data['titre']);
@@ -80,14 +103,18 @@ $filmsControllers->post('/create', function (Request $request) use ($app) {
             $film->setDistributeur($distributeur);
 
             $filmDao = Dao::getInstance()->getFilmDao();
-
-            if ($filmDao->create($film)) {
-                $app['session']->getFlashBag()->add('success', 'Le film est bien enregistré !');
-
-                return $app->redirect($app['url_generator']->generate('intranet-films-list'));
-            } else {
+            try {
+                if ($filmDao->create($film)) {
+                    $app['session']->getFlashBag()->add('success', 'Le film est bien enregistré !');
+                
+                    return $app->redirect($app['url_generator']->generate('intranet-films-list'));
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être enregistré.');
+                }
+            } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être enregistré.');
             }
+            
         }
     }
 
@@ -115,18 +142,24 @@ $filmsControllers->get('/{id}', function ($id) use ($app) {
 })->bind('intranet-films-detail');
 
 $filmsControllers->get('/{id}/edit', function ($id) use ($app) {
-    $filmDao = Dao::getInstance()->getFilmDao();
-    $film = $filmDao->find($id);
-
+    try {
+        $filmDao = Dao::getInstance()->getFilmDao();
+        $film = $filmDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
     if (!$film) {
         $app->abort(404, 'Ce film n\'existe pas...');
     }
-
-    $genreDao = Dao::getInstance()->getGenreDAO();
-    $genres = $genreDao->findAll();
-
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeurs = $distributeurDao->findAll();
+    try {
+        $genreDao = Dao::getInstance()->getGenreDAO();
+        $genres = $genreDao->findAll();
+        
+        $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+        $distributeurs = $distributeurDao->findAll();
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
 
     $dateDeSortie = $film->getDateDeSortie();
 
@@ -150,49 +183,60 @@ $filmsControllers->get('/{id}/edit', function ($id) use ($app) {
 })->bind('intranet-films-edit');
 
 $filmsControllers->post('/{id}/update', function (Request $request, $id) use ($app) {
-    $filmDao = Dao::getInstance()->getFilmDao();
-    $film = $filmDao->find($id);
+    try {
+        $filmDao = Dao::getInstance()->getFilmDao();
+        $film = $filmDao->find($id);
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     if (!$film) {
         $app->abort(404, 'Ce film n\'existe pas...');
     }
-
-    $genreDao = Dao::getInstance()->getGenreDAO();
-    $genres = $genreDao->findAll();
-
-    $distributeurDao = Dao::getInstance()->getDistributeurDAO();
-    $distributeurs = $distributeurDao->findAll();
-
-    $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
-        'titre' => $film->getTitre(),
-        'dateDeSortie' => $film->getDateDeSortie(),
-        'ageMinimum' => $film->getAgeMinimum(),
-        'genre' => $film->getGenre()->getNom(),
-        'distributeur' => $film->getDistributeur()->getId(),
-    ));
+    try {
+        $genreDao = Dao::getInstance()->getGenreDAO();
+        $genres = $genreDao->findAll();
+        $distributeurDao = Dao::getInstance()->getDistributeurDAO();
+        $distributeurs = $distributeurDao->findAll();
+        $form = $app['form.factory']->create(new FilmForm($genres, $distributeurs), array(
+            'titre' => $film->getTitre(),
+            'dateDeSortie' => $film->getDateDeSortie(),
+            'ageMinimum' => $film->getAgeMinimum(),
+            'genre' => $film->getGenre()->getNom(),
+            'distributeur' => $film->getDistributeur()->getId(),
+        ));
+    } catch (Exception $e) {
+        $app['session']->getFlashBag()->add('error', 'Vous avez généré une excection SQL, réassayez.');
+    }
+    
 
     if ($request->getMethod() === 'POST') {
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $data = $form->getData();
-
-            $genre = $genreDao->find($data['genre']);
-            $distributeur = $distributeurDao->find((int) $data['distributeur']);
-
-            $film->setTitre($data['titre']);
-            $film->setDateDeSortie($data['dateDeSortie']);
-            $film->setAgeMinimum($data['ageMinimum']);
-            $film->setGenre($genre);
-            $film->setDistributeur($distributeur);
-
-            if ($filmDao->update($film)) {
-                $app['session']->getFlashBag()->add('success', 'Le film est bien mis à jour !');
-
-                return $app->redirect($app['url_generator']->generate('intranet-films-list'));
-            } else {
+            try {
+                $genre = $genreDao->find($data['genre']);
+                $distributeur = $distributeurDao->find((int) $data['distributeur']);
+                
+                $film->setTitre($data['titre']);
+                $film->setDateDeSortie($data['dateDeSortie']);
+                $film->setAgeMinimum($data['ageMinimum']);
+                $film->setGenre($genre);
+                $film->setDistributeur($distributeur);
+                
+                if ($filmDao->update($film)) {
+                    $app['session']->getFlashBag()->add('success', 'Le film est bien mis à jour !');
+                
+                    return $app->redirect($app['url_generator']->generate('intranet-films-list'));
+                } else {
+                    $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être mis à jour.');
+                }
+            } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être mis à jour.');
             }
+            
         }
     }
 
@@ -208,18 +252,26 @@ $filmsControllers->post('/{id}/update', function (Request $request, $id) use ($a
 })->bind('intranet-films-update');
 
 $filmsControllers->post('/{id}/delete', function (Request $request, $id) use ($app) {
-    $filmDao = Dao::getInstance()->getFilmDao();
-    $film = $filmDao->find($id);
+    try {
+        $filmDao = Dao::getInstance()->getFilmDao();
+        $film = $filmDao->find($id);
+    } catch (Exception $e) {
+        $app->abort(404, 'Ce film n\'existe pas...');
+    }
 
     if (!$film) {
         $app->abort(404, 'Ce film n\'existe pas...');
     }
-
-    if ($filmDao->delete($film)) {
-        $app['session']->getFlashBag()->add('success', 'Le film a bien été supprimé !');
-    } else {
+    try {
+        if ($filmDao->delete($film)) {
+            $app['session']->getFlashBag()->add('success', 'Le film a bien été supprimé !');
+        } else {
+            $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être supprimé...');
+        }
+    } catch (Exception $e) {
         $app['session']->getFlashBag()->add('error', 'Le film n\'a pas pu être supprimé...');
     }
+    
 
     return $app->redirect($app['url_generator']->generate('intranet-films-list'));
 })->bind('intranet-films-delete');

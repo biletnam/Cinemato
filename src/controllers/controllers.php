@@ -29,7 +29,7 @@ $app->get('/DAO/test', function () use ($app) {
     //$seance = $seanceDao->find(new \DateTime('2014-06-25 14:00:00'),$salle);
     //$seance->setDateSeance(new \DateTime('2014-06-25 14:00:00'));
     //$seance->setDoublage('LOLESQUE');
-    $seance = $seanceDao->findSeancesOfTheWeek(1);
+    $seance = $seanceDao->findSeancesOfTheWeek(0);
     //$seanceDao->create($seance);
     /*$ticketDao = Dao::getInstance()->getTicketDao();
     $ticket = $ticketDao->find(9);

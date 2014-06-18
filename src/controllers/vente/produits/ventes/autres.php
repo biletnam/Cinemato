@@ -70,7 +70,14 @@ $autresVentesControllers->post('/create', function (Request $request) use ($app)
 
 $autresVentesControllers->get('/{id}', function ($id) use ($app) {
     $produitsVendeurDao = Dao::getInstance()->getProduitVendeurDao();
-    $produitVendeur = $produitsVendeurDao->find($id);
+    
+    try{
+    	$produitVendeur = $produitsVendeurDao->find($id);
+    }catch (exception $e)
+    {
+    	$app['session']->getFlashBag()->add('error', $e->getMessage());
+    	return $app['twig']->render('pages/home.html.twig');
+    }
 
     if (!$produitVendeur) {
         $app->abort(404, 'Cette vente d\'autre produit n\'existe pas...');
